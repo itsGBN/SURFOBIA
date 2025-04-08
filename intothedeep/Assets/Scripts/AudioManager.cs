@@ -21,4 +21,6 @@ public class AudioManager : MonoBehaviour
     public void Jump() { if (!Audio[2].isPlaying) { Audio[2].pitch = Random.Range(0.8f, 1.2f); Audio[2].Play(); } }
     public void BadLand() { if (!Audio[3].isPlaying) { Audio[3].pitch = Random.Range(0.8f, 1.2f); Audio[3].Play(); } }
     public void GoodLand() { if (!Audio[4].isPlaying) { Audio[4].pitch = Random.Range(0.8f, 1.2f); Audio[4].Play(); } }
+    public void Grind() { if (!Audio[5].isPlaying) { Audio[5].pitch = Random.Range(0.8f, 1.2f); Audio[5].Play(); } }
+    public void GrindStop() { Audio[5].Stop(); }
 }

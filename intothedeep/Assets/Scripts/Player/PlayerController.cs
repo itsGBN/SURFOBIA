@@ -292,6 +292,9 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
+            AudioManager.instance.GrindStop();
+            HUD.instance.onPlayerTrickHud("GRIND");
+
 
             // Get the ground normal at the point of contact
             ContactPoint contact = collision.contacts[0];
@@ -326,6 +329,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "Grind")
         {
+            AudioManager.instance.Grind();
             SplineContainer spline = collision.gameObject.GetComponent<SplineContainer>();
             if (spline != null)
             {
