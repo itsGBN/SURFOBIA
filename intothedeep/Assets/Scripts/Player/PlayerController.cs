@@ -293,12 +293,14 @@ public class PlayerController : MonoBehaviour
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
                 Debug.Log("OK"); // Flat
+                HUD.instance.onPlayerTrickHud("GOOD");
                 AudioManager.instance.Land();
                 grounding = true;
             }
             else if (groundAngle < 0f && !grounding)
             {
                 Debug.Log("Bad"); // Going downhill
+                HUD.instance.onPlayerTrickHud("OK");
                 moveSpeed -= 2f;
                 AudioManager.instance.BadLand();
                 grounding = true;
@@ -306,6 +308,7 @@ public class PlayerController : MonoBehaviour
             else if (!grounding)
             {
                 Debug.Log("Perfect"); // Going uphill
+                HUD.instance.onPlayerTrickHud("PERFECT");
                 moveSpeed += 3f;
                 AudioManager.instance.GoodLand();
                 grounding = true;

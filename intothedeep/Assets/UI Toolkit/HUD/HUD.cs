@@ -132,17 +132,15 @@ public class HUD : MonoBehaviour
 
     private void onPlayerTrick()
     {
-        string trickName = null;
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { trickName = "FLIP"; onPlayerTrickHud(); }
-        if(Input.GetKeyDown(KeyCode.Alpha2)) { trickName = "GRIND"; onPlayerTrickHud(); }
-        if(Input.GetKeyDown(KeyCode.Alpha3)) { trickName = "JUMP"; onPlayerTrickHud(); }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { onPlayerTrickHud("FLIP"); }
+        if(Input.GetKeyDown(KeyCode.Alpha2)) {  onPlayerTrickHud("GRIND"); }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { onPlayerTrickHud("JUMP"); }
     }
 
-    private void onPlayerTrickHud()
+    public void onPlayerTrickHud(string trickname)
     {
         trickNum++;
-        trickLabel = new Label("TrickName" + trickNum.ToString());
+        trickLabel = new Label(trickname);
         trickLabel.AddToClassList("label");
         trickLabel.AddToClassList("tricks");
         trickLabel.AddToClassList("tricker");
@@ -154,7 +152,7 @@ public class HUD : MonoBehaviour
 
         for (int i = 0; i < queueArray.Length; i++)
         {
-            if (queueArray[i].ClassListContains("tricker")) { queueArray[i].RemoveFromClassList("tricker"); queueArray[i].AddToClassList(("tzero")); continue; }
+            if (queueArray[i].ClassListContains("tricker")) { queueArray[i].RemoveFromClassList("tricker"); queueArray[i].AddToClassList(("tone")); }
             if (queueArray[i].ClassListContains("tzero")) { queueArray[i].RemoveFromClassList("tzero"); queueArray[i].AddToClassList(("tone")); continue; }
             if (queueArray[i].ClassListContains("tone")) { queueArray[i].RemoveFromClassList("tone"); queueArray[i].AddToClassList(("ttwo")); continue;  }
             if (queueArray[i].ClassListContains("ttwo")) { queueArray[i].RemoveFromClassList("ttwo"); queueArray[i].AddToClassList(("tthree")); continue; }
