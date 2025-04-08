@@ -8,12 +8,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material
-    second: {fileID: 2100000, guid: 8610eaf9a3ed8694db4a424a1c94eaf1, type: 2}
+    second: {fileID: 2100000, guid: 6a921c4c49fc54f4a8a7736668855677, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material.001
-    second: {fileID: 2100000, guid: 89a69071d820a81428fbd9182e674bbb, type: 2}
+    second: {fileID: 2100000, guid: 6a921c4c49fc54f4a8a7736668855677, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -26,8 +26,7 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'LeftLowerLeg' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 

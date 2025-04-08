@@ -22,6 +22,7 @@ public class MainMenuEvents : MonoBehaviour
     private VisualElement transitionName;
     private VisualElement mainMenu;
     private string transitionDescription;
+    private bool isTrasitioning = true;
     private enum ChooseTransition
 {
         FadeIn,
@@ -87,7 +88,7 @@ public class MainMenuEvents : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !isTrasitioning)
         {
             if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; Time.timeScale = 0; }
             else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; Time.timeScale = 1; }
@@ -112,6 +113,7 @@ public class MainMenuEvents : MonoBehaviour
     private void onPlayParentButtons(ClickEvent e)
     {
         Time.timeScale = 1;
+        isTrasitioning = true;
         StartCoroutine(onTransition(SceneManager.GetActiveScene().name, transitionName));
     }
 
@@ -132,5 +134,6 @@ public class MainMenuEvents : MonoBehaviour
         transitionName.style.display = DisplayStyle.None;
         trasitionTypes.style.display = DisplayStyle.None;
         Time.timeScale = 0;
+        isTrasitioning = false;
     }
 }

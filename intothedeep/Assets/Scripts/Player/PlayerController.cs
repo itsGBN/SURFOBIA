@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Splines; // Import Unity's Spline package
@@ -143,7 +144,8 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Jump prevented due to steep slope: " + angle);
         }
     }
-
+    
+    //DIVE
     public void StartDive()
     {
         isDiving = true;
@@ -153,6 +155,15 @@ public class PlayerController : MonoBehaviour
     public void StopDive()
     {
         isDiving = false;
+    }
+
+    //RED FLASH
+    IEnumerator FlashRed()
+    {
+        print("OK");
+        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 0);
+        yield return new WaitForSeconds(2);
+        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 1);
     }
 
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
@@ -292,14 +303,12 @@ public class PlayerController : MonoBehaviour
             // Print based on the angle direction
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
-                Debug.Log("OK"); // Flat
                 HUD.instance.onPlayerTrickHud("GOOD");
                 AudioManager.instance.Land();
                 grounding = true;
             }
             else if (groundAngle < 0f && !grounding)
             {
-                Debug.Log("Bad"); // Going downhill
                 HUD.instance.onPlayerTrickHud("OK");
                 moveSpeed -= 2f;
                 AudioManager.instance.BadLand();
@@ -307,7 +316,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (!grounding)
             {
-                Debug.Log("Perfect"); // Going uphill
                 HUD.instance.onPlayerTrickHud("PERFECT");
                 moveSpeed += 3f;
                 AudioManager.instance.GoodLand();
@@ -331,6 +339,14 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             AudioManager.instance.RunStop();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Obstacle")
+        {
+            StartCoroutine(FlashRed());
         }
     }
 }
