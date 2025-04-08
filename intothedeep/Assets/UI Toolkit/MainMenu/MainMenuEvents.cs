@@ -13,6 +13,8 @@ public class MainMenuEvents : MonoBehaviour
 
     private List<Button> allButtons = new List<Button>();
     private Button levelButton;
+    private Button level1Button;
+    private Button quitButton;
     private List<Button> levelChildrenButtons = new List<Button>();
     private List<VisualElement> allElements = new List<VisualElement>();
 
@@ -46,6 +48,8 @@ public class MainMenuEvents : MonoBehaviour
 
         //Reference Buttons
         levelButton = uIDocument.rootVisualElement.Q("LevelButton") as Button;
+        level1Button = uIDocument.rootVisualElement.Q("Level1Button") as Button;
+        quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
         levelChildrenButtons = uIDocument.rootVisualElement.Query<Button>(null, "levelChildren").ToList();
 
@@ -57,9 +61,9 @@ public class MainMenuEvents : MonoBehaviour
 
         //Register
         levelButton.RegisterCallback<ClickEvent>(onPlayButton);
+        level1Button.RegisterCallback<ClickEvent>(onPlayParentButtons);
+        quitButton.RegisterCallback<ClickEvent>(onQuitButton);
         foreach (Button button in allButtons) { button.RegisterCallback<ClickEvent>(onAllButtons); }
-        foreach (Button button in levelChildrenButtons) { button.RegisterCallback<ClickEvent>(onPlayParentButtons); }
-
         //Miscelleaneous Things
         //Make Inactive Buttons Dissapear
         foreach (Button button in levelChildrenButtons) { if (button.ClassListContains("levelChildrenActive")) { button.AddToClassList("levelChildrenInactive"); } }
@@ -76,8 +80,9 @@ public class MainMenuEvents : MonoBehaviour
     {
         //Deregister
         levelButton.UnregisterCallback<ClickEvent>(onPlayButton);
+        level1Button.UnregisterCallback<ClickEvent>(onPlayParentButtons);
+        quitButton.UnregisterCallback<ClickEvent>(onQuitButton);
         foreach (Button button in allButtons) { button.UnregisterCallback<ClickEvent>(onAllButtons); }
-        foreach (Button button in levelChildrenButtons) { button.UnregisterCallback<ClickEvent>(onPlayParentButtons); }
     }
 
     private void Start()
@@ -115,6 +120,12 @@ public class MainMenuEvents : MonoBehaviour
         Time.timeScale = 1;
         isTrasitioning = true;
         StartCoroutine(onTransition(SceneManager.GetActiveScene().name, transitionName));
+    }
+
+    private void onQuitButton(ClickEvent e)
+    {
+        Debug.Log("Application Quit");
+        Application.Quit();
     }
 
     IEnumerator onTransition(string sceneName, VisualElement transitionName)
