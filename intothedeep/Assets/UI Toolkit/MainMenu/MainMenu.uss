@@ -1,0 +1,86 @@
+.menuActive {
+    left: 0;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in;
+}
+
+.menuInactive {
+    left: -1920px;
+}
+
+.button {
+    font-size: 37px;
+    color: rgb(255, 255, 255);
+    width: 220px;
+    height: 60px;
+    top: 305px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-font-style: bold;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transition-property: all;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in;
+    transition-delay: 0s;
+}
+
+.button:hover {
+    font-size: 40px;
+}
+
+.levelChildren {
+    width: 500px;
+    -unity-text-align: upper-left;
+}
+
+.levelChildrenActive {
+    top: 243px;
+    left: 244px;
+    font-size: 26px;
+    opacity: 0.58;
+    align-items: flex-start;
+    align-self: flex-start;
+    justify-content: space-around;
+}
+
+.levelChildrenInactive {
+    top: 243px;
+    left: 81px;
+    font-size: 26px;
+    opacity: 0;
+    display: none;
+}
+
+.transition {
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+}
+
+.fadeIn {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+    background-image: url("project://database/Assets/Sprites/Textures/alfie-jaarf-sandtexture4.jpg?fileID=2800000&guid=a990f6a9e4dccb4419e8550e0cb6ff4a&type=3#alfie-jaarf-sandtexture4");
+}
+
+.fadeOut {
+    -unity-background-image-tint-color: rgba(0, 0, 0, 0);
+    background-image: url("project://database/Assets/Sprites/Textures/alfie-jaarf-sandtexture4.jpg?fileID=2800000&guid=a990f6a9e4dccb4419e8550e0cb6ff4a&type=3#alfie-jaarf-sandtexture4");
+}
+
+.squareIn {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+    width: 2000px;
+    height: 2000px;
+    position: absolute;
+    left: -43px;
+    top: -460px;
+    background-image: url("project://database/Assets/Sprites/Textures/alfie-jaarf-sandtexture4.jpg?fileID=2800000&guid=a990f6a9e4dccb4419e8550e0cb6ff4a&type=3#alfie-jaarf-sandtexture4");
+}
+
+.squareOut {
+    -unity-background-image-tint-color: rgb(0, 0, 0);
+    scale: 0.001 0.001;
+    background-image: url("project://database/Assets/Sprites/Textures/alfie-jaarf-sandtexture4.jpg?fileID=2800000&guid=a990f6a9e4dccb4419e8550e0cb6ff4a&type=3#alfie-jaarf-sandtexture4");
+}

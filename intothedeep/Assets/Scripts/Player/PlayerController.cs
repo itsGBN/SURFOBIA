@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
             float groundAngle = Vector3.SignedAngle(Vector3.up, groundNormal, transform.right);
 
             // Print based on the angle direction
-            if (Mathf.Abs(groundAngle) < 5f && !grounding)
+            if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
                 Debug.Log("OK"); // Flat
                 AudioManager.instance.Land();
@@ -310,7 +310,6 @@ public class PlayerController : MonoBehaviour
                 AudioManager.instance.GoodLand();
                 grounding = true;
             }
-            Invoke("Boost", 3);
         }
 
 

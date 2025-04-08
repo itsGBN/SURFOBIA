@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenu/MainMenu.uss?fileID=7433441132597879392&amp;guid=77c100ecaf6b0d3459d5c2f6816e6cd6&amp;type=3#MainMenu" />
+    <ui:VisualElement name="MainButtons" class="menuActive" style="flex-grow: 1; flex-shrink: 0; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/Gradient.png?fileID=2800000&amp;guid=5468e0f971ee71f48933a1522e748d42&amp;type=3#Gradient&quot;);">
+        <ui:VisualElement name="Background" style="position: absolute; height: 1096px; width: 3426px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/Gradient.png?fileID=2800000&amp;guid=5468e0f971ee71f48933a1522e748d42&amp;type=3#Gradient&quot;); top: -2px; left: 0;" />
+        <ui:Button text="LEVEL" name="LevelButton" class="button" />
+        <ui:Button text="Tutorial" name="TutorialButton" class="button levelChildren levelChildrenActive" />
+        <ui:Button text="Level 1: Atlantic Ocean" name="Level1Button" class="button levelChildren levelChildrenActive" />
+    </ui:VisualElement>
+    <ui:VisualElement name="TransitionTypes" style="position: absolute; width: 1920px; height: 1080px;">
+        <ui:VisualElement name="FadeIn" class="fadeIn transition fadeOut" style="position: absolute; width: 1920px; height: 1080px; background-image: url(&quot;project://database/Assets/Packages/Splines/2.8.0/Spline%20Examples%20(requires%20Shader%20Graph%20package)/Textures/Checker.png?fileID=2800000&amp;guid=feb046db34f4d424f86ecd4c04a85f0a&amp;type=3#Checker&quot;);" />
+        <ui:VisualElement name="SquareIn" class="transition squareIn squareOut" style="background-image: url(&quot;project://database/Assets/Packages/Splines/2.8.0/Spline%20Examples%20(requires%20Shader%20Graph%20package)/Textures/Checker.png?fileID=2800000&amp;guid=feb046db34f4d424f86ecd4c04a85f0a&amp;type=3#Checker&quot;);" />
+    </ui:VisualElement>
+</ui:UXML>

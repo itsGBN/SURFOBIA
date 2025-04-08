@@ -1,0 +1,83 @@
+.label {
+    width: 240px;
+    height: 78px;
+    background-image: none;
+    -unity-font-style: bold;
+    font-size: 40px;
+    top: 40px;
+    left: 54px;
+    color: rgb(255, 255, 255);
+}
+
+.scores {
+    position: absolute;
+    left: 1533px;
+    font-size: 37px;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in;
+    -unity-text-align: upper-right;
+    transition-property: all;
+}
+
+.one {
+    font-size: 66px;
+    top: 85px;
+    -unity-text-outline-color: rgb(30, 175, 215);
+    -unity-text-outline-width: 5px;
+}
+
+.two {
+    top: 176px;
+    font-size: 46px;
+}
+
+.three {
+    font-size: 39px;
+    top: 250px;
+}
+
+.four {
+    top: 323px;
+    font-size: 24px;
+}
+
+.tricks {
+    position: absolute;
+    font-size: 37px;
+    -unity-text-align: upper-left;
+    top: 972px;
+    left: 42px;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in;
+}
+
+.tricker {
+    left: 300px;
+    top: 972px;
+}
+
+.tzero {
+    left: 300px;
+    top: 972px;
+    opacity: 0;
+}
+
+.tone {
+    top: 972px;
+    left: 42px;
+}
+
+.ttwo {
+    top: 923px;
+    opacity: 0.75;
+}
+
+.tthree {
+    top: 874px;
+    opacity: 0.5;
+}
+
+.tfour {
+    top: 798px;
+    opacity: 0.25;
+}

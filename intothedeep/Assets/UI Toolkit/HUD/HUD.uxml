@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/HUD/HUD.uss?fileID=7433441132597879392&amp;guid=80c186163962ff747a5b063cca8c6e31&amp;type=3#HUD" />
+    <ui:VisualElement name="HUD" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/BaseHud.png?fileID=2800000&amp;guid=fed22040732d51741b2825d220c240cc&amp;type=3#BaseHud&quot;); -unity-background-image-tint-color: rgba(0, 0, 0, 0.89);">
+        <ui:Label text="DISTANCE" name="Distance" class="label" style="left: 62px; top: 18px;" />
+        <ui:Label text="POSITION" name="Position" class="label" style="left: 1635px; top: -67px;" />
+        <ui:Label text="Mia: 0" name="Enemy1" class="label scores one" />
+        <ui:Label text="Maryam: 0" name="Enemy2" class="label scores two" />
+        <ui:Label text="Zoey: 0" name="Enemy3" class="label scores three" />
+        <ui:Label text="Victor: 0" name="Enemy4" class="label scores four" />
+        <ui:Label text="1st" name="1ST" class="label" style="left: 1820px; top: -64px; width: 67px; height: 63px; -unity-text-outline-color: rgb(30, 175, 215); -unity-text-outline-width: 3px;" />
+        <ui:Label text="2nd" name="2ND" class="label" style="left: 1820px; top: -54px; width: 67px; height: 63px; font-size: 34px;" />
+        <ui:Label text="3rd&#10;" name="3RD" class="label" style="left: 1823px; top: -51px; width: 67px; height: 53px; font-size: 33px;" />
+        <ui:Label text="4th&#10;" name="4TH" class="label" style="left: 1826px; top: -43px; width: 54px; height: 45px; font-size: 28px;" />
+    </ui:VisualElement>
+</ui:UXML>
