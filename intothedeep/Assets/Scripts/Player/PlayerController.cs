@@ -260,14 +260,23 @@ public class PlayerController : MonoBehaviour
                 player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
 
                 Vector3 splinePosition = player.currentSpline.EvaluatePosition(player.progressAlongSpline);
-                player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 0.4f, splinePosition.z); 
+                player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 0.4f, splinePosition.z);
 
-                player.AlignToSurface();
+                Vector3 tangent = player.currentSpline.EvaluateTangent(player.progressAlongSpline);
 
-                Vector3 splineDirection = player.currentSpline.EvaluateTangent(player.progressAlongSpline);
-                if (splineDirection != Vector3.zero)
+                // Fallback up vector
+                Vector3 up = player.currentSpline.transform.up;
+
+                // Prevent gimbal issues when tangent and up are nearly aligned
+                if (Vector3.Dot(tangent.normalized, up) > 0.99f)
                 {
-                    player.transform.rotation = Quaternion.LookRotation(splineDirection);
+                    up = Vector3.forward;
+                }
+
+                if (tangent != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(tangent, up);
+                    player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * player.rotationSpeed);
                 }
 
                 if (player.progressAlongSpline >= 1f)
@@ -275,13 +284,14 @@ public class PlayerController : MonoBehaviour
                     player.SetState(player.freeRoamState);
                 }
 
-                if (Input.GetButtonDown("Jump")) // "Jump" is the default input for spacebar in Unity
+                if (Input.GetButtonDown("Jump"))
                 {
                     player.SetState(player.freeRoamState);
                     player.Jump();
                 }
             }
         }
+
     }
 
 
