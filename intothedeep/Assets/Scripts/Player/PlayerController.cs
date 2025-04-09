@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     //FIXED UPDATE
     void FixedUpdate()
     {
+        currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
         if(!isGrounded) { grounding = false; }
     }
@@ -54,7 +55,6 @@ public class PlayerController : MonoBehaviour
     //UPDATE
     private void Update()
     {
-        currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
 
 
@@ -71,7 +71,13 @@ public class PlayerController : MonoBehaviour
             StopDive();
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Escape) && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+        {
+            SetState(freeRoamState);
+            Debug.Log("Escape registered in Update() - transition from ZeroState");
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -241,7 +247,6 @@ public class PlayerController : MonoBehaviour
     public class ZeroState : IPlayerState
     {
         private PlayerController player;
-        private bool escapeRequested = false;
 
         public ZeroState(PlayerController player)
         {
@@ -250,17 +255,7 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                escapeRequested = true;
-            }
 
-            if (escapeRequested && !MainMenuEvents.instance.isTrasitioning)
-            {
-                player.SetState(player.freeRoamState);
-                escapeRequested = false;
-                print("Hello");
-            }
         }
     }
 
