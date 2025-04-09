@@ -3,7 +3,8 @@ using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Splines; // Import Unity's Spline package
-
+using UnityEngine.InputSystem;
+using UnityEngine.Animations;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private float progressAlongSpline = 0f;
     private Collider lastGrindCollider;
 
-    public bool isGrounded; 
+    public bool isGrounded;
     public bool grounding;
 
     private Rigidbody rb;
@@ -33,11 +34,28 @@ public class PlayerController : MonoBehaviour
     public Vector3 currentSurfaceNormal = Vector3.up;
 
 
+    #region CONTROLLER
+    private PS5Input GetInputs;
 
+    private void Awake()
+    {
+        GetInputs = new PS5Input();
+    }
+
+    private void OnEnable()
+    {
+        GetInputs.Enable();
+    }
+
+    private void OnDisable()
+    {
+        GetInputs.Disable();
+    }
+    #endregion CONTROLLER
     //START
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); 
+        rb = GetComponent<Rigidbody>();
         freeRoamState = new FreeRoamState(this);
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
@@ -50,35 +68,35 @@ public class PlayerController : MonoBehaviour
     {
         currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        if(!isGrounded) { grounding = false; }
+        if (!isGrounded) { grounding = false; }
     }
-    
+
     //UPDATE
     private void Update()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && isGrounded)
         {
             Jump();
         }
-        else if (Input.GetButtonDown("Jump") && !isGrounded)
+        else if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && !isGrounded)
         {
             StartDive();
         }
-        else if (Input.GetButtonUp("Jump") && !isGrounded)
+        else if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && !isGrounded)
         {
             StopDive();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+
+        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
+            Debug.Log("control press");
             SetState(freeRoamState);
             Debug.Log("Escape registered in Update() - transition from ZeroState");
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -87,7 +105,7 @@ public class PlayerController : MonoBehaviour
     //SETTING THE NEW STATE
     public void SetState(IPlayerState newState)
     {
-        rb.velocity = Vector3.zero; 
+        rb.velocity = Vector3.zero;
         if (newState == freeRoamState)
         {
             RaycastHit hit;
@@ -157,7 +175,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, jumpHeight * 2, rb.velocity.z);
         }
     }
-    
+
     //DIVE
     public void StartDive()
     {
@@ -183,7 +201,7 @@ public class PlayerController : MonoBehaviour
     {
         if (currentSpline == null)
         {
-            return 0f; 
+            return 0f;
         }
 
         float closestT = 0f;
@@ -201,7 +219,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        return closestT;  
+        return closestT;
     }
 
     //STATE INTERFACE
@@ -225,8 +243,11 @@ public class PlayerController : MonoBehaviour
         {
             GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
 
-            float moveInput = Input.GetAxis("Vertical");
-            float turnInput = Input.GetAxis("Horizontal");
+            float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
+            // Input.GetAxis("Vertical");
+            float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
+            //Input.GetAxis("Horizontal");
+
 
             player.AlignToSurface();
 
@@ -377,7 +398,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Obstacle")
+        if (other.gameObject.tag == "Obstacle")
         {
             StartCoroutine(FlashRed());
         }

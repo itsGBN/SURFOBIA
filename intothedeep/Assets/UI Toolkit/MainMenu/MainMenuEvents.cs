@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -25,8 +26,10 @@ public class MainMenuEvents : MonoBehaviour
     private VisualElement mainMenu;
     private string transitionDescription;
     public bool isTrasitioning = true;
+
+    private PS5Input GetInputs;
     private enum ChooseTransition
-{
+    {
         FadeIn,
         SqaureIn
     }
@@ -38,8 +41,9 @@ public class MainMenuEvents : MonoBehaviour
 
     private void Awake()
     {
+        GetInputs = new PS5Input();
         //Singleton
-        if(instance != null && instance != this) { Destroy(instance); }
+        if (instance != null && instance != this) { Destroy(instance); }
         else { instance = this; }
 
         //Refernce UI 
@@ -67,7 +71,7 @@ public class MainMenuEvents : MonoBehaviour
         //Miscelleaneous Things
         //Make Inactive Buttons Dissapear
         foreach (Button button in levelChildrenButtons) { if (button.ClassListContains("levelChildrenActive")) { button.AddToClassList("levelChildrenInactive"); } }
-        
+
         //Add the Transition
         if (fadeIn.ClassListContains("fadeOut") && chooseTransition == ChooseTransition.FadeIn) { fadeIn.RemoveFromClassList("fadeOut"); transitionName = fadeIn; transitionDescription = "fadeOut"; }
         if (squareIn.ClassListContains("squareOut") && chooseTransition == ChooseTransition.SqaureIn) { squareIn.RemoveFromClassList("squareOut"); transitionName = squareIn; transitionDescription = "squareOut"; }
@@ -76,9 +80,15 @@ public class MainMenuEvents : MonoBehaviour
         buttonSound = GetComponent<AudioSource>();
     }
 
+    private void OnEnable()
+    {
+        GetInputs.Enable();
+    }
+
     private void OnDisable()
     {
         //Deregister
+        GetInputs.Disable();
         levelButton.UnregisterCallback<ClickEvent>(onPlayButton);
         level1Button.UnregisterCallback<ClickEvent>(onPlayParentButtons);
         quitButton.UnregisterCallback<ClickEvent>(onQuitButton);
@@ -93,8 +103,9 @@ public class MainMenuEvents : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !isTrasitioning)
+        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !isTrasitioning)
         {
+            Debug.Log("Menu Pressed");
             if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; Time.timeScale = 0; }
             else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; Time.timeScale = 1; }
         }
