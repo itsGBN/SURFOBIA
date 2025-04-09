@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Splines; // Import Unity's Spline package
@@ -355,6 +356,7 @@ public class PlayerController : MonoBehaviour
             AudioManager.instance.Grind();
 
             SplineContainer spline = collision.gameObject.GetComponent<SplineContainer>();
+            grindSpeed = collision.gameObject.GetComponent<LoftRoadBehaviour>().splineSpeed;
             if (spline != null)
             {
                 lastGrindCollider = collision.collider;

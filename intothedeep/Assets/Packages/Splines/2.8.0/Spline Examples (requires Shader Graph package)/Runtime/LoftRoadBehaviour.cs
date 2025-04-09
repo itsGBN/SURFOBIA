@@ -20,6 +20,7 @@ namespace Unity.Splines.Examples
         [SerializeField]
         List<SplineData<float>> m_Widths = new List<SplineData<float>>();
         [SerializeField] private Material newRoadTexture;
+        public float splineSpeed = 1f;
 
         public List<SplineData<float>> Widths
         {
