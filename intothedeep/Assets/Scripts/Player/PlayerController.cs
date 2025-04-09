@@ -31,7 +31,13 @@ public class PlayerController : MonoBehaviour
     public float diveFallSpeed = -2f;
     public Vector3 currentSurfaceNormal = Vector3.up;
 
-
+    public Transform graphics;
+    private float boardRoll;
+    private float boardYaw;
+    private float curBoardRoll;
+    private float curBoardYaw;
+    public float rollSpeed = 30f;
+    public float boardRollAmount = 50f;
 
     //START
     void Start()
@@ -42,6 +48,8 @@ public class PlayerController : MonoBehaviour
         grindState = new GrindState(this);
         currentState = zeroState;
         GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+        curBoardRoll = graphics.transform.localEulerAngles.z;
+        curBoardYaw = graphics.transform.localEulerAngles.y;
     }
 
     //FIXED UPDATE
@@ -239,6 +247,18 @@ public class PlayerController : MonoBehaviour
 
             // Rotate left/right
             player.transform.Rotate(Vector3.up, turnInput * player.turnSpeed * Time.deltaTime);
+
+            // Player graphics
+            if (turnInput == 0) { player.boardRoll = 0; }
+            else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
+                
+            player.boardRoll = Mathf.Clamp(player.boardRoll, -50, 50);
+            player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
+
+            player.curBoardRoll = Mathf.LerpAngle(player.curBoardRoll, player.boardRoll, player.rollSpeed * Time.deltaTime);
+            player.curBoardYaw  = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, player.rollSpeed * Time.deltaTime);
+
+            player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);    
         }
 
     }
