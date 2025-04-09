@@ -47,15 +47,14 @@ public class PlayerController : MonoBehaviour
     //FIXED UPDATE
     void FixedUpdate()
     {
-        currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
         if(!isGrounded) { grounding = false; }
-        print(currentState);
     }
     
     //UPDATE
     private void Update()
     {
+        currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
 
 
@@ -167,7 +166,6 @@ public class PlayerController : MonoBehaviour
     //RED FLASH
     IEnumerator FlashRed()
     {
-        print("OK");
         gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 0);
         yield return new WaitForSeconds(2);
         gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 1);
@@ -243,7 +241,8 @@ public class PlayerController : MonoBehaviour
     public class ZeroState : IPlayerState
     {
         private PlayerController player;
-        private bool free = false;
+        private bool escapeRequested = false;
+
         public ZeroState(PlayerController player)
         {
             this.player = player;
@@ -251,17 +250,17 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
-
-            if (Input.GetKeyDown(KeyCode.Escape) && !MainMenuEvents.instance.isTrasitioning)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                free = true;
+                escapeRequested = true;
             }
-            if (free)
+
+            if (escapeRequested && !MainMenuEvents.instance.isTrasitioning)
             {
                 player.SetState(player.freeRoamState);
+                escapeRequested = false;
+                print("Hello");
             }
-            print(free);
         }
     }
 
