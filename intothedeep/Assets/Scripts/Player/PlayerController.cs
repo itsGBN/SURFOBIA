@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
+    private Collider lastGrindCollider;
 
     public bool isGrounded; // To check if the player is grounded\
     public bool grounding;
@@ -91,6 +92,12 @@ public class PlayerController : MonoBehaviour
                 transform.position = hit.point + Vector3.up * 0.1f;
             }
         }
+        if (newState == freeRoamState && lastGrindCollider != null)
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), lastGrindCollider, false);
+            lastGrindCollider = null;
+        }
+
         currentState = newState;
     }
 
@@ -123,25 +130,27 @@ public class PlayerController : MonoBehaviour
         currentSpline = splineContainer;
 
         if (currentSpline != null && currentSpline.Splines.Count > 0)
-        { 
+        {
             float closestT = GetClosestPointOnSpline(transform.position);
             progressAlongSpline = closestT;
             SetState(grindState);
         }
     }
 
+
     //JUMP
     public void Jump()
     {
         AudioManager.instance.Jump();
         float angle = Vector3.SignedAngle(Vector3.up, currentSurfaceNormal, transform.right);
+
         if (angle > -15f)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpHeight, rb.velocity.z);
         }
         else
         {
-            //Debug.Log("Jump prevented due to steep slope: " + angle);
+            rb.velocity = new Vector3(rb.velocity.x, jumpHeight * 2, rb.velocity.z);
         }
     }
     
@@ -260,19 +269,14 @@ public class PlayerController : MonoBehaviour
                 player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
 
                 Vector3 splinePosition = player.currentSpline.EvaluatePosition(player.progressAlongSpline);
-                player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 0.4f, splinePosition.z);
+                player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 1f, splinePosition.z);
 
                 Vector3 tangent = player.currentSpline.EvaluateTangent(player.progressAlongSpline);
-
-                // Fallback up vector
                 Vector3 up = player.currentSpline.transform.up;
-
-                // Prevent gimbal issues when tangent and up are nearly aligned
                 if (Vector3.Dot(tangent.normalized, up) > 0.99f)
                 {
-                    up = Vector3.forward;
+                    up = player.currentSpline.transform.forward;
                 }
-
                 if (tangent != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(tangent, up);
@@ -292,6 +296,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
     }
 
 
@@ -303,7 +308,6 @@ public class PlayerController : MonoBehaviour
             StopDive();
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
-            HUD.instance.onPlayerTrickHud("GRIND");
 
 
             // Get the ground normal at the point of contact
@@ -320,32 +324,36 @@ public class PlayerController : MonoBehaviour
                 AudioManager.instance.Land();
                 grounding = true;
             }
-            else if (groundAngle < 0f && !grounding)
+            else if (groundAngle < 5f && !grounding)
             {
                 HUD.instance.onPlayerTrickHud("OK");
-                moveSpeed -= 2f;
+                moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
             }
             else if (!grounding)
             {
                 HUD.instance.onPlayerTrickHud("PERFECT");
-                moveSpeed += 3f;
+                moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
             }
         }
 
-
         if (collision.gameObject.tag == "Grind")
         {
+            HUD.instance.onPlayerTrickHud("GRIND");
             AudioManager.instance.Grind();
+
             SplineContainer spline = collision.gameObject.GetComponent<SplineContainer>();
             if (spline != null)
             {
+                lastGrindCollider = collision.collider;
+                Physics.IgnoreCollision(GetComponent<Collider>(), lastGrindCollider, true); // <-- key line
                 StartGrind(spline);
             }
         }
+
     }
 
     private void OnCollisionExit(Collision collision)
