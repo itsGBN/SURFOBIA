@@ -87,46 +87,49 @@ public class HUD : MonoBehaviour
 
     private void OnEnemyScore()
     {
-        foreach (var entry in enemyScores.ToList()) 
+        if (!MainMenuEvents.instance.focusMenu)
         {
-            Label label = entry.Key;
-            int score = entry.Value.Item1; 
-            string text = entry.Value.Item2; 
-            int points = UnityEngine.Random.Range(1,4);
-
-            enemyScores[label] = (score + points, text);
-            label.text = $"{text}: {score}";
-        }
-
-        enemyScores = enemyScores.OrderByDescending(entry => entry.Value.Item1).ToDictionary(entry => entry.Key, entry => entry.Value);
-
-        foreach (var entry in enemyScores.ToList())
-        {
-            Label label = entry.Key;
-            int score = entry.Value.Item1;
-            string text = entry.Value.Item2;
-
-            if (label.ClassListContains("one")) { label.RemoveFromClassList("one"); }
-            if (label.ClassListContains("two")) { label.RemoveFromClassList("two"); }
-            if (label.ClassListContains("three")) { label.RemoveFromClassList("three"); }
-            if (label.ClassListContains("four")) { label.RemoveFromClassList("four"); }
-
-            var list = enemyScores.ToList();
-            int index = list.FindIndex(entry => entry.Key == label);
-
-            switch (index+1)
+            foreach (var entry in enemyScores.ToList())
             {
-                case 1:
-                    label.AddToClassList(("one").ToString()); break;
-                case 2:
-                    label.AddToClassList(("two").ToString()); break;
-                case 3:
-                    label.AddToClassList(("three").ToString()); break;
-                case 4:
-                    label.AddToClassList(("four").ToString()); break;
+                Label label = entry.Key;
+                int score = entry.Value.Item1;
+                string text = entry.Value.Item2;
+                int points = UnityEngine.Random.Range(1, 4);
 
+                enemyScores[label] = (score + points, text);
+                label.text = $"{text}: {score}";
             }
 
+            enemyScores = enemyScores.OrderByDescending(entry => entry.Value.Item1).ToDictionary(entry => entry.Key, entry => entry.Value);
+
+            foreach (var entry in enemyScores.ToList())
+            {
+                Label label = entry.Key;
+                int score = entry.Value.Item1;
+                string text = entry.Value.Item2;
+
+                if (label.ClassListContains("one")) { label.RemoveFromClassList("one"); }
+                if (label.ClassListContains("two")) { label.RemoveFromClassList("two"); }
+                if (label.ClassListContains("three")) { label.RemoveFromClassList("three"); }
+                if (label.ClassListContains("four")) { label.RemoveFromClassList("four"); }
+
+                var list = enemyScores.ToList();
+                int index = list.FindIndex(entry => entry.Key == label);
+
+                switch (index + 1)
+                {
+                    case 1:
+                        label.AddToClassList(("one").ToString()); break;
+                    case 2:
+                        label.AddToClassList(("two").ToString()); break;
+                    case 3:
+                        label.AddToClassList(("three").ToString()); break;
+                    case 4:
+                        label.AddToClassList(("four").ToString()); break;
+
+                }
+
+            }
         }
     }
 

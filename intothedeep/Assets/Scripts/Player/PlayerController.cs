@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     private float progressAlongSpline = 0f;
     private Collider lastGrindCollider;
 
-    public bool isGrounded; // To check if the player is grounded\
+    public bool isGrounded; 
     public bool grounding;
 
     private Rigidbody rb;
@@ -36,12 +36,12 @@ public class PlayerController : MonoBehaviour
     //START
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // Get the player's Rigidbody
+        rb = GetComponent<Rigidbody>(); 
         freeRoamState = new FreeRoamState(this);
-        zeroState = new ZeroState();
+        zeroState = new ZeroState(this);
         grindState = new GrindState(this);
-        currentState = freeRoamState;
-        GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
+        currentState = zeroState;
+        GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
     }
 
     //FIXED UPDATE
@@ -50,9 +50,7 @@ public class PlayerController : MonoBehaviour
         currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
         if(!isGrounded) { grounding = false; }
-
-        //print(GameObject.Find("CameraControl").GetComponent<Animator>().GetInteger("State"));
-        //print(currentState.ToString());
+        print(currentState);
     }
     
     //UPDATE
@@ -244,9 +242,26 @@ public class PlayerController : MonoBehaviour
     //STATE.ZERO
     public class ZeroState : IPlayerState
     {
+        private PlayerController player;
+        private bool free = false;
+        public ZeroState(PlayerController player)
+        {
+            this.player = player;
+        }
+
         public void UpdateState()
         {
-            // No movement or actions allowed
+            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+
+            if (Input.GetKeyDown(KeyCode.Escape) && !MainMenuEvents.instance.isTrasitioning)
+            {
+                free = true;
+            }
+            if (free)
+            {
+                player.SetState(player.freeRoamState);
+            }
+            print(free);
         }
     }
 
@@ -288,7 +303,7 @@ public class PlayerController : MonoBehaviour
                     player.SetState(player.freeRoamState);
                 }
 
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButtonDown("Jump") && !player)
                 {
                     player.SetState(player.freeRoamState);
                     player.Jump();

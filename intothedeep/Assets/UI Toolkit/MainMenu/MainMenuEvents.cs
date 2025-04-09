@@ -24,7 +24,7 @@ public class MainMenuEvents : MonoBehaviour
     private VisualElement transitionName;
     private VisualElement mainMenu;
     private string transitionDescription;
-    private bool isTrasitioning = true;
+    public bool isTrasitioning = true;
     private enum ChooseTransition
 {
         FadeIn,
@@ -144,7 +144,6 @@ public class MainMenuEvents : MonoBehaviour
         yield return new WaitForSeconds(1);
         transitionName.style.display = DisplayStyle.None;
         trasitionTypes.style.display = DisplayStyle.None;
-        Time.timeScale = 0;
         isTrasitioning = false;
     }
 }
