@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4805f6f4ee7d2c43be838da4f80b2fa, type: 3}
-  m_Name: FrontFlip
+  m_Name: KungFuKick
   m_EditorClassIdentifier: 
   playerInputList:
   - rightTrigger
-  - down
   - up
   testList:
   - {fileID: -326130699215126277, guid: 5338156f8257a4e519038e54578c3768, type: 3}
-  - {fileID: -7188205451858503878, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   - {fileID: 3432913430670124802, guid: 5338156f8257a4e519038e54578c3768, type: 3}
-  trickName: Front Flip
-  pointsAmount: 20
+  trickName: Kung Fu Kick
+  pointsAmount: 10
