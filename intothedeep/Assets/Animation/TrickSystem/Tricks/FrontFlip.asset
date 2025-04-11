@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4805f6f4ee7d2c43be838da4f80b2fa, type: 3}
+  m_Name: FrontFlip
+  m_EditorClassIdentifier: 
+  playerInputList:
+  - rightTrigger
+  - down
+  - up
+  testList:
+  - {fileID: -326130699215126277, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  - {fileID: -7188205451858503878, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  - {fileID: 3432913430670124802, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  trickName: Front Flip
+  pointsAmount: 10

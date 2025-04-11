@@ -89,6 +89,69 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TrickStick"",
+                    ""type"": ""Value"",
+                    ""id"": ""7f0df835-8814-43a0-913a-47c81c168c84"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""39fda258-0cba-40f5-9fc3-155df8f49c68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad5a75df-babd-49a5-b5a8-47809591e494"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""44bf2f0c-47e3-46c7-8a40-bf9519632a0c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b240cd6-90e8-464b-87b8-589bce840580"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""b956aa0c-5a8f-42d6-8e63-f6f2df8e1909"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""d59e6e35-ff3a-4f26-b067-a5346b7c9d30"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -344,6 +407,83 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7adb9f7e-06d6-4dc8-bf10-f64cb9b09e11"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""TrickStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a457b1c-3435-4e14-a928-36bebd738a4a"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0cb394f0-dc9a-443b-97d6-b1b0b63a043f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""49424d24-c4e1-47ef-bcb3-b54097402815"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee2694bf-ace5-4d61-90b4-f8a6a07019a8"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""09e186da-0eef-4905-b3ce-4f723481fac1"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e40975fa-f73f-4b13-9570-b430ad40b5af"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -359,6 +499,13 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         m_PS5Map_Dash = m_PS5Map.FindAction("Dash", throwIfNotFound: true);
         m_PS5Map_Menu = m_PS5Map.FindAction("Menu", throwIfNotFound: true);
         m_PS5Map_Restart = m_PS5Map.FindAction("Restart", throwIfNotFound: true);
+        m_PS5Map_TrickStick = m_PS5Map.FindAction("TrickStick", throwIfNotFound: true);
+        m_PS5Map_RightTrigger = m_PS5Map.FindAction("RightTrigger", throwIfNotFound: true);
+        m_PS5Map_LeftTrigger = m_PS5Map.FindAction("LeftTrigger", throwIfNotFound: true);
+        m_PS5Map_Up = m_PS5Map.FindAction("Up", throwIfNotFound: true);
+        m_PS5Map_Down = m_PS5Map.FindAction("Down", throwIfNotFound: true);
+        m_PS5Map_Left = m_PS5Map.FindAction("Left", throwIfNotFound: true);
+        m_PS5Map_Right = m_PS5Map.FindAction("Right", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,6 +574,13 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_PS5Map_Dash;
     private readonly InputAction m_PS5Map_Menu;
     private readonly InputAction m_PS5Map_Restart;
+    private readonly InputAction m_PS5Map_TrickStick;
+    private readonly InputAction m_PS5Map_RightTrigger;
+    private readonly InputAction m_PS5Map_LeftTrigger;
+    private readonly InputAction m_PS5Map_Up;
+    private readonly InputAction m_PS5Map_Down;
+    private readonly InputAction m_PS5Map_Left;
+    private readonly InputAction m_PS5Map_Right;
     public struct PS5MapActions
     {
         private @PS5Input m_Wrapper;
@@ -438,6 +592,13 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_PS5Map_Dash;
         public InputAction @Menu => m_Wrapper.m_PS5Map_Menu;
         public InputAction @Restart => m_Wrapper.m_PS5Map_Restart;
+        public InputAction @TrickStick => m_Wrapper.m_PS5Map_TrickStick;
+        public InputAction @RightTrigger => m_Wrapper.m_PS5Map_RightTrigger;
+        public InputAction @LeftTrigger => m_Wrapper.m_PS5Map_LeftTrigger;
+        public InputAction @Up => m_Wrapper.m_PS5Map_Up;
+        public InputAction @Down => m_Wrapper.m_PS5Map_Down;
+        public InputAction @Left => m_Wrapper.m_PS5Map_Left;
+        public InputAction @Right => m_Wrapper.m_PS5Map_Right;
         public InputActionMap Get() { return m_Wrapper.m_PS5Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -468,6 +629,27 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @Restart.started += instance.OnRestart;
             @Restart.performed += instance.OnRestart;
             @Restart.canceled += instance.OnRestart;
+            @TrickStick.started += instance.OnTrickStick;
+            @TrickStick.performed += instance.OnTrickStick;
+            @TrickStick.canceled += instance.OnTrickStick;
+            @RightTrigger.started += instance.OnRightTrigger;
+            @RightTrigger.performed += instance.OnRightTrigger;
+            @RightTrigger.canceled += instance.OnRightTrigger;
+            @LeftTrigger.started += instance.OnLeftTrigger;
+            @LeftTrigger.performed += instance.OnLeftTrigger;
+            @LeftTrigger.canceled += instance.OnLeftTrigger;
+            @Up.started += instance.OnUp;
+            @Up.performed += instance.OnUp;
+            @Up.canceled += instance.OnUp;
+            @Down.started += instance.OnDown;
+            @Down.performed += instance.OnDown;
+            @Down.canceled += instance.OnDown;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
         }
 
         private void UnregisterCallbacks(IPS5MapActions instance)
@@ -493,6 +675,27 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @Restart.started -= instance.OnRestart;
             @Restart.performed -= instance.OnRestart;
             @Restart.canceled -= instance.OnRestart;
+            @TrickStick.started -= instance.OnTrickStick;
+            @TrickStick.performed -= instance.OnTrickStick;
+            @TrickStick.canceled -= instance.OnTrickStick;
+            @RightTrigger.started -= instance.OnRightTrigger;
+            @RightTrigger.performed -= instance.OnRightTrigger;
+            @RightTrigger.canceled -= instance.OnRightTrigger;
+            @LeftTrigger.started -= instance.OnLeftTrigger;
+            @LeftTrigger.performed -= instance.OnLeftTrigger;
+            @LeftTrigger.canceled -= instance.OnLeftTrigger;
+            @Up.started -= instance.OnUp;
+            @Up.performed -= instance.OnUp;
+            @Up.canceled -= instance.OnUp;
+            @Down.started -= instance.OnDown;
+            @Down.performed -= instance.OnDown;
+            @Down.canceled -= instance.OnDown;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
         }
 
         public void RemoveCallbacks(IPS5MapActions instance)
@@ -519,5 +722,12 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnMenu(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
+        void OnTrickStick(InputAction.CallbackContext context);
+        void OnRightTrigger(InputAction.CallbackContext context);
+        void OnLeftTrigger(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
     }
 }
