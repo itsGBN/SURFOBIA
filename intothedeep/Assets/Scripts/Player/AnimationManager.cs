@@ -49,6 +49,6 @@ public class AnimationManager : MonoBehaviour
     public void DoTrick(string trickName)
     {
         skeletonAnim.SetTrigger(trickName);
-        Debug.Log(trickName);
+        Debug.Log(trickName + "inanimanager");
     }
 }

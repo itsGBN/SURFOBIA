@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TrickListener : MonoBehaviour
@@ -10,6 +11,7 @@ public class TrickListener : MonoBehaviour
 
     [Header("Changeable Variables")]
     [SerializeField] float maxTrickTime;
+    [SerializeField] float maxComboTime; //Tracks maximum time next trick needs to be completed
 
     [Header("GameObjects")]
     [SerializeField] AnimationManager AnimationManager;
@@ -17,6 +19,14 @@ public class TrickListener : MonoBehaviour
     string lastTrick;
     bool isDoingTrick;
     float trickTimer;
+
+    //COMBO VARIABLES
+    float comboTimer; //Tracks maximum time next trick needs to be completed
+    int comboMultiplier = 1;
+    float lastPointValue; //Point value gained by most recent trip
+    float totalPointValue; //Total points gained
+    float totalComboPoints; //Counts points towards Combo
+    bool inComboMode; //Whether or not counting Combo
 
     // Start is called before the first frame update
     void Start()
@@ -47,10 +57,31 @@ public class TrickListener : MonoBehaviour
             }
         }
 
+        if (inComboMode) {
+            comboTimer += Time.deltaTime;
+
+            if(comboTimer >= maxComboTime)
+            {
+                inComboMode = false;
+                totalComboPoints = 0;
+                comboMultiplier = 1;
+            }
+        }
+
 
         if (!isDoingTrick && AnyListMatches(testTrick01.playerInputList, predefinedTricks) && testTrick01.timerOn)
         {
-            HUD.instance.onPlayerTrickHud(lastTrick); //publishes trick to be viewed by player
+            HUD.instance.onPlayerTrickHud(lastTrick + " +" + lastPointValue + " x " + comboMultiplier); //publishes trick to be viewed by player
+            totalPointValue += lastPointValue * comboMultiplier;
+            totalComboPoints += lastPointValue * comboMultiplier;
+            comboTimer = 0;
+            inComboMode = true;
+
+            if (totalComboPoints > 50 * (1.5f * (comboMultiplier))) {
+                comboMultiplier += 1;
+                HUD.instance.onPlayerTrickHud("COMBO MULTIPLER: x" + comboMultiplier);
+            } 
+ 
             Debug.Log(lastTrick);
             AnimationManager.DoTrick(lastTrick);
             isDoingTrick = true;
@@ -103,6 +134,7 @@ public class TrickListener : MonoBehaviour
                 if (ListsMatch(recentInputs, predefinedTricks[i].playerInputList))
                 {
                     lastTrick = predefinedTricks.Find(x => ListsMatch(recentInputs, x.playerInputList)).trickName;
+                    lastPointValue = predefinedTricks.Find(x => ListsMatch(recentInputs, x.playerInputList)).pointsAmount;
                     testTrick01.playerInputList.Clear();
                     return true;
                 }
