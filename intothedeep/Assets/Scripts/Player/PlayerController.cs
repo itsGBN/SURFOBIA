@@ -5,15 +5,31 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Splines; // Import Unity's Spline package
 using UnityEngine.InputSystem;
 using UnityEngine.Animations;
+using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 public class PlayerController : MonoBehaviour
 {
+    [Header("Speed")]
     public float moveSpeed = 5f;
     public float turnSpeed = 100f;
     public float rotationSpeed = 10f;
     public float grindSpeed = 5f;
+    public float accel = 4;
+    public float decel = 2;
+    private float currentSpeed;
+
+    [Header("Braking")]
+    public float brakeDecel = 15;
+    [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
+    private bool isBraking = false;
+    private float curBrakeSpeed;
+
+    [Header("Jumping and Grounded")]
     public float jumpHeight = 5f; // Jump height (force)
     public float groundCheckDistance = 0.5f; // Distance to check for ground
     public LayerMask groundLayer; // Layer mask for ground detection
+    public bool isGrounded;
+    public bool grounding;
 
     private IPlayerState currentState;
     private FreeRoamState freeRoamState;
@@ -23,9 +39,6 @@ public class PlayerController : MonoBehaviour
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
     private Collider lastGrindCollider;
-
-    public bool isGrounded;
-    public bool grounding;
 
     private Rigidbody rb;
     private bool isDiving = false;
@@ -255,12 +268,39 @@ public class PlayerController : MonoBehaviour
             Vector3 inputDirection = player.transform.forward;
             Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
 
+            // braking
+            if (moveInput < 0 && player.currentSpeed > 0)
+            {
+                // initial break
+                if (!player.isBraking)
+                {
+                    player.isBraking = true;
+                    player.currentSpeed *= player.initialBrakeMultiplier;
+                    player.curBrakeSpeed = 0;
+                }
+            }
+            else
+            {
+                player.isBraking = false;
+                player.curBrakeSpeed = 0;
+            }
+            if (player.isBraking)
+            {
+                player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
+                player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
+            }
+
+            // accelerate + decelerate
+            if (moveInput > 0) { player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime; }
+            else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
+            player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
+            
             // Apply movement
-            Vector3 moveDirection = flattenedDirection * moveInput * player.moveSpeed * Time.deltaTime;
+            Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
             // Rotate left/right
-            player.transform.Rotate(Vector3.up, turnInput * player.turnSpeed * Time.deltaTime);
+            player.transform.Rotate(Vector3.up, turnInput * player.turnSpeed * Time.fixedDeltaTime);
         }
 
     }
