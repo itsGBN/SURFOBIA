@@ -82,7 +82,7 @@ public class TrickListener : MonoBehaviour
                 HUD.instance.onPlayerTrickHud("COMBO MULTIPLER: x" + comboMultiplier);
             } 
  
-            Debug.Log(lastTrick);
+            //Debug.Log(lastTrick);
             AnimationManager.DoTrick(lastTrick);
             isDoingTrick = true;
         }

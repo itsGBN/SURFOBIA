@@ -8,6 +8,7 @@ public class AnimationManager : MonoBehaviour
     [Header("Components")]
     [SerializeField] Animator mantaAnim;
     [SerializeField] Animator skeletonAnim;
+    [SerializeField] Animator trickSkeletonAnim;
 
 
     #region CONTROLLER
@@ -33,7 +34,7 @@ public class AnimationManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        trickSkeletonAnim.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -48,7 +49,20 @@ public class AnimationManager : MonoBehaviour
 
     public void DoTrick(string trickName)
     {
-        skeletonAnim.SetTrigger(trickName);
-        Debug.Log(trickName + "inanimanager");
+        skeletonAnim.gameObject.SetActive(false);
+        trickSkeletonAnim.gameObject.SetActive(true);
+        trickSkeletonAnim.SetTrigger(trickName);
+
+        StartCoroutine(trickTimer());
+
+        //Debug.Log(trickName + "inanimanager");
+    }
+
+    IEnumerator trickTimer()
+    {
+        yield return new WaitForSeconds(2f);
+
+        skeletonAnim.gameObject.SetActive(true);
+        trickSkeletonAnim.gameObject.SetActive(false);
     }
 }

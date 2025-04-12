@@ -110,13 +110,7 @@ void Update()
                }
                else if (ctrl.name == playerInputList[playerInputList.Count - 1])
                {
-                   /*
-                   Debug.Log("Same input");
-                   Timer = 0f;
-                   timerOn = false;
-                   playerInputList.Clear();
-                   //Timer++;
-                   */
+                   //SameInput
                }
            });
 
@@ -125,21 +119,6 @@ void Update()
             {
                 playerInputList.RemoveRange(0, 10);
             }
-            /*
-                if (playerInputList.Count > 4)
-        {
-                //Debug.Log("amount of inputs: " + playerInputList.Count);
-                // foreach (InputControl input in playerInputList)
-                // {
-                //     Debug.Log(input);
-                // }
-
-                Debug.Log(playerInputList[0] + playerInputList[1] + playerInputList[2] + playerInputList[3]);
-                playerInputList.Clear();
-                Timer = 0;
-                timerOn = false;
-            }
-            */
         }
 
 
