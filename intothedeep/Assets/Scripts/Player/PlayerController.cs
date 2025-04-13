@@ -17,12 +17,14 @@ public class PlayerController : MonoBehaviour
     public float accel = 4;
     public float decel = 2;
     private float currentSpeed;
+    private float currentTurnSpeed;
 
     [Header("Braking")]
     public float brakeDecel = 15;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
     private bool isBraking = false;
     private float curBrakeSpeed;
+    private float brakeTurnDir;
 
     [Header("Jumping and Grounded")]
     public float jumpHeight = 5f; // Jump height (force)
@@ -46,6 +48,14 @@ public class PlayerController : MonoBehaviour
     public float diveFallSpeed = -2f;
     public Vector3 currentSurfaceNormal = Vector3.up;
 
+    // player graphics
+    public Transform graphics;
+    private float boardRoll;
+    private float boardYaw;
+    private float curBoardRoll;
+    private float curBoardYaw;
+    public float rollSpeed = 30f;
+    public float boardRollAmount = 50f;
 
     #region CONTROLLER
     private PS5Input GetInputs;
@@ -74,6 +84,9 @@ public class PlayerController : MonoBehaviour
         grindState = new GrindState(this);
         currentState = zeroState;
         GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+
+        curBoardRoll = graphics.transform.localEulerAngles.z;
+        curBoardYaw = graphics.transform.localEulerAngles.y;
     }
 
     //FIXED UPDATE
@@ -268,15 +281,16 @@ public class PlayerController : MonoBehaviour
             Vector3 inputDirection = player.transform.forward;
             Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
 
-            // braking
+            // Braking
             if (moveInput < 0 && player.currentSpeed > 0)
             {
-                // initial break
+                // initial brake
                 if (!player.isBraking)
                 {
                     player.isBraking = true;
                     player.currentSpeed *= player.initialBrakeMultiplier;
                     player.curBrakeSpeed = 0;
+                    player.brakeTurnDir = Mathf.Sign(turnInput); // which way we were turning 
                 }
             }
             else
@@ -290,7 +304,7 @@ public class PlayerController : MonoBehaviour
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
             }
 
-            // accelerate + decelerate
+            // Accelerate + Decelerate
             if (moveInput > 0) { player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime; }
             else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
             player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
@@ -301,6 +315,21 @@ public class PlayerController : MonoBehaviour
 
             // Rotate left/right
             player.transform.Rotate(Vector3.up, turnInput * player.turnSpeed * Time.fixedDeltaTime);
+
+            // Player graphics
+            if (turnInput == 0) { player.boardRoll = 0; }
+            else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
+
+            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * 30; }
+            else { player.boardYaw = turnInput; }
+
+            player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
+            player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
+
+            player.curBoardRoll = Mathf.LerpAngle(player.curBoardRoll, player.boardRoll, player.rollSpeed * Time.fixedDeltaTime);
+            player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, player.rollSpeed * Time.fixedDeltaTime);
+
+            player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
         }
 
     }
