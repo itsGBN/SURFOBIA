@@ -14,14 +14,15 @@ public class PlayerController : MonoBehaviour
     public float turnSpeed = 100f;
     public float rotationSpeed = 10f;
     public float grindSpeed = 5f;
-    public float accel = 4;
-    public float decel = 2;
+    public float accel = 20;
+    public float decel = 7;
     private float currentSpeed;
     private float currentTurnSpeed;
 
     [Header("Braking")]
-    public float brakeDecel = 15;
+    public float brakeDecel = 8;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
+    public float brakeTurnDecel = 70;
     private bool isBraking = false;
     private float curBrakeSpeed;
     private float brakeTurnDir;
@@ -48,14 +49,14 @@ public class PlayerController : MonoBehaviour
     public float diveFallSpeed = -2f;
     public Vector3 currentSurfaceNormal = Vector3.up;
 
-    // player graphics
+    [Header("Graphics")]
     public Transform graphics;
     private float boardRoll;
     private float boardYaw;
     private float curBoardRoll;
     private float curBoardYaw;
-    public float rollSpeed = 30f;
-    public float boardRollAmount = 50f;
+    public float rollSpeed = 2.5f;
+    public float boardRollAmount = 25f;
 
     #region CONTROLLER
     private PS5Input GetInputs;
@@ -274,7 +275,6 @@ public class PlayerController : MonoBehaviour
             float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
             //Input.GetAxis("Horizontal");
 
-
             player.AlignToSurface();
 
             // Get direction the player is facing and project it onto the surface plane
@@ -289,11 +289,12 @@ public class PlayerController : MonoBehaviour
                 {
                     player.isBraking = true;
                     player.currentSpeed *= player.initialBrakeMultiplier;
+                    player.currentTurnSpeed *= player.initialBrakeMultiplier;
                     player.curBrakeSpeed = 0;
                     player.brakeTurnDir = Mathf.Sign(turnInput); // which way we were turning 
                 }
             }
-            else
+            else if (moveInput >= 0)
             {
                 player.isBraking = false;
                 player.curBrakeSpeed = 0;
@@ -309,25 +310,50 @@ public class PlayerController : MonoBehaviour
             else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
             player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
             
+            // Turning
+            if (player.isBraking)
+            {
+                player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
+                // Clamp, so it doesn't go past 0 in the opposite direction
+                if (player.brakeTurnDir < 0)
+                {
+                    player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0);
+                }
+                else if (player.brakeTurnDir > 0)
+                {
+                    player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed);
+                }
+            }
+            else
+            {
+                player.currentTurnSpeed = turnInput * player.turnSpeed;
+            }
+
             // Apply movement
             Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
             // Rotate left/right
-            player.transform.Rotate(Vector3.up, turnInput * player.turnSpeed * Time.fixedDeltaTime);
+            player.transform.Rotate(Vector3.up, player.currentTurnSpeed * Time.fixedDeltaTime);
 
             // Player graphics
             if (turnInput == 0) { player.boardRoll = 0; }
+            //else if (player.isBraking) { player.boardRoll }
+            //else if (player.isBraking) { player.boardRoll }
             else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
 
-            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * 30; }
+            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10; }
             else { player.boardYaw = turnInput; }
 
             player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
             player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
 
+            float yawSpeed;
+            if (player.isBraking) { yawSpeed = player.rollSpeed; }
+            else { yawSpeed = player.rollSpeed / 2; }
+
             player.curBoardRoll = Mathf.LerpAngle(player.curBoardRoll, player.boardRoll, player.rollSpeed * Time.fixedDeltaTime);
-            player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, player.rollSpeed * Time.fixedDeltaTime);
+            player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, yawSpeed * Time.fixedDeltaTime);
 
             player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
         }
