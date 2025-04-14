@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aimer : MonoBehaviour
+public class ReceivingAngle : MonoBehaviour
 {
-    public Transform player;
+    float angle;
+
+    public void setAngle(float angle)
+    {
+        this.angle = angle;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +19,6 @@ public class Aimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = new Vector3(player.position.x, player.position.y, player.position.z);
+        
     }
 }
