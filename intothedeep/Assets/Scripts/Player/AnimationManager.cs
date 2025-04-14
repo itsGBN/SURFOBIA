@@ -45,6 +45,12 @@ public class AnimationManager : MonoBehaviour
         skeletonAnim.SetFloat("Joystick", moveInput);
         mantaAnim.SetFloat("Joystick", moveInput);
 
+        if (GetInputs.PS5Map.Jump.WasPressedThisFrame())
+        {
+            DoTrick("Jump");
+        }
+
+
     }
 
     public void DoTrick(string trickName)
