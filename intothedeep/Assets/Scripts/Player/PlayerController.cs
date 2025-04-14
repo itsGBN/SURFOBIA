@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
     {
         AudioManager.instance.Jump();
         float angle = Vector3.SignedAngle(Vector3.up, currentSurfaceNormal, transform.right);
-
+        
         if (angle > -15f)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpHeight, rb.velocity.z);
@@ -260,10 +260,12 @@ public class PlayerController : MonoBehaviour
     public class FreeRoamState : IPlayerState
     {
         private PlayerController player;
+        private ReceivingAngle ra;
 
         public FreeRoamState(PlayerController player)
         {
             this.player = player;
+            this.ra = GameObject.Find("RA").GetComponent<ReceivingAngle>();
         }
 
         public void UpdateState()
@@ -356,6 +358,12 @@ public class PlayerController : MonoBehaviour
             player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, yawSpeed * Time.fixedDeltaTime);
 
             player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
+            
+            float angle = Vector3.SignedAngle(Vector3.up, player.currentSurfaceNormal, player.transform.right);
+            if (!ra)
+            {
+                ra.setAngle(angle);
+            }
         }
 
     }
