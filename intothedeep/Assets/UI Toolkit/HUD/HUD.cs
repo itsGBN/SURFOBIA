@@ -13,6 +13,7 @@ public class HUD : MonoBehaviour
     private UIDocument uIDocument;
     private Label distanceLabel;
     private VisualElement hudVisualElement;
+    private VisualElement redVisualElement;
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
     private int trickNum;
@@ -32,6 +33,7 @@ public class HUD : MonoBehaviour
 
         //Reference Labels
         hudVisualElement = uIDocument.rootVisualElement.Q("HUD") as VisualElement;
+        redVisualElement = uIDocument.rootVisualElement.Q("Red") as VisualElement;
         distanceLabel = uIDocument.rootVisualElement.Q("Distance") as Label;
         List<Label> labels = uIDocument.rootVisualElement.Query<Label>(null, "scores").ToList();
         enemyScores = labels.ToDictionary(label => label, label => (0, "Name"));
@@ -66,6 +68,15 @@ public class HUD : MonoBehaviour
         onDistance();
         onPlayerTrick();
         onVisibility();
+    }
+
+    public IEnumerator onRed()
+    {
+        redVisualElement.style.visibility = Visibility.Visible;
+        redVisualElement.style.opacity = 0;
+        yield return new WaitForSeconds(0.6f);
+        redVisualElement.style.visibility = Visibility.Hidden;
+        redVisualElement.style.opacity = 0.5f;
     }
 
     private void onVisibility()
