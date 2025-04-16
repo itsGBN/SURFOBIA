@@ -11,18 +11,24 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
     public float moveSpeed = 5f;
-    public float turnSpeed = 100f;
     public float rotationSpeed = 10f;
     public float grindSpeed = 5f;
     public float accel = 20;
     public float decel = 7;
     private float currentSpeed;
+
+    [Header("Turning")]
+    public float turnSpeed = 110f;
+    public float turnAccel = 70f;
+    [Tooltip("Get to this speed with faster acceleration, so it doesn't feel draggy")]public float initTurnSpeed = 80f;
+    public float initTurnAccel = 90f;
     private float currentTurnSpeed;
 
     [Header("Braking")]
     public float brakeDecel = 8;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
     public float brakeTurnDecel = 70;
+    [Range(-1, 0)][Tooltip("How far back the stick needs to be pulled back to brake")]public float brakeThreshold = -0.45f;
     private bool isBraking = false;
     private float curBrakeSpeed;
     private float brakeTurnDir;
@@ -127,6 +133,7 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
     }
 
     //SETTING THE NEW STATE
@@ -281,8 +288,8 @@ public class PlayerController : MonoBehaviour
             Vector3 inputDirection = player.transform.forward;
             Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
 
-            // Braking
-            if (moveInput < 0 && player.currentSpeed > 0)
+            // Braking, threshold makes deadzone for pulling the stick back
+            if (moveInput < player.brakeThreshold && player.currentSpeed > 0 && player.isGrounded)
             {
                 // initial brake
                 if (!player.isBraking)
@@ -296,13 +303,18 @@ public class PlayerController : MonoBehaviour
             }
             else if (moveInput >= 0)
             {
-                player.isBraking = false;
-                player.curBrakeSpeed = 0;
+                if (player.isBraking)
+                {
+                    player.isBraking = false;
+                    player.curBrakeSpeed = 0;
+                    if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(false); }
+                }
             }
             if (player.isBraking)
             {
                 player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
+                if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed, player.currentSpeed / player.moveSpeed); }
             }
 
             // Accelerate + Decelerate
@@ -315,37 +327,37 @@ public class PlayerController : MonoBehaviour
             {
                 player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
                 // Clamp, so it doesn't go past 0 in the opposite direction
-                if (player.brakeTurnDir < 0)
-                {
-                    player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0);
-                }
-                else if (player.brakeTurnDir > 0)
-                {
-                    player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed);
-                }
+                if (player.brakeTurnDir < 0) { player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0); }
+                else if (player.brakeTurnDir > 0) { player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed); }
+            }
+            else if (Mathf.Abs(turnInput) > 0 && !player.isBraking)
+            {
+                //player.currentTurnSpeed = turnInput * player.turnSpeed;
+                if (player.currentTurnSpeed < player.initTurnSpeed) { player.currentTurnSpeed += player.initTurnAccel * Time.fixedDeltaTime; }
+                else { player.currentTurnSpeed += player.turnAccel * Time.fixedDeltaTime; }
             }
             else
             {
-                player.currentTurnSpeed = turnInput * player.turnSpeed;
+                player.currentTurnSpeed = 0;
             }
+            player.currentSpeed = Mathf.Clamp(player.currentSpeed, -player.turnSpeed, player.turnSpeed);
 
             // Apply movement
             Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
             // Rotate left/right
-            player.transform.Rotate(Vector3.up, player.currentTurnSpeed * Time.fixedDeltaTime);
+            player.transform.Rotate(Vector3.up, player.currentTurnSpeed * turnInput * Time.fixedDeltaTime);
 
             // Player graphics
-            if (turnInput == 0) { player.boardRoll = 0; }
-            //else if (player.isBraking) { player.boardRoll }
-            //else if (player.isBraking) { player.boardRoll }
+            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 2; Debug.Log("check"); }
+            else if (turnInput == 0) { player.boardRoll = 0; }
             else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
 
             if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10; }
             else { player.boardYaw = turnInput; }
 
-            player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
+            //player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
             player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
 
             float yawSpeed;
@@ -449,6 +461,7 @@ public class PlayerController : MonoBehaviour
                 HUD.instance.onPlayerTrickHud("GOOD");
                 AudioManager.instance.Land();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
             }
             else if (groundAngle < 5f && !grounding)
             {
@@ -456,6 +469,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
             }
             else if (!grounding)
             {
@@ -463,6 +477,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
             }
         }
 
