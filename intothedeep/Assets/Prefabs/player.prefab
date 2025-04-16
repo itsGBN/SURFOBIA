@@ -5053,6 +5053,8 @@ MonoBehaviour:
   mantaAnim: {fileID: 5561257626483279285}
   skeletonAnim: {fileID: 3934287544598793967}
   trickSkeletonAnim: {fileID: 2256671910626772672}
+  movementSkeletonMesh: {fileID: 7618730211961952702}
+  trickSkeletonMesh: {fileID: 796742244223016039}
 --- !u!114 &1101744569606385682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5283,6 +5285,12 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!137 &796742244223016039 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1029313066246466240, guid: 938de59250dd7224385bd397078becef,
+    type: 3}
+  m_PrefabInstance: {fileID: 380063915985090215}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2037628079537879076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5495,6 +5503,12 @@ Animator:
 --- !u!4 &6951668287376970901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e45b5fa8d7e75554380948288606b1b0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7490594508167361406}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7618730211961952702 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1029313066246466240, guid: e45b5fa8d7e75554380948288606b1b0,
     type: 3}
   m_PrefabInstance: {fileID: 7490594508167361406}
   m_PrefabAsset: {fileID: 0}
