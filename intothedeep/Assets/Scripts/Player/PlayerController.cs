@@ -218,9 +218,12 @@ public class PlayerController : MonoBehaviour
     //RED FLASH
     IEnumerator FlashRed()
     {
-        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 0);
-        yield return new WaitForSeconds(2);
-        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 1);
+        StartCoroutine(HUD.instance.onRed());
+        AudioManager.instance.Hit();
+        HUD.instance.onPlayerTrickHud("**COLLIDE**");
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(0.2f);
+        Time.timeScale = 1;
     }
 
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
