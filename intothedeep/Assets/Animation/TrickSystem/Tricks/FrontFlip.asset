@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FrontFlip
   m_EditorClassIdentifier: 
   playerInputList:
-  - rightTrigger
+  - leftTrigger
   - down
   - up
   testList:

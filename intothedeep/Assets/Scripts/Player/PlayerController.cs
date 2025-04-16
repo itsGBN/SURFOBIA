@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public float initTurnAccel = 90f;
     private float currentTurnSpeed;
 
+    public float idleFloat = 0.2f;
+
     [Header("Braking")]
     public float brakeDecel = 8;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
@@ -222,9 +224,12 @@ public class PlayerController : MonoBehaviour
     //RED FLASH
     IEnumerator FlashRed()
     {
-        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 0);
-        yield return new WaitForSeconds(2);
-        gameObject.transform.GetChild(1).gameObject.transform.GetChild(2).GetComponent<Renderer>().material.SetFloat("_redPower", 1);
+        StartCoroutine(HUD.instance.onRed());
+        AudioManager.instance.Hit();
+        HUD.instance.onPlayerTrickHud("**COLLIDE**");
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(0.2f);
+        Time.timeScale = 1;
     }
 
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
@@ -264,10 +269,12 @@ public class PlayerController : MonoBehaviour
     public class FreeRoamState : IPlayerState
     {
         private PlayerController player;
+        private ReceivingAngle ra;
 
         public FreeRoamState(PlayerController player)
         {
             this.player = player;
+            this.ra = GameObject.Find("RA").GetComponent<ReceivingAngle>();
         }
 
         public void UpdateState()
@@ -275,6 +282,7 @@ public class PlayerController : MonoBehaviour
             GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
 
             float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
+
             // Input.GetAxis("Vertical");
             float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
             //Input.GetAxis("Horizontal");
@@ -315,10 +323,22 @@ public class PlayerController : MonoBehaviour
             }
 
             // Accelerate + Decelerate
-            if (moveInput > 0) { player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime; }
+            if (moveInput >= 0)
+            {
+                if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
+                {
+                    player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
+                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
+                }
+                else
+                {
+                    player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
+                }
+                
+            }
             else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
             player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
-            
+
             // Turning
             if (player.isBraking)
             {
@@ -346,6 +366,7 @@ public class PlayerController : MonoBehaviour
             // Rotate left/right
             player.transform.Rotate(Vector3.up, player.currentTurnSpeed * turnInput * Time.fixedDeltaTime);
 
+
             // Player graphics
             if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 2; }
             else if (turnInput == 0) { player.boardRoll = 0; }
@@ -365,6 +386,12 @@ public class PlayerController : MonoBehaviour
             player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, yawSpeed * Time.fixedDeltaTime);
 
             player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
+
+            float angle = Vector3.SignedAngle(Vector3.up, player.currentSurfaceNormal, player.transform.right);
+            if (!ra)
+            {
+                ra.setAngle(angle);
+            }
         }
 
     }

@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Wall
   - Obstacle
+  - RA
+  - Jump
   layers:
   - Default
   - TransparentFX

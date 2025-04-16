@@ -12,4 +12,5 @@
         <ui:Label text="3rd&#10;" name="3RD" class="label" style="left: 1823px; top: -51px; width: 67px; height: 53px; font-size: 33px;" />
         <ui:Label text="4th&#10;" name="4TH" class="label" style="left: 1826px; top: -43px; width: 54px; height: 45px; font-size: 28px;" />
     </ui:VisualElement>
+    <ui:VisualElement name="Red" style="flex-grow: 1; position: absolute; height: 1126px; width: 1952px; background-image: url(&quot;project://database/Assets/Sprites/Textures/alfie-jaarf-sandtexture4.jpg?fileID=2800000&amp;guid=a990f6a9e4dccb4419e8550e0cb6ff4a&amp;type=3#alfie-jaarf-sandtexture4&quot;); -unity-background-image-tint-color: rgb(255, 0, 0); opacity: 0.5; transition-duration: 0.5s; transition-timing-function: ease-in; visibility: hidden; transition-property: opacity;" />
 </ui:UXML>
