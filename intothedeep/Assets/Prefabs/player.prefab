@@ -5055,6 +5055,7 @@ MonoBehaviour:
   trickSkeletonAnim: {fileID: 2256671910626772672}
   movementSkeletonMesh: {fileID: 7618730211961952702}
   trickSkeletonMesh: {fileID: 796742244223016039}
+  trickAnimationSpeed: 1.25
 --- !u!114 &1101744569606385682
 MonoBehaviour:
   m_ObjectHideFlags: 0

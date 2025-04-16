@@ -14,6 +14,9 @@ public class AnimationManager : MonoBehaviour
     [SerializeField] SkinnedMeshRenderer trickSkeletonMesh;
 
 
+    [Header("Changable Variables")]
+    [SerializeField] float trickAnimationSpeed;
+
     #region CONTROLLER
     private PS5Input GetInputs;
 
@@ -39,6 +42,7 @@ public class AnimationManager : MonoBehaviour
     {
         //trickSkeletonAnim.gameObject.SetActive(false);
         trickSkeletonMesh.enabled = false;
+        trickSkeletonAnim.speed = trickAnimationSpeed;
     }
 
     // Update is called once per frame
@@ -74,10 +78,39 @@ public class AnimationManager : MonoBehaviour
 
     IEnumerator trickTimer()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         //skeletonAnim.gameObject.SetActive(true);
         //trickSkeletonAnim.gameObject.SetActive(false);
+
+        movementSkeletonMesh.enabled = true;
+        trickSkeletonMesh.enabled = false;
+
+    }
+
+    public void DoJump()
+    {
+        //skeletonAnim.gameObject.SetActive(false);
+        movementSkeletonMesh.enabled = false;
+
+        //trickSkeletonAnim.gameObject.SetActive(true);
+        trickSkeletonMesh.enabled = true;
+
+        int randomFrame = (int) Mathf.Floor(Random.Range(0, 4));
+
+        trickSkeletonAnim.SetInteger("JumpFrame", randomFrame);
+
+        StartCoroutine(freezeTimer());
+    }
+
+    IEnumerator freezeTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        //skeletonAnim.gameObject.SetActive(true);
+        //trickSkeletonAnim.gameObject.SetActive(false);
+
+        trickSkeletonAnim.SetTrigger("EndJump");
 
         movementSkeletonMesh.enabled = true;
         trickSkeletonMesh.enabled = false;
