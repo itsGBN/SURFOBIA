@@ -319,7 +319,7 @@ public class PlayerController : MonoBehaviour
                 if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
                 {
                     player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
-                    Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
+                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
                 }
                 else
                 {
