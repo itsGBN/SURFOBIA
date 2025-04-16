@@ -108,32 +108,29 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && isGrounded)
+        if (GameManager.instance.InputActive)
         {
-            Jump();
-        }
-        else if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && !isGrounded)
-        {
-            StartDive();
-        }
-        else if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && !isGrounded)
-        {
-            StopDive();
-        }
+            if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && isGrounded)
+            {
+                Jump();
+            }
+            else if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && !isGrounded)
+            {
+                StartDive();
+            }
+            else if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && !isGrounded)
+            {
+                StopDive();
+            }
 
 
-        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
-        {
-            Debug.Log("control press");
-            SetState(freeRoamState);
-            Debug.Log("Escape registered in Update() - transition from ZeroState");
+            if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+            {
+                Debug.Log("control press");
+                SetState(freeRoamState);
+                Debug.Log("Escape registered in Update() - transition from ZeroState");
+            }
         }
-
-        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-
     }
 
     //SETTING THE NEW STATE
@@ -350,7 +347,7 @@ public class PlayerController : MonoBehaviour
             player.transform.Rotate(Vector3.up, player.currentTurnSpeed * turnInput * Time.fixedDeltaTime);
 
             // Player graphics
-            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 2; Debug.Log("check"); }
+            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 2; }
             else if (turnInput == 0) { player.boardRoll = 0; }
             else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
 
