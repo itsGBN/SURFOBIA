@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Get to this speed with faster acceleration, so it doesn't feel draggy")]public float initTurnSpeed = 80f;
     public float initTurnAccel = 90f;
     private float currentTurnSpeed;
+    private float turnHold; // how long we've been holding turn
 
     public float idleFloat = 0.2f;
 
@@ -120,11 +121,12 @@ public class PlayerController : MonoBehaviour
             {
                 StartDive();
             }
-            else if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && !isGrounded)
+            else if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !isGrounded)
             {
                 StopDive();
             }
 
+            Debug.Log(GameManager.instance.InputActive);
 
             if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
             {
@@ -222,14 +224,12 @@ public class PlayerController : MonoBehaviour
     }
 
     //RED FLASH
-    IEnumerator FlashRed()
+    void FlashRed()
     {
         StartCoroutine(HUD.instance.onRed());
         AudioManager.instance.Hit();
         HUD.instance.onPlayerTrickHud("**COLLIDE**");
-        Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(0.2f);
-        Time.timeScale = 1;
+        GameManager.instance.FreezeFrame(0.08f);
     }
 
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
@@ -281,11 +281,13 @@ public class PlayerController : MonoBehaviour
         {
             GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
 
-            float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
-
-            // Input.GetAxis("Vertical");
-            float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
-            //Input.GetAxis("Horizontal");
+            float moveInput = 0;
+            float turnInput = 0;
+            if (GameManager.instance.InputActive)
+            {
+                moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
+                turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
+            }
 
             player.AlignToSurface();
 
@@ -319,7 +321,7 @@ public class PlayerController : MonoBehaviour
             {
                 player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
-                if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed, player.currentSpeed / player.moveSpeed); }
+                if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
             // Accelerate + Decelerate
@@ -327,7 +329,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
                 {
-                    player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
+                    //player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
                     // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
                 }
                 else
@@ -344,20 +346,22 @@ public class PlayerController : MonoBehaviour
             {
                 player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
                 // Clamp, so it doesn't go past 0 in the opposite direction
-                if (player.brakeTurnDir < 0) { player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0); }
-                else if (player.brakeTurnDir > 0) { player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed); }
+                //if (player.brakeTurnDir < 0) { player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0); }
+                //else if (player.brakeTurnDir > 0) { player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed); }
             }
             else if (Mathf.Abs(turnInput) > 0 && !player.isBraking)
             {
+                player.turnHold += Time.deltaTime;
                 //player.currentTurnSpeed = turnInput * player.turnSpeed;
-                if (player.currentTurnSpeed < player.initTurnSpeed) { player.currentTurnSpeed += player.initTurnAccel * Time.fixedDeltaTime; }
-                else { player.currentTurnSpeed += player.turnAccel * Time.fixedDeltaTime; }
+                if (Mathf.Abs(player.currentTurnSpeed) < player.initTurnSpeed) { player.currentTurnSpeed += player.initTurnAccel * Time.fixedDeltaTime; }
+                else if (player.turnHold >= 0.85f && Mathf.Abs(turnInput) > 0.5f) { player.currentTurnSpeed += player.turnAccel * Mathf.Abs(turnInput) * Time.fixedDeltaTime; }
+                if (Mathf.Abs(turnInput) <= 0.5f)
+                {
+                    player.turnHold = 0;
+                    player.currentTurnSpeed = Mathf.MoveTowards(player.currentTurnSpeed, 0, player.turnAccel * 1.25f * Time.fixedDeltaTime);
+                }
             }
-            else
-            {
-                player.currentTurnSpeed = 0;
-            }
-            player.currentSpeed = Mathf.Clamp(player.currentSpeed, -player.turnSpeed, player.turnSpeed);
+            player.currentTurnSpeed = Mathf.Clamp(player.currentTurnSpeed, 0, player.turnSpeed);
 
             // Apply movement
             Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
@@ -366,13 +370,13 @@ public class PlayerController : MonoBehaviour
             // Rotate left/right
             player.transform.Rotate(Vector3.up, player.currentTurnSpeed * turnInput * Time.fixedDeltaTime);
 
-
+            //Debug.Log(player.currentTurnSpeed);
             // Player graphics
-            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 2; }
+            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 1.75f; }
             else if (turnInput == 0) { player.boardRoll = 0; }
             else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
 
-            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10; }
+            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 3f; }
             else { player.boardYaw = turnInput; }
 
             //player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
@@ -485,7 +489,7 @@ public class PlayerController : MonoBehaviour
                 HUD.instance.onPlayerTrickHud("GOOD");
                 AudioManager.instance.Land();
                 grounding = true;
-                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
@@ -493,7 +497,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
-                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (!grounding)
             {
@@ -501,7 +505,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
-                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 1, 1); }
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
         }
 
@@ -534,7 +538,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Obstacle")
         {
-            StartCoroutine(FlashRed());
+            FlashRed();
+            RumbleManager.instance.RumblePulse(0.05f, 0.1f, new Vector2(1, 1), new Vector2(1, 1));
         }
     }
 }

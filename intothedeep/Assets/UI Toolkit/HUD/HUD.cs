@@ -14,12 +14,16 @@ public class HUD : MonoBehaviour
     private Label distanceLabel;
     private VisualElement hudVisualElement;
     private VisualElement redVisualElement;
+    private VisualElement endscreenVisualElement;
+    private Label countdownLabel;
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
     private int trickNum;
     private Queue<Label> playerTricks = new Queue<Label>();
 
     [SerializeField] [Range(1, 1000)] int distannceRange;
+
+    private bool focusEndscreen = false;
 
 
     private void Awake()
@@ -34,7 +38,9 @@ public class HUD : MonoBehaviour
         //Reference Labels
         hudVisualElement = uIDocument.rootVisualElement.Q("HUD") as VisualElement;
         redVisualElement = uIDocument.rootVisualElement.Q("Red") as VisualElement;
+        endscreenVisualElement = uIDocument.rootVisualElement.Q("Endscreen") as VisualElement;
         distanceLabel = uIDocument.rootVisualElement.Q("Distance") as Label;
+        countdownLabel = uIDocument.rootVisualElement.Q("Countdown") as Label;
         List<Label> labels = uIDocument.rootVisualElement.Query<Label>(null, "scores").ToList();
         enemyScores = labels.ToDictionary(label => label, label => (0, "Name"));
   
@@ -81,7 +87,7 @@ public class HUD : MonoBehaviour
 
     private void onVisibility()
     {
-        if (MainMenuEvents.instance.focusMenu)
+        if (MainMenuEvents.instance.focusMenu || focusEndscreen)
         {
             hudVisualElement.style.opacity = 0;
         }
@@ -173,6 +179,20 @@ public class HUD : MonoBehaviour
             if (queueArray[i].ClassListContains("tthree")) { queueArray[i].RemoveFromClassList("tthree"); queueArray[i].AddToClassList(("tfour")); continue; }
             if (queueArray[i].ClassListContains("tfour")) { Label toDelete = playerTricks.Dequeue(); uIDocument.rootVisualElement.Remove(toDelete); toDelete = null; continue; }
         }
+    }
+
+    public void UpdateCountdown(float value)
+    {
+        countdownLabel.style.visibility = Visibility.Visible;
+        countdownLabel.text = value.ToString();
+        if (value <= 0) { countdownLabel.style.visibility = Visibility.Hidden; }
+    }
+
+    public void Endscreen()
+    {
+        focusEndscreen = true;
+        endscreenVisualElement.style.visibility = Visibility.Visible;
+        // update stats
     }
 }
 

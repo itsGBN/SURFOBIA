@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState { MENU, PAUSED, COUNTING, RACING, ENDGAME, CREDITS }
+    public enum GameState { MAIN, READY, PAUSED, COUNTING, RACING, ENDGAME, CREDITS }
 
-    GameState gameState = GameState.MENU;
+    [SerializeField] GameState startingState = GameState.READY;
+
+    GameState gameState = GameState.MAIN;
     GameState lastState;
 
     float globalTimeScale = 1f;
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         GetInputs = new PS5Input();
+        if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
+        else { Destroy(gameObject); }
     }
 
     private void OnEnable()
@@ -45,67 +49,81 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); gameState = GameState.MENU; }
-        else { Destroy(gameObject); }
+        
+        //UpdateState(GameState.MAIN);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Time.timeScale = globalTimeScale;
-        
+        //Time.timeScale = globalTimeScale;
+
         switch (gameState)
         {
-            case GameState.COUNTING:
-                
+            case GameState.ENDGAME:
+                if (Input.anyKeyDown)
+                {
+                    // go to main menu
+                    SceneManager.LoadScene(0);
+                    //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    UpdateState(GameState.MAIN);
+                    MusicManager.instance.FadeOut();
+                }
             break;
+            case GameState.MAIN:
+                if (Input.anyKeyDown)
+                {
+                    //UpdateState(GameState.READY);
+                }
+                break;
         }
-
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
         {
-            UpdateState(GameState.MENU);
+            UpdateState(GameState.READY);
+            MusicManager.instance.FadeOut();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
-    void UpdateState(GameState newState)
+    public void UpdateState(GameState newState)
     {
-        // exit states
-        switch (gameState)
-        {
-            case GameState.PAUSED:
-                globalTimeScale = 1f;
-                //pauseMenu.SetActive(false);
-                break;
-        }
-
         lastState = gameState;
         gameState = newState;
 
+        // TODO FIX LOOPING INPUT
+
         switch (gameState)
         {
-            case GameState.MENU:
-                playerInput = false;
+            case GameState.MAIN:
+                playerInput = true;
+                Time.timeScale = 1f;
+                break;
+            case GameState.READY:
+                playerInput = true;
+                Time.timeScale = 1f;
                 break;
             case GameState.PAUSED:
-                playerInput = false;
-                globalTimeScale = 0f;
+                playerInput = true;
+                Time.timeScale = 0f;
+                //globalTimeScale = 0f;
                 //pauseMenu.SetActive(true);
                 break;
             case GameState.COUNTING:
-                playerInput = false;
+                playerInput = true;
                 StartCount();
                 break;
             case GameState.RACING:
                 playerInput = true;
+                Time.timeScale = 1f;
                 break;
             case GameState.ENDGAME:
-                playerInput = false;
-                //endScreen.SetActive(true);
-                // init information
+                playerInput = true;
+                HUD.instance.Endscreen();
                 break;
         }
+
+        Debug.Log("Game state updated: " + gameState.ToString());
     }
 
     public void PauseGame()
@@ -115,13 +133,14 @@ public class GameManager : MonoBehaviour
 
     public void UnpauseGame()
     {
-        if (gameState == GameState.MENU) { UpdateState(GameState.RACING); }
+        if (gameState == GameState.READY) { UpdateState(GameState.COUNTING); }
         else { UpdateState(lastState); }
     }
 
     void StartCount()
     {
         countdownTimer = countdownTime;
+        HUD.instance.UpdateCountdown(countdownTimer);
         StartCoroutine(Count());
     }
 
@@ -131,13 +150,26 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             countdownTimer--;
-            // TODO Update number in HUD
+            HUD.instance.UpdateCountdown(countdownTimer);
 
             if (countdownTimer <= 0)
             {
                 // Start game
                 UpdateState(GameState.RACING);
+                MusicManager.instance.StartTrack();
             }
         }
+    }
+
+    public void FreezeFrame(float time = 1f)
+    {
+        StartCoroutine(Freeze(time));
+    }
+
+    IEnumerator Freeze(float time)
+    {
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(time);
+        Time.timeScale = 1;
     }
 }

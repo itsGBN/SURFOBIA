@@ -105,6 +105,7 @@ public class MainMenuEvents : MonoBehaviour
     {
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !isTrasitioning)
         {
+            //Debug.Log("check"); BUG THIS IF STATEMENT ISNT RUNNING WHEN RELOADING FROM ENTIRE GAME LOOP (MAIN MENU)
             if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
             else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
         }
