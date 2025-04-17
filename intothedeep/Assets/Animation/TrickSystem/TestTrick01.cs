@@ -17,7 +17,7 @@ public class TestTrick01 : MonoBehaviour
     public List<string> playerInputList = new List<string>();
 
     //this bool activates the entire program to run checks on inputs
-    bool isChecking = true;
+    public bool isChecking = true;
 
     public bool timerOn;
 

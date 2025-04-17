@@ -4889,6 +4889,7 @@ MonoBehaviour:
   grindSpeed: 0.2
   accel: 20
   decel: 7
+  idleFloat: 0.2
   brakeDecel: 8
   initialBrakeMultiplier: 0.7
   brakeTurnDecel: 70
@@ -5068,8 +5069,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefea48f84dd45840a7dc76e9e8cee58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimerLimit: 10
+  TimerLimit: 5
   playerInputList: []
+  isChecking: 1
   timerOn: 0
 --- !u!114 &2669789248659423501
 MonoBehaviour:
@@ -5087,7 +5089,9 @@ MonoBehaviour:
   predefinedTricks:
   - {fileID: 11400000, guid: 5c6e569c82f91f04ea073620f5a7de16, type: 2}
   - {fileID: 11400000, guid: 759719a1df4bed440ab9c5fe7a8c5f14, type: 2}
-  maxTrickTime: 3
+  - {fileID: 11400000, guid: 1bf6879e85df7a44c8ee1de80e20334f, type: 2}
+  - {fileID: 11400000, guid: 53bca4e20de35254282b37174e0ef5a6, type: 2}
+  maxTrickTime: 0.5
   maxComboTime: 20
   AnimationManager: {fileID: 8130040839136150765}
 --- !u!1 &7109183861940227124

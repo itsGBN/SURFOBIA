@@ -18,7 +18,6 @@ MonoBehaviour:
   - up
   testList:
   - {fileID: -326130699215126277, guid: 5338156f8257a4e519038e54578c3768, type: 3}
-  - {fileID: -7188205451858503878, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   - {fileID: 3432913430670124802, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   trickName: Front Flip
-  pointsAmount: 20
+  pointsAmount: 50
