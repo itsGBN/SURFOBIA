@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Animations;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
@@ -59,6 +61,10 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
+    
+    [Header("Intro Timeline")]
+    [SerializeField] GameObject introDirectorGB;  
+    private PlayableDirector introDirector;
 
     #region CONTROLLER
     private PS5Input GetInputs;
@@ -87,6 +93,15 @@ public class PlayerController : MonoBehaviour
         grindState = new GrindState(this);
         currentState = zeroState;
         GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+        if (introDirectorGB == null)
+        {
+            introDirectorGB = GameObject.Find("CutsceneDirector");
+        }
+
+        if (introDirectorGB != null)
+        {
+            introDirector = introDirectorGB.GetComponent<PlayableDirector>();
+        }
 
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
@@ -120,9 +135,17 @@ public class PlayerController : MonoBehaviour
 
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
-            Debug.Log("control press");
-            SetState(freeRoamState);
-            Debug.Log("Escape registered in Update() - transition from ZeroState");
+            if (introDirectorGB!=null && introDirectorGB.activeSelf)
+            {
+                introDirector.Play();
+            }
+            else
+            {
+                Debug.Log("control press");
+                SetState(freeRoamState);
+                Debug.Log("Escape registered in Update() - transition from ZeroState");
+            }
+
         }
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
@@ -252,6 +275,11 @@ public class PlayerController : MonoBehaviour
         }
 
         return closestT;
+    }
+
+    public void introDirectorEnds()
+    {
+        SetState(freeRoamState);
     }
 
     //STATE INTERFACE
