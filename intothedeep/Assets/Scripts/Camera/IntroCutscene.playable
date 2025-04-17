@@ -16,22 +16,6 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: 71e05e07eb1a6554289172f62cff23bb
     defaultValue: {fileID: 0}
---- !u!114 &-7333938811667702786
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
-  m_Name: Signal Emitter
-  m_EditorClassIdentifier: 
-  m_Time: 10
-  m_Retroactive: 0
-  m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: 9f8364a4f94901e4cb548f21a8273a8b, type: 2}
 --- !u!114 &-4558055340604471432
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,7 +41,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -8362044469425763614}
-    m_Duration: 5
+    m_Duration: 4.8
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4558055340604471432}
     m_EaseInDuration: 0
@@ -105,10 +89,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: cs1
   - m_Version: 1
-    m_Start: 5
+    m_Start: 4.8
     m_ClipIn: 0
     m_Asset: {fileID: 7696771143958614440}
-    m_Duration: 5
+    m_Duration: 5.1499999999999995
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4558055340604471432}
     m_EaseInDuration: 0
@@ -141,25 +125,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -174,10 +140,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: cs2
   - m_Version: 1
-    m_Start: 10
+    m_Start: 9.95
     m_ClipIn: 0
-    m_Asset: {fileID: -2407723884150796616}
-    m_Duration: 0.5999999999999996
+    m_Asset: {fileID: 5788396977764408066}
+    m_Duration: 1.8499999999999996
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4558055340604471432}
     m_EaseInDuration: 0
@@ -186,25 +152,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -241,25 +189,9 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: ZeroState
+    m_DisplayName: State-Driven Camera
   m_Markers:
     m_Objects: []
---- !u!114 &-4002816210434069023
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
-  m_Name: Signal Emitter
-  m_EditorClassIdentifier: 
-  m_Time: 9.5
-  m_Retroactive: 0
-  m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: ec26192a99a1b124d9a68e36a5363ff8, type: 2}
 --- !u!114 &-3423813091639119575
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -278,7 +210,7 @@ MonoBehaviour:
   m_Muted: 0
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
+  m_Parent: {fileID: 8177287909260757478}
   m_Children: []
   m_Clips: []
   m_Markers:
@@ -288,24 +220,8 @@ MonoBehaviour:
     - {fileID: 3877549787855181508}
     - {fileID: 3091979147202206613}
     - {fileID: 5516803535260806380}
-    - {fileID: -4002816210434069023}
-    - {fileID: -7333938811667702786}
---- !u!114 &-2407723884150796616
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  VirtualCamera:
-    exposedName: 595cf7c4db2c9fb4bb63c659bb206e1b
-    defaultValue: {fileID: 0}
+    - {fileID: 4857403241413696702}
+    - {fileID: 4367726130650816900}
 --- !u!114 &-313599935945932627
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 10.6
+  m_Time: 11.8
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 420e7d48c15dd734d9452236836b9e84, type: 2}
@@ -337,7 +253,6 @@ MonoBehaviour:
   m_Version: 0
   m_Tracks:
   - {fileID: 8177287909260757478}
-  - {fileID: -3423813091639119575}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -372,10 +287,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 4.966666666666667
+  m_Time: 4.85
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 9f8364a4f94901e4cb548f21a8273a8b, type: 2}
+--- !u!114 &4367726130650816900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 10
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 9f8364a4f94901e4cb548f21a8273a8b, type: 2}
+--- !u!114 &4857403241413696702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 9.45
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: ec26192a99a1b124d9a68e36a5363ff8, type: 2}
 --- !u!114 &5516803535260806380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -388,10 +335,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 6
+  m_Time: 6.083333333333333
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 9593fe38a8137494383306213a599083, type: 2}
+--- !u!114 &5788396977764408066
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: 284670f3339936a4296590826b07ed0f
+    defaultValue: {fileID: 0}
 --- !u!114 &7696771143958614440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -429,6 +392,7 @@ MonoBehaviour:
   m_Parent: {fileID: 11400000}
   m_Children:
   - {fileID: -4558055340604471432}
+  - {fileID: -3423813091639119575}
   m_Clips: []
   m_Markers:
     m_Objects: []
@@ -444,7 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 4.466666666666667
+  m_Time: 4.3
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: ec26192a99a1b124d9a68e36a5363ff8, type: 2}
