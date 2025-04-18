@@ -552,7 +552,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""WASD"",
+                    ""name"": ""IJKL"",
                     ""id"": ""5da87c15-e687-4ec9-9abf-0c9323f959f3"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
