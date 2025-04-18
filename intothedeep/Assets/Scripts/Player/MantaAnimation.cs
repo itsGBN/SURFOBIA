@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MantaAnimation : MonoBehaviour
@@ -54,7 +55,7 @@ public class MantaAnimation : MonoBehaviour
     void Update()
     {
         float moveInput = GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
-        float trickInput = GetInputs.PS5Map.TrickStick.ReadValue<Vector2>().x;
+        Vector2 trickInput = GetInputs.PS5Map.TrickStick.ReadValue<Vector2>();
         isGrounded = player.GetComponent<PlayerController>().isGrounded;
 
         skeletonAnim.SetFloat("Joystick", moveInput);
@@ -65,13 +66,23 @@ public class MantaAnimation : MonoBehaviour
             DoTrick("Jump");
         }
 
-        if(!isGrounded && trickInput != 0)
+        if(!isGrounded)
         {
-            if (trickInput > 0.5f) mantaRay.transform.Rotate(new Vector3(0, 0, 0.75f));
-            if (trickInput < 0.5f) mantaRay.transform.Rotate(new Vector3(0, 0, -0.75f));
+            if (trickInput.y > 0.5f) mantaRay.transform.Rotate(new Vector3(0, 0, 0.75f));
+            if (trickInput.y < -0.5f) mantaRay.transform.Rotate(new Vector3(0, 0, -0.75f));
+
+            if (trickInput.x > 0.5f) mantaRay.transform.Rotate(new Vector3(0, 0.75f, 0));
+            if (trickInput.x < -0.5f) mantaRay.transform.Rotate(new Vector3(0, -0.75f,  0));
+
+            if (moveInput > 0) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.01f);
+
+            //if (GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame()) mantaRay.transform.Rotate(new Vector3(0, 0.75f, 0));
+            //if (GetInputs.PS5Map.RightTrigger.WasPressedThisFrame()) mantaRay.transform.Rotate(new Vector3(0, -0.75f, 0));
+
+
         } else
         {
-            //mantaRay.transform.rotation = Quaternion.identity;
+            if(mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.01f);
         }
 
     }
