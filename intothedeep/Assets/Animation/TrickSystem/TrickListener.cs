@@ -73,6 +73,7 @@ public class TrickListener : MonoBehaviour
         {
             trickTimer += Time.deltaTime;
 
+            /*
             if (!isDoingFall)
             { //LAST BUTTON MUST BE HELD TO COMPLETE TRICK
 
@@ -102,12 +103,13 @@ public class TrickListener : MonoBehaviour
                     comboMultiplier = 1;
                 }
             }
+            */
             
 
             if (trickTimer >= maxTrickTime)
             {
                 //text.text = "Waiting for Next Trick";
-                if (!isDoingFall) {
+                //if (!isDoingFall) {
 
                     HUD.instance.onPlayerTrickHud(lastTrick + " +" + lastPointValue + " x " + comboMultiplier); //publishes trick to be viewed by player
 
@@ -121,7 +123,7 @@ public class TrickListener : MonoBehaviour
                         comboMultiplier += 1;
                         HUD.instance.onPlayerTrickHud("COMBO MULTIPLER: x" + comboMultiplier);
                     }
-                }
+                //}
                
                 trickTimer = 0;
                 isDoingTrick = false;
