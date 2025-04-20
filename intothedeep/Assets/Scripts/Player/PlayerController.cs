@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +9,9 @@ using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
+using static System.TimeZoneInfo;
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
@@ -152,6 +155,13 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        if (transform.position.y < -10)
+        {
+            Time.timeScale = 1;
+            MainMenuEvents.instance.isTrasitioning = true;
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName));
+        }
     }
 
     //SETTING THE NEW STATE
@@ -251,6 +261,18 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    private void ApplySpeedBoost()
+    {
+        float boostForce = 20f; // Tune this value for your desired punch
+        Vector3 boostDirection = transform.forward;
+
+        rb.AddForce(boostDirection * boostForce, ForceMode.Impulse);
+
+        HUD.instance.onPlayerTrickHud("BOOST!");
+        // AudioManager.instance.Boost(); // Uncomment if sound exists
+    }
+
+
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
     public float GetClosestPointOnSpline(Vector3 position)
     {
@@ -306,28 +328,20 @@ public class PlayerController : MonoBehaviour
             GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
 
             float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
-
-            // Input.GetAxis("Vertical");
             float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
-            //Input.GetAxis("Horizontal");
 
             player.AlignToSurface();
-
-            // Get direction the player is facing and project it onto the surface plane
-            Vector3 inputDirection = player.transform.forward;
-            Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
 
             // Braking
             if (moveInput < 0 && player.currentSpeed > 0)
             {
-                // initial brake
                 if (!player.isBraking)
                 {
                     player.isBraking = true;
                     player.currentSpeed *= player.initialBrakeMultiplier;
                     player.currentTurnSpeed *= player.initialBrakeMultiplier;
                     player.curBrakeSpeed = 0;
-                    player.brakeTurnDir = Mathf.Sign(turnInput); // which way we were turning 
+                    player.brakeTurnDir = Mathf.Sign(turnInput);
                 }
             }
             else if (moveInput >= 0)
@@ -335,71 +349,72 @@ public class PlayerController : MonoBehaviour
                 player.isBraking = false;
                 player.curBrakeSpeed = 0;
             }
+
             if (player.isBraking)
             {
                 player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
             }
 
-            // Accelerate + Decelerate
+            // Acceleration
             if (moveInput >= 0)
             {
-                if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
-                {
-                    player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
-                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
-                }
-                else
-                {
-                    player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
-                }
-                
+                player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
             }
-            else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
+            else
+            {
+                player.currentSpeed -= player.decel * Time.fixedDeltaTime;
+            }
+
             player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
 
-            // Turning
+            // Turning (y-axis rotation)
             if (player.isBraking)
             {
                 player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
-                // Clamp, so it doesn't go past 0 in the opposite direction
                 if (player.brakeTurnDir < 0)
-                {
                     player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0);
-                }
                 else if (player.brakeTurnDir > 0)
-                {
                     player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed);
-                }
             }
             else
             {
                 player.currentTurnSpeed = turnInput * player.turnSpeed;
             }
 
-            // Apply movement
-            Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
+            // ✅ Calculate forward direction constrained to terrain surface
+            Vector3 forwardOnSurface = Vector3.ProjectOnPlane(player.transform.forward, player.currentSurfaceNormal).normalized;
+
+            // ✅ Move player only forward, terrain-conforming
+            Vector3 moveDirection = forwardOnSurface * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
-            // Rotate left/right
+            // ✅ Rotate left/right
             player.transform.Rotate(Vector3.up, player.currentTurnSpeed * Time.fixedDeltaTime);
 
+            // Graphics Roll + Yaw
+            if (turnInput == 0)
+            {
+                player.boardRoll = 0;
+            }
+            else
+            {
+                player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount;
+            }
 
-            // Player graphics
-            if (turnInput == 0) { player.boardRoll = 0; }
-            //else if (player.isBraking) { player.boardRoll }
-            //else if (player.isBraking) { player.boardRoll }
-            else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
-
-            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10; }
-            else { player.boardYaw = turnInput; }
+            if (player.isBraking)
+            {
+                player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10;
+            }
+            else
+            {
+                player.boardYaw = turnInput;
+            }
 
             player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
             player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
 
-            float yawSpeed;
-            if (player.isBraking) { yawSpeed = player.rollSpeed; }
-            else { yawSpeed = player.rollSpeed / 2; }
+            float yawSpeed = player.isBraking ? player.rollSpeed : player.rollSpeed / 2;
 
             player.curBoardRoll = Mathf.LerpAngle(player.curBoardRoll, player.boardRoll, player.rollSpeed * Time.fixedDeltaTime);
             player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, yawSpeed * Time.fixedDeltaTime);
@@ -407,11 +422,12 @@ public class PlayerController : MonoBehaviour
             player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
 
             float angle = Vector3.SignedAngle(Vector3.up, player.currentSurfaceNormal, player.transform.right);
-            if (!ra)
+            if (ra != null)
             {
                 ra.setAngle(angle);
             }
         }
+
 
     }
 
@@ -483,12 +499,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "HighGround")
         {
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
+
+            if(collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if(collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 
             // Get the ground normal at the point of contact
@@ -552,5 +571,17 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(FlashRed());
         }
+
+        if (other.CompareTag("Boost"))
+        {
+            ApplySpeedBoost();
+        }
+
+        if (other.CompareTag("Bubble"))
+        {
+            AudioManager.instance.Pop();
+            Destroy(other.gameObject);
+        }
+
     }
 }

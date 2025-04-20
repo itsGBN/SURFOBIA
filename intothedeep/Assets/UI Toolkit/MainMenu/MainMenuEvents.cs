@@ -22,7 +22,7 @@ public class MainMenuEvents : MonoBehaviour
     private VisualElement fadeIn;
     private VisualElement squareIn;
     private VisualElement trasitionTypes;
-    private VisualElement transitionName;
+    public VisualElement transitionName;
     private VisualElement mainMenu;
     private string transitionDescription;
     public bool isTrasitioning = true;
@@ -139,7 +139,7 @@ public class MainMenuEvents : MonoBehaviour
         Application.Quit();
     }
 
-    IEnumerator onTransition(string sceneName, VisualElement transitionName)
+    public IEnumerator onTransition(string sceneName, VisualElement transitionName)
     {
         transitionName.style.display = DisplayStyle.Flex;
         trasitionTypes.style.display = DisplayStyle.Flex;
