@@ -17,11 +17,13 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 10f;
     public float grindSpeed = 5f;
     public float accel = 20;
-    public float decel = 7;
+    //public float decel = 7;
     private float currentSpeed;
     private float currentTurnSpeed;
 
     public float idleFloat = 0.2f;
+    
+    public float decelerationSmooth = 0.2f;
 
     [Header("Braking")]
     public float brakeDecel = 8;
@@ -310,6 +312,7 @@ public class PlayerController : MonoBehaviour
             // Input.GetAxis("Vertical");
             float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
             //Input.GetAxis("Horizontal");
+            float deadZone = 0.1f;  
 
             player.AlignToSurface();
 
@@ -341,22 +344,19 @@ public class PlayerController : MonoBehaviour
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
             }
 
-            // Accelerate + Decelerate
-            if (moveInput >= 0)
+            if (moveInput > deadZone)
             {
-                if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
-                {
-                    player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
-                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
-                }
-                else
-                {
-                    player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
-                }
-                
+                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                player.currentSpeed = Mathf.Clamp(player.currentSpeed, player.idleFloat, player.moveSpeed);
             }
-            else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
-            player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
+            else if (Mathf.Abs(moveInput) <= deadZone)
+            {
+                player.currentSpeed = Mathf.MoveTowards(
+                    player.currentSpeed,
+                    player.idleFloat,
+                    player.decelerationSmooth * Time.fixedDeltaTime
+                );
+            }
 
             // Turning
             if (player.isBraking)
