@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     public IPlayerState currentState;
     private FreeRoamState freeRoamState;
     private ZeroState zeroState;
-    private GrindState grindState;
+    public GrindState grindState;
 
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
