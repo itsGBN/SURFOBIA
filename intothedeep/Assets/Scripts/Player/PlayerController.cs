@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [Header("Turning")]
     public float turnSpeed = 110f;
     public float turnAccel = 70f;
-    [Tooltip("Get to this speed with faster acceleration, so it doesn't feel draggy")]public float initTurnSpeed = 80f;
+    [Tooltip("Get to this speed with faster acceleration, so it doesn't feel draggy")] public float initTurnSpeed = 80f;
     public float initTurnAccel = 90f;
     private float currentTurnSpeed;
     private float turnHold; // how long we've been holding turn
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     public float brakeDecel = 8;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
     public float brakeTurnDecel = 70;
-    [Range(-1, 0)][Tooltip("How far back the stick needs to be pulled back to brake")]public float brakeThreshold = -0.45f;
+    [Range(-1, 0)][Tooltip("How far back the stick needs to be pulled back to brake")] public float brakeThreshold = -0.45f;
     private bool isBraking = false;
     private float curBrakeSpeed;
     private float brakeTurnDir;
@@ -71,9 +71,9 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
-    
+
     [Header("Intro Timeline")]
-    [SerializeField] GameObject introDirectorGB;  
+    [SerializeField] GameObject introDirectorGB;
     private PlayableDirector introDirector;
 
     #region CONTROLLER
@@ -122,7 +122,11 @@ public class PlayerController : MonoBehaviour
     {
         currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        if (!isGrounded) { grounding = false; }
+        if (!isGrounded)
+        {
+            grounding = false;
+            rb.AddForce(Vector3.down * 20f);
+        }
     }
 
     //UPDATE
@@ -146,7 +150,7 @@ public class PlayerController : MonoBehaviour
         }
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
-            if (introDirectorGB!=null && introDirectorGB.activeSelf)
+            if (introDirectorGB != null && introDirectorGB.activeSelf)
             {
                 introDirector.Play();
             }
@@ -387,7 +391,7 @@ public class PlayerController : MonoBehaviour
                 {
                     player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
                 }
-                
+
             }
             else
             {
@@ -489,7 +493,11 @@ public class PlayerController : MonoBehaviour
 
             if (player.currentSpline != null)
             {
-                player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
+                //this should normalize the speed so its consistent even if the rail is short or long
+                float splineLength = player.currentSpline.CalculateLength();
+                float normalizedSpeed = player.grindSpeed / splineLength;
+                player.progressAlongSpline += normalizedSpeed * Time.deltaTime;
+                //player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
 
                 Vector3 splinePosition = player.currentSpline.EvaluatePosition(player.progressAlongSpline);
                 player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 1f, splinePosition.z);
@@ -500,7 +508,7 @@ public class PlayerController : MonoBehaviour
                     tangent += new Vector3(0, grind.tangentOffset, 0);
                 }
                 Vector3 up = player.currentSpline.transform.up;
-                
+
                 if (Vector3.Dot(tangent.normalized, up) > 0.99f)
                 {
                     up = player.currentSpline.transform.forward;
@@ -537,8 +545,8 @@ public class PlayerController : MonoBehaviour
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
 
-            if(collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
-            if(collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
+            if (collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if (collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 
             // Get the ground normal at the point of contact
