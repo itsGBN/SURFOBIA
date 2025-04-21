@@ -501,10 +501,10 @@ public class PlayerController : MonoBehaviour
             if (player.currentSpline != null)
             {
                 //this should normalize the speed so its consistent even if the rail is short or long
-                float splineLength = player.currentSpline.CalculateLength();
-                float normalizedSpeed = player.grindSpeed / splineLength;
-                player.progressAlongSpline += normalizedSpeed * Time.deltaTime;
-                //player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
+                //float splineLength = player.currentSpline.CalculateLength();
+                //float normalizedSpeed = player.grindSpeed / splineLength;
+                //player.progressAlongSpline += normalizedSpeed * Time.deltaTime;
+                player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
 
                 Vector3 splinePosition = player.currentSpline.EvaluatePosition(player.progressAlongSpline);
                 player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 1f, splinePosition.z);

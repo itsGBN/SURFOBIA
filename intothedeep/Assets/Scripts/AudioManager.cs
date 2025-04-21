@@ -7,11 +7,42 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField] AudioSource[] Audio;
+    [SerializeField] AudioSource musicNoDrums;
+    [SerializeField] AudioSource drumsOnly;
+
+    [SerializeField] GameObject player;
+
+    bool isGrounded;
+    bool isGrinding;
 
     private void Awake()
     {
         if (instance == null) { instance = this; }
         else if (instance != this) { Destroy(this); }
+    }
+
+    private void Update()
+    {
+        isGrounded = player.GetComponent<PlayerController>().isGrounded;
+        isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
+
+
+        if (isGrinding)
+        {
+            drumsOnly.volume = 1.0f;
+        } else if(drumsOnly.volume != 0.6f)
+        {
+            musicNoDrums.volume = 0.6f;
+        }
+
+        if (isGrounded)
+        {
+            if (drumsOnly.volume != 1) drumsOnly.volume = 0.6f;
+        }
+        else
+        {
+            drumsOnly.volume = 0.2f;
+        }
     }
 
     // Play the sound of the Player Walking
