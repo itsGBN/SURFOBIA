@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private float currentTurnSpeed;
 
     public float idleFloat = 0.2f;
+    [Tooltip("After forward is released，speed decelerates to idleSpeed")]
+    public float decelerationSmooth = 0.2f;
 
     [Header("Braking")]
     public float brakeDecel = 8;
@@ -329,7 +331,8 @@ public class PlayerController : MonoBehaviour
 
             float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
             float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
-
+            Debug.Log($"[DEBUG] moveInput = {moveInput:F3} , currentSpeed = {player.currentSpeed:F3}");
+            float deadZone = 0.1f;
             player.AlignToSurface();
 
             // Braking
@@ -356,17 +359,23 @@ public class PlayerController : MonoBehaviour
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
             }
 
-            // Acceleration
-            if (moveInput >= 0)
+            // —— 加速/松手减速 分支 —— 
+            if (moveInput > deadZone)
             {
-                player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
+                // 正向加速
+                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                player.currentSpeed = Mathf.Clamp(player.currentSpeed, player.idleFloat, player.moveSpeed);
             }
-            else
+            else if (Mathf.Abs(moveInput) <= deadZone)
             {
-                player.currentSpeed -= player.decel * Time.fixedDeltaTime;
+                // 松手后：平滑减速到 idleFloat
+                player.currentSpeed = Mathf.MoveTowards(
+                    player.currentSpeed,
+                    player.idleFloat,
+                    player.decelerationSmooth * Time.fixedDeltaTime
+                );
             }
 
-            player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
 
             // Turning (y-axis rotation)
             if (player.isBraking)

@@ -4890,7 +4890,8 @@ MonoBehaviour:
   grindSpeed: 0.2
   accel: 20
   decel: 7
-  idleFloat: 0.2
+  idleFloat: 15
+  decelerationSmooth: 12
   brakeDecel: 8
   initialBrakeMultiplier: 0.7
   brakeTurnDecel: 70
