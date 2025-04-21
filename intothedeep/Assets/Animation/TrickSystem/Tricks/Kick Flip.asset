@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4805f6f4ee7d2c43be838da4f80b2fa, type: 3}
   m_Name: Kick Flip
   m_EditorClassIdentifier: 
-  playerInputList: []
+  playerInputList:
+  - down
+  - up
   testList:
-  - {fileID: -7188205451858503878, guid: 5338156f8257a4e519038e54578c3768, type: 3}
-  - {fileID: 3432913430670124802, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  - {fileID: 3219827030549674282, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  - {fileID: 4399640510492636560, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   trickName: Kick Flip
-  pointsAmount: 0
+  pointsAmount: 20

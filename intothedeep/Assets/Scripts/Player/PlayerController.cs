@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +7,11 @@ using UnityEngine.InputSystem;
 using UnityEngine.Animations;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using UnityEngine.UIElements;
+using static System.TimeZoneInfo;
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
@@ -66,6 +71,10 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
+    
+    [Header("Intro Timeline")]
+    [SerializeField] GameObject introDirectorGB;  
+    private PlayableDirector introDirector;
 
     #region CONTROLLER
     private PS5Input GetInputs;
@@ -94,6 +103,15 @@ public class PlayerController : MonoBehaviour
         grindState = new GrindState(this);
         currentState = zeroState;
         GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+        if (introDirectorGB == null)
+        {
+            introDirectorGB = GameObject.Find("CutsceneDirector");
+        }
+
+        if (introDirectorGB != null)
+        {
+            introDirector = introDirectorGB.GetComponent<PlayableDirector>();
+        }
 
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
@@ -128,12 +146,31 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log(GameManager.instance.InputActive);
 
-            if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+        {
+            if (introDirectorGB!=null && introDirectorGB.activeSelf)
+            {
+                introDirector.Play();
+            }
+            else
             {
                 Debug.Log("control press");
                 SetState(freeRoamState);
                 Debug.Log("Escape registered in Update() - transition from ZeroState");
             }
+
+        }
+
+        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (transform.position.y < -10)
+        {
+            Time.timeScale = 1;
+            MainMenuEvents.instance.isTrasitioning = true;
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName));
         }
     }
 
@@ -232,6 +269,18 @@ public class PlayerController : MonoBehaviour
         GameManager.instance.FreezeFrame(0.08f);
     }
 
+    private void ApplySpeedBoost()
+    {
+        float boostForce = 20f; // Tune this value for your desired punch
+        Vector3 boostDirection = transform.forward;
+
+        rb.AddForce(boostDirection * boostForce, ForceMode.Impulse);
+
+        HUD.instance.onPlayerTrickHud("BOOST!");
+        // AudioManager.instance.Boost(); // Uncomment if sound exists
+    }
+
+
     //FIND THE CLOSEST POINT ON THE GRIND FOR GRINDING
     public float GetClosestPointOnSpline(Vector3 position)
     {
@@ -256,6 +305,11 @@ public class PlayerController : MonoBehaviour
         }
 
         return closestT;
+    }
+
+    public void introDirectorEnds()
+    {
+        SetState(freeRoamState);
     }
 
     //STATE INTERFACE
@@ -298,14 +352,13 @@ public class PlayerController : MonoBehaviour
             // Braking, threshold makes deadzone for pulling the stick back
             if (moveInput < player.brakeThreshold && player.currentSpeed > 0 && player.isGrounded)
             {
-                // initial brake
                 if (!player.isBraking)
                 {
                     player.isBraking = true;
                     player.currentSpeed *= player.initialBrakeMultiplier;
                     player.currentTurnSpeed *= player.initialBrakeMultiplier;
                     player.curBrakeSpeed = 0;
-                    player.brakeTurnDir = Mathf.Sign(turnInput); // which way we were turning 
+                    player.brakeTurnDir = Mathf.Sign(turnInput);
                 }
             }
             else if (moveInput >= 0)
@@ -317,6 +370,7 @@ public class PlayerController : MonoBehaviour
                     if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(false); }
                 }
             }
+
             if (player.isBraking)
             {
                 player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
@@ -324,7 +378,7 @@ public class PlayerController : MonoBehaviour
                 if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
-            // Accelerate + Decelerate
+            // Acceleration
             if (moveInput >= 0)
             {
                 if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
@@ -338,10 +392,14 @@ public class PlayerController : MonoBehaviour
                 }
                 
             }
-            else { player.currentSpeed -= player.decel * Time.fixedDeltaTime; }
+            else
+            {
+                player.currentSpeed -= player.decel * Time.fixedDeltaTime;
+            }
+
             player.currentSpeed = Mathf.Clamp(player.currentSpeed, 0, player.moveSpeed);
 
-            // Turning
+            // Turning (y-axis rotation)
             if (player.isBraking)
             {
                 player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
@@ -363,8 +421,11 @@ public class PlayerController : MonoBehaviour
             }
             player.currentTurnSpeed = Mathf.Clamp(player.currentTurnSpeed, 0, player.turnSpeed);
 
-            // Apply movement
-            Vector3 moveDirection = flattenedDirection * player.currentSpeed * Time.fixedDeltaTime;
+            // ✅ Calculate forward direction constrained to terrain surface
+            Vector3 forwardOnSurface = Vector3.ProjectOnPlane(player.transform.forward, player.currentSurfaceNormal).normalized;
+
+            // ✅ Move player only forward, terrain-conforming
+            Vector3 moveDirection = forwardOnSurface * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
             // Rotate left/right
@@ -382,9 +443,7 @@ public class PlayerController : MonoBehaviour
             //player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
             player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
 
-            float yawSpeed;
-            if (player.isBraking) { yawSpeed = player.rollSpeed; }
-            else { yawSpeed = player.rollSpeed / 2; }
+            float yawSpeed = player.isBraking ? player.rollSpeed : player.rollSpeed / 2;
 
             player.curBoardRoll = Mathf.LerpAngle(player.curBoardRoll, player.boardRoll, player.rollSpeed * Time.fixedDeltaTime);
             player.curBoardYaw = Mathf.LerpAngle(player.curBoardYaw, player.boardYaw, yawSpeed * Time.fixedDeltaTime);
@@ -392,11 +451,12 @@ public class PlayerController : MonoBehaviour
             player.graphics.localEulerAngles = new Vector3(0, player.curBoardYaw, player.curBoardRoll);
 
             float angle = Vector3.SignedAngle(Vector3.up, player.currentSurfaceNormal, player.transform.right);
-            if (!ra)
+            if (ra != null)
             {
                 ra.setAngle(angle);
             }
         }
+
 
     }
 
@@ -468,12 +528,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "HighGround")
         {
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
+
+            if(collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if(collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 
             // Get the ground normal at the point of contact
@@ -541,5 +604,17 @@ public class PlayerController : MonoBehaviour
             FlashRed();
             RumbleManager.instance.RumblePulse(0.05f, 0.1f, new Vector2(1, 1), new Vector2(1, 1));
         }
+
+        if (other.CompareTag("Boost"))
+        {
+            ApplySpeedBoost();
+        }
+
+        if (other.CompareTag("Bubble"))
+        {
+            AudioManager.instance.Pop();
+            Destroy(other.gameObject);
+        }
+
     }
 }

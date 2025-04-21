@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: KungFuKick
   m_EditorClassIdentifier: 
   playerInputList:
-  - rightTrigger
+  - left
   - up
   testList:
-  - {fileID: -326130699215126277, guid: 5338156f8257a4e519038e54578c3768, type: 3}
+  - {fileID: -7188205451858503878, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   - {fileID: 3432913430670124802, guid: 5338156f8257a4e519038e54578c3768, type: 3}
   trickName: Kung Fu Kick
-  pointsAmount: 10
+  pointsAmount: 20

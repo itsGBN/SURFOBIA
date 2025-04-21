@@ -65,10 +65,15 @@ public class TrickListener : MonoBehaviour
             // Debug.Log("Trick: " + testTrick01.playerInputList[testTrick01.playerInputList.Count - 1]);
         }
 
+
+        testTrick01.isChecking = !isDoingTrick;
+
+
         if (isDoingTrick)
         {
             trickTimer += Time.deltaTime;
 
+            /*
             if (!isDoingFall)
             { //LAST BUTTON MUST BE HELD TO COMPLETE TRICK
 
@@ -89,6 +94,7 @@ public class TrickListener : MonoBehaviour
                     trickTimer = 0;
                     isDoingFall = true;
                     HUD.instance.onPlayerTrickHud(lastTrick + " FAILED");
+                    HUD.instance.onPlayerTrickHud("COMBO LOST");
 
                     AnimationManager.DoTrick("Fall");
 
@@ -97,17 +103,18 @@ public class TrickListener : MonoBehaviour
                     comboMultiplier = 1;
                 }
             }
+            */
             
 
             if (trickTimer >= maxTrickTime)
             {
                 //text.text = "Waiting for Next Trick";
-                if (!isDoingFall) {
+                //if (!isDoingFall) {
 
                     HUD.instance.onPlayerTrickHud(lastTrick + " +" + lastPointValue + " x " + comboMultiplier); //publishes trick to be viewed by player
 
                     totalPointValue += lastPointValue * comboMultiplier;
-                    totalComboPoints += lastPointValue * comboMultiplier;
+                    totalComboPoints += lastPointValue;
                     comboTimer = 0;
                     inComboMode = true;
 
@@ -116,7 +123,7 @@ public class TrickListener : MonoBehaviour
                         comboMultiplier += 1;
                         HUD.instance.onPlayerTrickHud("COMBO MULTIPLER: x" + comboMultiplier);
                     }
-                }
+                //}
                
                 trickTimer = 0;
                 isDoingTrick = false;
@@ -133,6 +140,8 @@ public class TrickListener : MonoBehaviour
                 inComboMode = false;
                 totalComboPoints = 0;
                 comboMultiplier = 1;
+
+                HUD.instance.onPlayerTrickHud("COMBO LOST");
             }
         }
 

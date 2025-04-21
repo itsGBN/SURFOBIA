@@ -95,7 +95,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightPos: {r: 1, g: 1.68, b: 0, a: 0}
+    - _LightPos: {r: 0.06, g: 1.68, b: 0.53, a: 0}
     - _SkyBrightColor: {r: 0.5764706, g: 0.8769447, b: 0.8784314, a: 1}
     - _SkyDarkColor: {r: 0.008810962, g: 0.08035603, b: 0.20754719, a: 1}
     - _SkyMediumColor: {r: 0.11372548, g: 0.25419155, b: 0.3019608, a: 1}
