@@ -143,9 +143,7 @@ public class PlayerController : MonoBehaviour
             {
                 StopDive();
             }
-
-            Debug.Log(GameManager.instance.InputActive);
-
+        }
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
             if (introDirectorGB!=null && introDirectorGB.activeSelf)
@@ -222,7 +220,6 @@ public class PlayerController : MonoBehaviour
     public void StartGrind(SplineContainer splineContainer)
     {
         currentSpline = splineContainer;
-
         if (currentSpline != null && currentSpline.Splines.Count > 0)
         {
             float closestT = GetClosestPointOnSpline(transform.position);
@@ -412,11 +409,11 @@ public class PlayerController : MonoBehaviour
                 player.turnHold += Time.deltaTime;
                 //player.currentTurnSpeed = turnInput * player.turnSpeed;
                 if (Mathf.Abs(player.currentTurnSpeed) < player.initTurnSpeed) { player.currentTurnSpeed += player.initTurnAccel * Time.fixedDeltaTime; }
-                else if (player.turnHold >= 0.85f && Mathf.Abs(turnInput) > 0.5f) { player.currentTurnSpeed += player.turnAccel * Mathf.Abs(turnInput) * Time.fixedDeltaTime; }
-                if (Mathf.Abs(turnInput) <= 0.5f)
+                else if (player.turnHold >= 1f && Mathf.Abs(turnInput) > 0.65f) { player.currentTurnSpeed += player.turnAccel * Mathf.Abs(turnInput) * Time.fixedDeltaTime; }
+                if (Mathf.Abs(turnInput) <= 0.65f)
                 {
                     player.turnHold = 0;
-                    player.currentTurnSpeed = Mathf.MoveTowards(player.currentTurnSpeed, 0, player.turnAccel * 1.25f * Time.fixedDeltaTime);
+                    player.currentTurnSpeed = Mathf.MoveTowards(player.currentTurnSpeed, 0, player.turnAccel * 1.45f * Time.fixedDeltaTime);
                 }
             }
             player.currentTurnSpeed = Mathf.Clamp(player.currentTurnSpeed, 0, player.turnSpeed);
@@ -498,7 +495,12 @@ public class PlayerController : MonoBehaviour
                 player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 1f, splinePosition.z);
 
                 Vector3 tangent = player.currentSpline.EvaluateTangent(player.progressAlongSpline);
+                if (player.currentSpline.TryGetComponent<Grind>(out var grind))
+                {
+                    tangent += new Vector3(0, grind.tangentOffset, 0);
+                }
                 Vector3 up = player.currentSpline.transform.up;
+                
                 if (Vector3.Dot(tangent.normalized, up) > 0.99f)
                 {
                     up = player.currentSpline.transform.forward;

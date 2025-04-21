@@ -191,6 +191,7 @@ public class HUD : MonoBehaviour
     public void Endscreen()
     {
         focusEndscreen = true;
+        endscreenVisualElement.style.opacity = 1;
         endscreenVisualElement.style.visibility = Visibility.Visible;
         // update stats
     }

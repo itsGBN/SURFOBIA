@@ -18,10 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] float countdownTime = 3;
     float countdownTimer;
 
-    [Header("UI Elements")]
-    [SerializeField] GameObject pauseMenu;
-    [SerializeField] GameObject endScreen;
-
     public static GameManager instance;
 
     // PROPERTY GETTERS
@@ -34,6 +30,7 @@ public class GameManager : MonoBehaviour
         GetInputs = new PS5Input();
         if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
         else { Destroy(gameObject); }
+        UpdateState(startingState);
     }
 
     private void OnEnable()
@@ -80,7 +77,12 @@ public class GameManager : MonoBehaviour
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
         {
-            UpdateState(GameState.READY);
+            switch (SceneManager.GetActiveScene().name)
+            {
+                case "Playtest Scene":
+                    UpdateState(GameState.READY);
+                    break;
+            }
             MusicManager.instance.FadeOut();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -96,21 +98,21 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.MAIN:
-                playerInput = true;
+                playerInput = false;
                 Time.timeScale = 1f;
                 break;
             case GameState.READY:
-                playerInput = true;
+                playerInput = false;
                 Time.timeScale = 1f;
                 break;
             case GameState.PAUSED:
-                playerInput = true;
+                playerInput = false;
                 Time.timeScale = 0f;
                 //globalTimeScale = 0f;
                 //pauseMenu.SetActive(true);
                 break;
             case GameState.COUNTING:
-                playerInput = true;
+                playerInput = false;
                 StartCount();
                 break;
             case GameState.RACING:
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1f;
                 break;
             case GameState.ENDGAME:
-                playerInput = true;
+                playerInput = false;
                 HUD.instance.Endscreen();
                 break;
         }
