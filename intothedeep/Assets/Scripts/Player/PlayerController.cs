@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     public bool grounding;
 
-    private IPlayerState currentState;
+    public IPlayerState currentState;
     private FreeRoamState freeRoamState;
     private ZeroState zeroState;
     private GrindState grindState;

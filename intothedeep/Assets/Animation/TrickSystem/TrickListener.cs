@@ -17,7 +17,7 @@ public class TrickListener : MonoBehaviour
     [SerializeField] AnimationManager AnimationManager;
 
     string lastTrick;
-    bool isDoingTrick;
+    public bool isDoingTrick;
     bool isDoingFall;
     float trickTimer;
     string lastTrickInput;
@@ -102,12 +102,13 @@ public class TrickListener : MonoBehaviour
                     comboMultiplier = 1;
                 }
             }
-            
+
 
             if (trickTimer >= maxTrickTime)
             {
                 //text.text = "Waiting for Next Trick";
-                if (!isDoingFall) {
+                if (!isDoingFall)
+                {
 
                     HUD.instance.onPlayerTrickHud(lastTrick + " +" + lastPointValue + " x " + comboMultiplier); //publishes trick to be viewed by player
 
@@ -122,18 +123,19 @@ public class TrickListener : MonoBehaviour
                         HUD.instance.onPlayerTrickHud("COMBO MULTIPLER: x" + comboMultiplier);
                     }
                 }
-               
+
                 trickTimer = 0;
                 isDoingTrick = false;
                 isDoingFall = false;
-                
+
             }
         }
 
-        if (inComboMode) {
+        if (inComboMode)
+        {
             comboTimer += Time.deltaTime;
 
-            if(comboTimer >= maxComboTime)
+            if (comboTimer >= maxComboTime)
             {
                 inComboMode = false;
                 totalComboPoints = 0;
@@ -148,9 +150,9 @@ public class TrickListener : MonoBehaviour
         {
 
             Debug.Log(lastTrickInput);
-            
-            
- 
+
+
+
             //Debug.Log(lastTrick);
             AnimationManager.DoTrick(lastTrick);
             isDoingTrick = true;
