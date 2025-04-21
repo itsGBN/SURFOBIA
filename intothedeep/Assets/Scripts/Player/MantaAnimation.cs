@@ -123,7 +123,7 @@ public class MantaAnimation : MonoBehaviour
             */
 
 
-            if (Input.GetKey(KeyCode.T) || GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame())
+            if (Input.GetKey(KeyCode.LeftShift) || GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame())
             {
 
                 if (skeleton.transform.rotation != mantaRay.transform.rotation)
@@ -198,7 +198,7 @@ public class MantaAnimation : MonoBehaviour
 
         if (!wasGrounded && isGrounded) {
             //trickSkeletonAnim.SetTrigger("EndJump");
-            if(totalRotation != 0) LandingCheck();
+            if(player.transform.rotation.y != mantaRay.transform.rotation.y) LandingCheck();
         }
 
         skeletonAnim.SetFloat("Joystick", joystick);
