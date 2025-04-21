@@ -7,11 +7,19 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField] AudioSource[] Audio;
+    [SerializeField] AudioSource musicNoDrums;
+    [SerializeField] AudioSource drumsOnly;
 
     private void Awake()
     {
         if (instance == null) { instance = this; }
         else if (instance != this) { Destroy(this); }
+    }
+
+    private void Start()
+    {
+        musicNoDrums.Play();
+        drumsOnly.Play();
     }
 
     // Play the sound of the Player Walking
