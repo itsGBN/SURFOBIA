@@ -22,14 +22,14 @@ public class TutorialZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) { FindObjectOfType<TutorialManager>().EnterZone(this); }
+        //if (Input.GetKeyDown(KeyCode.Space)) { FindObjectOfType<TutorialManager>().EnterZone(this); }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<PlayerController>(out var player))
         {
-            FindObjectOfType<TutorialManager>().EnterZone(this);
+            //FindObjectOfType<TutorialManager>().EnterZone(this);
         }
     }
 }

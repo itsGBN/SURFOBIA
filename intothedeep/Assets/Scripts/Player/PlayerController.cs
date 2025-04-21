@@ -50,10 +50,10 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     public bool grounding;
 
-    private IPlayerState currentState;
-    private FreeRoamState freeRoamState;
-    private ZeroState zeroState;
-    private GrindState grindState;
+    public IPlayerState currentState;
+    public FreeRoamState freeRoamState;
+    public ZeroState zeroState;
+    public GrindState grindState;
 
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
@@ -340,6 +340,7 @@ public class PlayerController : MonoBehaviour
 
             float moveInput = 0;
             float turnInput = 0;
+            float deadZone = 0.1f;
             if (GameManager.instance.InputActive)
             {
                 moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
