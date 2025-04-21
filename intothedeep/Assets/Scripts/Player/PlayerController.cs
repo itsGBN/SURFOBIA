@@ -16,13 +16,19 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
     public float moveSpeed = 5f;
-    public float turnSpeed = 100f;
     public float rotationSpeed = 10f;
     public float grindSpeed = 5f;
     public float accel = 20;
     public float decel = 7;
     private float currentSpeed;
+
+    [Header("Turning")]
+    public float turnSpeed = 110f;
+    public float turnAccel = 70f;
+    [Tooltip("Get to this speed with faster acceleration, so it doesn't feel draggy")] public float initTurnSpeed = 80f;
+    public float initTurnAccel = 90f;
     private float currentTurnSpeed;
+    private float turnHold; // how long we've been holding turn
 
     public float idleFloat = 0.2f;
     [Tooltip("After forward is released，speed decelerates to idleSpeed")]
@@ -32,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public float brakeDecel = 8;
     [Range(0, 1)][Tooltip("0.5 will half the speed on brake")] public float initialBrakeMultiplier = 0.7f;
     public float brakeTurnDecel = 70;
+    [Range(-1, 0)][Tooltip("How far back the stick needs to be pulled back to brake")] public float brakeThreshold = -0.45f;
     private bool isBraking = false;
     private float curBrakeSpeed;
     private float brakeTurnDir;
@@ -66,9 +73,9 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
-    
+
     [Header("Intro Timeline")]
-    [SerializeField] GameObject introDirectorGB;  
+    [SerializeField] GameObject introDirectorGB;
     private PlayableDirector introDirector;
 
     #region CONTROLLER
@@ -117,30 +124,35 @@ public class PlayerController : MonoBehaviour
     {
         currentState.UpdateState();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        if (!isGrounded) { grounding = false; }
+        if (!isGrounded)
+        {
+            grounding = false;
+            rb.AddForce(Vector3.down * 20f);
+        }
     }
 
     //UPDATE
     private void Update()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
-        if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && isGrounded)
+        if (GameManager.instance.InputActive)
         {
-            Jump();
+            if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && isGrounded)
+            {
+                Jump();
+            }
+            else if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && !isGrounded)
+            {
+                StartDive();
+            }
+            else if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !isGrounded)
+            {
+                StopDive();
+            }
         }
-        else if (GetInputs.PS5Map.Jump.WasPressedThisFrame() && !isGrounded)
-        {
-            StartDive();
-        }
-        else if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && !isGrounded)
-        {
-            StopDive();
-        }
-
-
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
-            if (introDirectorGB!=null && introDirectorGB.activeSelf)
+            if (introDirectorGB != null && introDirectorGB.activeSelf)
             {
                 introDirector.Play();
             }
@@ -214,7 +226,6 @@ public class PlayerController : MonoBehaviour
     public void StartGrind(SplineContainer splineContainer)
     {
         currentSpline = splineContainer;
-
         if (currentSpline != null && currentSpline.Splines.Count > 0)
         {
             float closestT = GetClosestPointOnSpline(transform.position);
@@ -253,14 +264,12 @@ public class PlayerController : MonoBehaviour
     }
 
     //RED FLASH
-    IEnumerator FlashRed()
+    void FlashRed()
     {
         StartCoroutine(HUD.instance.onRed());
         AudioManager.instance.Hit();
         HUD.instance.onPlayerTrickHud("**COLLIDE**");
-        Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(0.2f);
-        Time.timeScale = 1;
+        GameManager.instance.FreezeFrame(0.08f);
     }
 
     private void ApplySpeedBoost()
@@ -329,14 +338,22 @@ public class PlayerController : MonoBehaviour
         {
             GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
 
-            float moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
-            float turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
-            Debug.Log($"[DEBUG] moveInput = {moveInput:F3} , currentSpeed = {player.currentSpeed:F3}");
-            float deadZone = 0.1f;
+            float moveInput = 0;
+            float turnInput = 0;
+            if (GameManager.instance.InputActive)
+            {
+                moveInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
+                turnInput = player.GetInputs.PS5Map.Move.ReadValue<Vector2>().x;
+            }
+
             player.AlignToSurface();
 
-            // Braking
-            if (moveInput < 0 && player.currentSpeed > 0)
+            // Get direction the player is facing and project it onto the surface plane
+            Vector3 inputDirection = player.transform.forward;
+            Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
+
+            // Braking, threshold makes deadzone for pulling the stick back
+            if (moveInput < player.brakeThreshold && player.currentSpeed > 0 && player.isGrounded)
             {
                 if (!player.isBraking)
                 {
@@ -349,22 +366,34 @@ public class PlayerController : MonoBehaviour
             }
             else if (moveInput >= 0)
             {
-                player.isBraking = false;
-                player.curBrakeSpeed = 0;
+                if (player.isBraking)
+                {
+                    player.isBraking = false;
+                    player.curBrakeSpeed = 0;
+                    if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(false); }
+                }
             }
 
             if (player.isBraking)
             {
                 player.curBrakeSpeed += player.brakeDecel * Time.fixedDeltaTime;
                 player.currentSpeed -= player.curBrakeSpeed * Time.fixedDeltaTime;
+                if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
             // —— 加速/松手减速 分支 —— 
             if (moveInput > deadZone)
             {
-                // 正向加速
-                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
-                player.currentSpeed = Mathf.Clamp(player.currentSpeed, player.idleFloat, player.moveSpeed);
+                if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
+                {
+                    //player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
+                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
+                }
+                else
+                {
+                    player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
+                }
+
             }
             else if (Mathf.Abs(moveInput) <= deadZone)
             {
@@ -381,15 +410,23 @@ public class PlayerController : MonoBehaviour
             if (player.isBraking)
             {
                 player.currentTurnSpeed -= player.brakeTurnDecel * player.brakeTurnDir * Time.fixedDeltaTime;
-                if (player.brakeTurnDir < 0)
-                    player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0);
-                else if (player.brakeTurnDir > 0)
-                    player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed);
+                // Clamp, so it doesn't go past 0 in the opposite direction
+                //if (player.brakeTurnDir < 0) { player.currentTurnSpeed = Mathf.Min(player.currentTurnSpeed, 0); }
+                //else if (player.brakeTurnDir > 0) { player.currentTurnSpeed = Mathf.Max(0, player.currentTurnSpeed); }
             }
-            else
+            else if (Mathf.Abs(turnInput) > 0 && !player.isBraking)
             {
-                player.currentTurnSpeed = turnInput * player.turnSpeed;
+                player.turnHold += Time.deltaTime;
+                //player.currentTurnSpeed = turnInput * player.turnSpeed;
+                if (Mathf.Abs(player.currentTurnSpeed) < player.initTurnSpeed) { player.currentTurnSpeed += player.initTurnAccel * Time.fixedDeltaTime; }
+                else if (player.turnHold >= 1f && Mathf.Abs(turnInput) > 0.65f) { player.currentTurnSpeed += player.turnAccel * Mathf.Abs(turnInput) * Time.fixedDeltaTime; }
+                if (Mathf.Abs(turnInput) <= 0.65f)
+                {
+                    player.turnHold = 0;
+                    player.currentTurnSpeed = Mathf.MoveTowards(player.currentTurnSpeed, 0, player.turnAccel * 1.45f * Time.fixedDeltaTime);
+                }
             }
+            player.currentTurnSpeed = Mathf.Clamp(player.currentTurnSpeed, 0, player.turnSpeed);
 
             // ✅ Calculate forward direction constrained to terrain surface
             Vector3 forwardOnSurface = Vector3.ProjectOnPlane(player.transform.forward, player.currentSurfaceNormal).normalized;
@@ -398,29 +435,19 @@ public class PlayerController : MonoBehaviour
             Vector3 moveDirection = forwardOnSurface * player.currentSpeed * Time.fixedDeltaTime;
             player.transform.position += moveDirection;
 
-            // ✅ Rotate left/right
-            player.transform.Rotate(Vector3.up, player.currentTurnSpeed * Time.fixedDeltaTime);
+            // Rotate left/right
+            player.transform.Rotate(Vector3.up, player.currentTurnSpeed * turnInput * Time.fixedDeltaTime);
 
-            // Graphics Roll + Yaw
-            if (turnInput == 0)
-            {
-                player.boardRoll = 0;
-            }
-            else
-            {
-                player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount;
-            }
+            //Debug.Log(player.currentTurnSpeed);
+            // Player graphics
+            if (player.isBraking) { player.boardRoll = -player.brakeTurnDir * player.currentSpeed * 1.75f; }
+            else if (turnInput == 0) { player.boardRoll = 0; }
+            else { player.boardRoll = -Mathf.Sign(turnInput) * player.boardRollAmount; }
 
-            if (player.isBraking)
-            {
-                player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 10;
-            }
-            else
-            {
-                player.boardYaw = turnInput;
-            }
+            if (player.isBraking) { player.boardYaw = player.brakeTurnDir * Mathf.Abs(player.currentSpeed) * 3f; }
+            else { player.boardYaw = turnInput; }
 
-            player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
+            //player.boardRoll = Mathf.Clamp(player.boardRoll, -player.boardRollAmount, player.boardRollAmount);
             player.boardYaw = Mathf.Clamp(player.boardYaw, -70, 70);
 
             float yawSpeed = player.isBraking ? player.rollSpeed : player.rollSpeed / 2;
@@ -472,13 +499,22 @@ public class PlayerController : MonoBehaviour
 
             if (player.currentSpline != null)
             {
-                player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
+                //this should normalize the speed so its consistent even if the rail is short or long
+                float splineLength = player.currentSpline.CalculateLength();
+                float normalizedSpeed = player.grindSpeed / splineLength;
+                player.progressAlongSpline += normalizedSpeed * Time.deltaTime;
+                //player.progressAlongSpline += player.grindSpeed * Time.deltaTime;
 
                 Vector3 splinePosition = player.currentSpline.EvaluatePosition(player.progressAlongSpline);
                 player.transform.position = new Vector3(splinePosition.x, splinePosition.y + 1f, splinePosition.z);
 
                 Vector3 tangent = player.currentSpline.EvaluateTangent(player.progressAlongSpline);
+                if (player.currentSpline.TryGetComponent<Grind>(out var grind))
+                {
+                    tangent += new Vector3(0, grind.tangentOffset, 0);
+                }
                 Vector3 up = player.currentSpline.transform.up;
+
                 if (Vector3.Dot(tangent.normalized, up) > 0.99f)
                 {
                     up = player.currentSpline.transform.forward;
@@ -515,8 +551,8 @@ public class PlayerController : MonoBehaviour
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
 
-            if(collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
-            if(collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
+            if (collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if (collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 
             // Get the ground normal at the point of contact
@@ -532,6 +568,7 @@ public class PlayerController : MonoBehaviour
                 HUD.instance.onPlayerTrickHud("GOOD");
                 AudioManager.instance.Land();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
@@ -539,6 +576,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (!grounding)
             {
@@ -546,6 +584,7 @@ public class PlayerController : MonoBehaviour
                 moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
+                if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
         }
 
@@ -578,7 +617,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Obstacle")
         {
-            StartCoroutine(FlashRed());
+            FlashRed();
+            RumbleManager.instance.RumblePulse(0.05f, 0.1f, new Vector2(1, 1), new Vector2(1, 1));
         }
 
         if (other.CompareTag("Boost"))

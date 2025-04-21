@@ -34,6 +34,7 @@ public class Title : MonoBehaviour
         Trans.style.opacity = 1;
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene(1);
+        GameManager.instance.UpdateState(GameManager.GameState.READY);
     }
 
 }
