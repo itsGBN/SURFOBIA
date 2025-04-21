@@ -23,7 +23,7 @@ public class TestTrick01 : MonoBehaviour
 
 
     #region CONTROLLER
-    private PS5Input GetInputs;
+    public PS5Input GetInputs;
 
     private void Awake()
     {

@@ -4886,12 +4886,8 @@ MonoBehaviour:
   rotationSpeed: 10
   grindSpeed: 0.2
   accel: 20
-  decel: 7
-  turnSpeed: 100
-  turnAccel: 70
-  initTurnSpeed: 80
-  initTurnAccel: 90
-  idleFloat: 0.2
+  idleFloat: 10
+  decelerationSmooth: 15
   brakeDecel: 8
   initialBrakeMultiplier: 0.7
   brakeTurnDecel: 70
@@ -5161,6 +5157,7 @@ MonoBehaviour:
   maxTrickTime: 0.5
   maxComboTime: 20
   AnimationManager: {fileID: 8130040839136150765}
+  isDoingTrick: 0
 --- !u!1 &7109183861940227124
 GameObject:
   m_ObjectHideFlags: 0
