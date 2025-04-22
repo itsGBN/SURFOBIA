@@ -382,23 +382,18 @@ public class PlayerController : MonoBehaviour
                 if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
-            // —— 加速/松手减速 分支 —— 
+            // acceleration / deceleration after release
+            // if input is greater than deadZone，then player boost；otherwise decelerate smoothly to idleFloat
             if (moveInput > deadZone)
             {
-                if (player.transform.rotation.eulerAngles.y >= 150 && player.transform.rotation.eulerAngles.y <= 195)
-                {
-                    //player.currentSpeed += (player.accel/80) * (moveInput - 0.95f) * Time.fixedDeltaTime;
-                    // Debug.Log(player.transform.rotation.eulerAngles.y + " input " + moveInput);
-                }
-                else
-                {
-                    player.currentSpeed += player.accel * (moveInput + player.idleFloat) * Time.fixedDeltaTime;
-                }
-
+                // acceleration：currentSpeed += acceleration × moveInput × Time
+                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                // make the speed no greater than max
+                player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
             }
-            else if (Mathf.Abs(moveInput) <= deadZone)
+            else
             {
-                // 松手后：平滑减速到 idleFloat
+                // if forward button is released：decelerate to idleFloat
                 player.currentSpeed = Mathf.MoveTowards(
                     player.currentSpeed,
                     player.idleFloat,
