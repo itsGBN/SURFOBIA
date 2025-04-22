@@ -314,6 +314,10 @@ public class PlayerController : MonoBehaviour
     {
         SetState(freeRoamState);
     }
+    
+    public float GetCurrentSpeed() {
+        return currentSpeed;
+    }
 
     //STATE INTERFACE
     public interface IPlayerState

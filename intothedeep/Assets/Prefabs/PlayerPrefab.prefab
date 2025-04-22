@@ -119,12 +119,12 @@ MonoBehaviour:
   grindSpeed: 0.2
   accel: 20
   decel: 7
-  turnSpeed: 100
+  turnSpeed: 120
   turnAccel: 70
   initTurnSpeed: 80
   initTurnAccel: 90
-  idleFloat: 0.2
-  decelerationSmooth: 0.2
+  idleFloat: 22
+  decelerationSmooth: 15
   brakeDecel: 8
   initialBrakeMultiplier: 0.7
   brakeTurnDecel: 70
