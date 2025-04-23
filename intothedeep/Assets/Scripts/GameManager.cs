@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
+    private float savedIdleFloat;
+
     // PROPERTY GETTERS
     public bool InputActive { get { return playerInput; } }
     public float GlobalTimeScale { get { return globalTimeScale; } }
@@ -112,13 +114,30 @@ public class GameManager : MonoBehaviour
                 //pauseMenu.SetActive(true);
                 break;
             case GameState.COUNTING:
+            {
+                PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                if (tempPlayer != null)
+                {
+                    savedIdleFloat = tempPlayer.idleFloat;
+                    tempPlayer.idleFloat = 0;
+                }
+
                 playerInput = false;
                 StartCount();
                 break;
+            }
             case GameState.RACING:
+            {
+                PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                if (tempPlayer != null)
+                {
+                    tempPlayer.idleFloat = savedIdleFloat;
+                }
+
                 playerInput = true;
                 Time.timeScale = 1f;
                 break;
+            }
             case GameState.ENDGAME:
                 playerInput = false;
                 HUD.instance.Endscreen();
