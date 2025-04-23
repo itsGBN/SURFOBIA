@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
     public float GlobalTimeScale { get { return globalTimeScale; } }
 
     private PS5Input GetInputs;
-
-    private float savedIdleFloat;
     private void Awake()
     {
         GetInputs = new PS5Input();
@@ -115,21 +113,10 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.COUNTING:
                 playerInput = false;
-                PlayerController player = FindObjectOfType<PlayerController>();
-                if (player != null)
-                {
-                    savedIdleFloat = player.idleFloat;
-                    player.idleFloat = 0.0f;
-                }
                 StartCount();
                 break;
             case GameState.RACING:
                 playerInput = true;
-                player = FindObjectOfType<PlayerController>();
-                if (player != null)
-                {
-                    player.idleFloat = savedIdleFloat;
-                }
                 Time.timeScale = 1f;
                 break;
             case GameState.ENDGAME:
