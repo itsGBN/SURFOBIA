@@ -1,7 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/HUD/HUD.uss?fileID=7433441132597879392&amp;guid=80c186163962ff747a5b063cca8c6e31&amp;type=3#HUD" />
-    <ui:VisualElement name="HUD" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/BaseHud.png?fileID=2800000&amp;guid=fed22040732d51741b2825d220c240cc&amp;type=3#BaseHud&quot;); -unity-background-image-tint-color: rgba(0, 0, 0, 0.89);">
+    <ui:VisualElement name="HUD" style="flex-grow: 1; background-image: none; -unity-background-image-tint-color: rgba(0, 0, 0, 0.89);">
+        <ui:VisualElement name="DBG" style="flex-grow: 1; position: absolute; height: 114px; width: 504px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/Miles.png?fileID=2800000&amp;guid=1a9bc0da3dd5f3441b018d14dcf6fbf5&amp;type=3#Miles&quot;); top: 12px; left: 3px;" />
+        <ui:VisualElement name="DBG" style="flex-grow: 1; position: absolute; height: 114px; width: 504px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/Position.png?fileID=2800000&amp;guid=e9265ebe4dcf2db4986c3ee8a222345f&amp;type=3#Position&quot;); top: -10px; left: 1430px;" />
         <ui:Label text="DISTANCE" name="Distance" class="label" style="left: 62px; top: 18px;" />
+        <ui:VisualElement name="DBG" style="flex-grow: 1; position: absolute; height: 114px; width: 504px; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIImages/Vector%201.png?fileID=2800000&amp;guid=d3b8e61c17ba0544998820128303ffca&amp;type=3#Vector 1&quot;); top: 933px; left: 730px;" />
         <ui:Label text="POSITION" name="Position" class="label" style="left: 1635px; top: -67px;" />
         <ui:Label text="Mia: 0" name="Enemy1" class="label scores one" />
         <ui:Label text="Maryam: 0" name="Enemy2" class="label scores two" />
