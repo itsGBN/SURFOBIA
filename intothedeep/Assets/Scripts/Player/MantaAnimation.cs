@@ -35,6 +35,7 @@ public class MantaAnimation : MonoBehaviour
     bool wasGrinding;
 
     bool isHolding;
+    bool isDoingTrick;
 
     float totalRotation;
     float comboMultiplier;
@@ -208,7 +209,14 @@ public class MantaAnimation : MonoBehaviour
                 rotationSpeed = startRotationSpeed;
             }
 
-            //if (player.transform.rotation.y != mantaRay.transform.rotation.y) LandingCheck();
+            if (isDoingTrick) {
+                isDoingTrick = false;
+                LandingCheck();
+                Debug.Log("stoppedTrick");
+            } 
+           
+
+            //if (player.transform.rotation.y != mantaRay.transform.rotation.y) 
         }
 
         skeletonAnim.SetFloat("Joystick", joystick);
@@ -230,6 +238,7 @@ public class MantaAnimation : MonoBehaviour
         {
             if (isHolding && trickInput.y > 0.5f)
             {
+                isDoingTrick = true;
                 graphics.transform.Rotate(new Vector3(bodyRotationSpeed, 0, 0));
 
                 if (totalBodyRotation < 0)
@@ -254,6 +263,7 @@ public class MantaAnimation : MonoBehaviour
             }
             if (isHolding && trickInput.y < -0.5f)
             {
+                isDoingTrick = true;
                 graphics.transform.Rotate(new Vector3(-bodyRotationSpeed, 0, 0));
 
                 if (totalBodyRotation > 0)
@@ -280,6 +290,7 @@ public class MantaAnimation : MonoBehaviour
             //if (trickInput.x > 0.5f)
             if(trickInput.x > 0.5f || isTurningRight)
             {
+                isDoingTrick = true;
                 mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
 
                 if (totalRotation < 0)
@@ -304,6 +315,7 @@ public class MantaAnimation : MonoBehaviour
             //if ()
             if (trickInput.x < -0.5f || isTurningLeft)
             {
+                isDoingTrick = true;
                 mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
 
                 totalRotation -= 1;
@@ -334,16 +346,16 @@ public class MantaAnimation : MonoBehaviour
         float totalRotationDisplacement = 0;
         totalRotationDisplacement = Mathf.Abs(player.transform.rotation.y - mantaRay.transform.rotation.y);
 
-        if (totalRotationDisplacement < comboThreshold)
+        if (totalRotationDisplacement < 0.3f)
         {
             HUD.instance.onPlayerTrickHud("Perfect +50");
             totalPoints += 50;
-        } else if(totalRotationDisplacement < 0.2f)
+        } else if(totalRotationDisplacement < 0.5f)
         {
             HUD.instance.onPlayerTrickHud("Good +30");
             totalPoints += 50;
         }
-        else if (totalRotationDisplacement < 0.6f)
+        else if (totalRotationDisplacement < 0.8f)
         {
             HUD.instance.onPlayerTrickHud("Fine +10");
             totalPoints += 50;
@@ -353,6 +365,11 @@ public class MantaAnimation : MonoBehaviour
             HUD.instance.onPlayerTrickHud("Awful +0");
             totalPoints += 50;
         }
+    }
+
+    public bool GetIsDoingTrick()
+    {
+        return isDoingTrick;
     }
 
     void ActivateTrick()
