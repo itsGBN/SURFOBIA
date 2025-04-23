@@ -23,8 +23,7 @@ public class MantaAnimation : MonoBehaviour
     [Header("Changable Variables")]
     [SerializeField] float trickAnimationSpeed;
     [SerializeField] float startRotationSpeed;
-    [SerializeField] float rotationSpeed;
-    [SerializeField] float bodyRotationSpeed;
+    [SerializeField] float startBodyRotationSpeed;
     [SerializeField] LayerMask layerMask;
 
     bool isGrounded;
@@ -41,6 +40,14 @@ public class MantaAnimation : MonoBehaviour
     float comboMultiplier;
     float comboThreshold;
     float joystick;
+
+    float totalBodyRotation;
+
+    float rotationSpeed;
+    float bodyRotationSpeed;
+
+    float moveInput;
+    Vector2 trickInput;
 
     //public
     public float totalPoints;
@@ -72,6 +79,9 @@ public class MantaAnimation : MonoBehaviour
     {
         ActivateMove(); //Activates movement, deactivates trick
         trickSkeletonAnim.speed = trickAnimationSpeed;
+
+        rotationSpeed = startRotationSpeed;
+        bodyRotationSpeed = startBodyRotationSpeed;
     }
 
     // Update is called once per frame
@@ -80,10 +90,10 @@ public class MantaAnimation : MonoBehaviour
         wasGrounded = isGrounded; //Checks if was grounded in previous frame
         wasGrinding = isGrinding;
 
-        float moveInput = GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
+        moveInput = GetInputs.PS5Map.Move.ReadValue<Vector2>().y;
         joystick = moveInput;
 
-        Vector2 trickInput = GetInputs.PS5Map.TrickStick.ReadValue<Vector2>();
+        trickInput = GetInputs.PS5Map.TrickStick.ReadValue<Vector2>();
         isGrounded = player.GetComponent<PlayerController>().isGrounded;
         isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
 
@@ -91,16 +101,11 @@ public class MantaAnimation : MonoBehaviour
         //RaycastHit hit;
         //isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.5f, layerMask);
 
-        if(!wasGrinding && isGrinding) ActivateGrind();
-        if(wasGrinding && !isGrinding) DeactivateGrind();
+        if (!wasGrinding && isGrinding) ActivateGrind();
+        if (wasGrinding && !isGrinding) DeactivateGrind();
 
-        if(isGrinding)
-        {
-            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
-            skeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
-            trickSkeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
-        }
         
+
 
         if (GetInputs.PS5Map.Jump.WasPressedThisFrame())
         {
@@ -137,21 +142,10 @@ public class MantaAnimation : MonoBehaviour
                 comboMultiplier = 0;
                 rotationSpeed = startRotationSpeed;
             }
-
-            //if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame()) trickSkeletonAnim.SetTrigger("EndGrab");
         }
         else
         {
-            if (isHolding && trickInput.y > 0.1f)
-            {
-                graphics.transform.Rotate(new Vector3(bodyRotationSpeed, 0, 0));
-                joystick = Mathf.Abs(trickInput.y);
-            }
-            if (isHolding && trickInput.y < -0.1f)
-            {
-                graphics.transform.Rotate(new Vector3(-bodyRotationSpeed, 0, 0));
-                joystick = Mathf.Abs(trickInput.y);
-            }
+            
 
             if (isHolding)
             {
@@ -159,7 +153,7 @@ public class MantaAnimation : MonoBehaviour
                 skeleton.transform.rotation = mantaRay.transform.rotation;
                 trickSkeleton.transform.rotation = mantaRay.transform.rotation;
 
-
+                /*
                 if (skeleton.transform.rotation != mantaRay.transform.rotation)
                 {
                     skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, mantaRay.transform.rotation, 0.01f);
@@ -169,53 +163,7 @@ public class MantaAnimation : MonoBehaviour
                 {
                     
                 }
-            }
-
-            if (trickInput.x > 0.5f && moveInput == 0)
-            {
-                mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
-
-                if (totalRotation < 0)
-                {
-                    totalRotation = 0;
-                    rotationSpeed = startRotationSpeed;
-                    comboMultiplier = 0;
-                }
-
-                totalRotation += 1;
-                comboThreshold = 352 / rotationSpeed; //Amount of +1 per rotation, might need to find a better way to do this
-
-
-                if (totalRotation > comboThreshold)
-                {
-                    totalPoints += 100;
-                    if (rotationSpeed < 3) rotationSpeed += 0.25f;
-                    HUD.instance.onPlayerTrickHud("Spin +100");
-                    totalRotation = 0;
-                }
-
-            }
-            if (trickInput.x < -0.5f && moveInput == 0)
-            {
-                mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
-
-                totalRotation -= 1;
-                comboThreshold = (-352 / rotationSpeed); //Amount of +1 per rotation, might need to find a better way to do this
-
-                if (totalRotation > 0)
-                {
-                    totalRotation = 0;
-                    rotationSpeed = startRotationSpeed;
-                    comboMultiplier = 0;
-                }
-
-                if (totalRotation < comboThreshold)
-                {
-                    totalPoints += 100;
-                    if (rotationSpeed < 3) rotationSpeed += 0.25f;
-                    HUD.instance.onPlayerTrickHud("Spin +100");
-                    totalRotation = 0;
-                }
+                */
             }
 
             /*
@@ -229,16 +177,125 @@ public class MantaAnimation : MonoBehaviour
         }
 
         if (!wasGrounded && isGrounded) {
-            //trickSkeletonAnim.SetTrigger("EndJump");
-            //trickSkeletonAnim.SetTrigger("EndGrab");
+
+            if (totalRotation != 0)
+            {
+                totalRotation = 0;
+                comboMultiplier = 0;
+                rotationSpeed = startRotationSpeed;
+            }
+
             if (player.transform.rotation.y != mantaRay.transform.rotation.y) LandingCheck();
         }
-
-        
 
         skeletonAnim.SetFloat("Joystick", joystick);
         mantaAnim.SetFloat("Joystick", joystick);
 
+    }
+
+    private void FixedUpdate()
+    {
+
+        if (isGrinding)
+        {
+            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+            skeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+            trickSkeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+        }
+
+        if (isHolding && trickInput.y > 0.1f)
+        {
+            graphics.transform.Rotate(new Vector3(bodyRotationSpeed, 0, 0));
+
+            if (totalBodyRotation < 0)
+            {
+                totalBodyRotation = 0;
+                bodyRotationSpeed = startBodyRotationSpeed;
+                comboMultiplier = 0;
+            }
+
+            totalBodyRotation += 1;
+
+            comboThreshold = rotationSpeed * (36 / 10);
+
+            if (totalBodyRotation > comboThreshold)
+            {
+                totalPoints += 200;
+                if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+                HUD.instance.onPlayerTrickHud("Flip +200");
+                totalBodyRotation = 0;
+            }
+
+        }
+        if (isHolding && trickInput.y < -0.1f)
+        {
+            graphics.transform.Rotate(new Vector3(-bodyRotationSpeed, 0, 0));
+
+            if (totalBodyRotation > 0)
+            {
+                totalBodyRotation = 0;
+                bodyRotationSpeed = startBodyRotationSpeed;
+                comboMultiplier = 0;
+            }
+
+            totalBodyRotation -= 1;
+
+            comboThreshold = rotationSpeed * (36 / 10);
+
+            if (totalBodyRotation < -comboThreshold)
+            {
+                totalPoints += 200;
+                if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+                HUD.instance.onPlayerTrickHud("Flip +200");
+                totalBodyRotation = 0;
+            }
+
+        }
+
+        if (trickInput.x > 0.5f)
+        {
+            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+
+            if (totalRotation < 0)
+            {
+                totalRotation = 0;
+                rotationSpeed = startRotationSpeed;
+                comboMultiplier = 0;
+            }
+
+            totalRotation += 1;
+            //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
+            comboThreshold = rotationSpeed * (36 / 10);
+
+            if (totalRotation > comboThreshold)
+            {
+                totalPoints += 100;
+                if (rotationSpeed < 18) rotationSpeed += 2;
+                HUD.instance.onPlayerTrickHud("Spin +100");
+                totalRotation = 0;
+            }
+        }
+        if (trickInput.x < -0.5f) {
+            mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
+
+            totalRotation -= 1;
+            comboThreshold = rotationSpeed * (36 / 10);
+
+            if (totalRotation > 0)
+            {
+                totalRotation = 0;
+                rotationSpeed = startRotationSpeed;
+                comboMultiplier = 0;
+            }
+
+            if (totalRotation < -comboThreshold)
+            {
+                totalPoints += 100;
+                if (rotationSpeed < 18) rotationSpeed += 2;
+                HUD.instance.onPlayerTrickHud("Spin +100");
+                totalRotation = 0;
+            }
+        }
     }
 
     public void LandingCheck()
