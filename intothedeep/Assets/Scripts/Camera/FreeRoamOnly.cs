@@ -17,6 +17,11 @@ public class FreeRoamOnly : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (player == null)
+        {
+            player = FindObjectOfType<PlayerController>();
+        }
+
         noise=vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
