@@ -551,7 +551,7 @@ public class PlayerController : MonoBehaviour
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
 
-            if (collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if (collision.gameObject.tag == "Ground") { moveSpeed = 30f; }
             if (collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 

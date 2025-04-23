@@ -55,9 +55,8 @@ MonoBehaviour:
   mantaRay: {fileID: 2209258772061955060}
   graphics: {fileID: 5842063759545393388}
   trickAnimationSpeed: 2
-  startRotationSpeed: 1
-  rotationSpeed: 1
-  bodyRotationSpeed: 0.8
+  startRotationSpeed: 10
+  startBodyRotationSpeed: 10
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -114,22 +113,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d452ea6cbfa23ac45955304a919c98e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 50
+  moveSpeed: 43
   rotationSpeed: 10
-  grindSpeed: 0.2
-  accel: 20
+  grindSpeed: 20
+  accel: 17
   decel: 7
-  turnSpeed: 120
-  turnAccel: 70
-  initTurnSpeed: 80
-  initTurnAccel: 90
-  idleFloat: 22
-  decelerationSmooth: 15
+  turnSpeed: 175
+  turnAccel: 248
+  initTurnSpeed: 75
+  initTurnAccel: 110
+  idleFloat: 0.05
+  decelerationSmooth: 0.2
   brakeDecel: 8
   initialBrakeMultiplier: 0.7
   brakeTurnDecel: 70
   brakeThreshold: -0.45
-  jumpHeight: 10
+  jumpHeight: 20
   groundCheckDistance: 0.3
   groundLayer:
     serializedVersion: 2
@@ -139,7 +138,7 @@ MonoBehaviour:
   diveForwardSpeed: 5
   diveFallSpeed: -5
   currentSurfaceNormal: {x: 0, y: 1, z: 0}
-  graphics: {fileID: 7348512218321577313}
+  graphics: {fileID: 293402308937668422}
   rollSpeed: 2.5
   boardRollAmount: 25
   introDirectorGB: {fileID: 0}
