@@ -31,8 +31,15 @@ public class PlayerController : MonoBehaviour
     private float turnHold; // how long we've been holding turn
 
     public float idleFloat = 0.2f;
+    [Header("Auto Deceleration")]
     [Tooltip("After forward is released，speed decelerates to idleSpeed")]
     public float decelerationSmooth = 0.2f;
+    public float decelerationDelay = 0.2f;
+
+// 运行时用，不要在 Inspector 显示
+    [HideInInspector] public float timeSinceRelease = 0f;
+    [HideInInspector] public bool hasReachedMaxSpeed = false;
+    [HideInInspector] public bool decelStarted = false;
 
     [Header("Braking")]
     public float brakeDecel = 8;
@@ -386,23 +393,46 @@ public class PlayerController : MonoBehaviour
                 if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
-            // acceleration / deceleration after release
-            // if input is greater than deadZone，then player boost；otherwise decelerate smoothly to idleFloat
+            // --- acceleration / deceleration after release ---
             if (moveInput > deadZone)
             {
-                // acceleration：currentSpeed += acceleration × moveInput × Time
+                // 1) 有输入：立即加速，重置所有延迟相关的状态
+                player.timeSinceRelease = 0f;
+                player.decelStarted = false;
+                player.hasReachedMaxSpeed = false;
+
+                // 原先的加速逻辑
                 player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
-                // make the speed no greater than max
                 player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+
+                // 2) 如果达到了极限速，就打标记
+                if (player.currentSpeed >= player.moveSpeed)
+                    player.hasReachedMaxSpeed = true;
             }
             else
             {
-                // if forward button is released：decelerate to idleFloat
-                player.currentSpeed = Mathf.MoveTowards(
-                    player.currentSpeed,
-                    player.idleFloat,
-                    player.decelerationSmooth * Time.fixedDeltaTime
-                );
+                // 玩家松开前进杆
+                if (player.hasReachedMaxSpeed && !player.decelStarted)
+                {
+                    // 3) 只有在“曾经跑满”且“还未开始减速”时，才累加延迟计时
+                    player.timeSinceRelease += Time.fixedDeltaTime;
+                    if (player.timeSinceRelease >= player.decelerationDelay)
+                    {
+                        // 4) 延迟结束，正式启动减速
+                        player.decelStarted = true;
+                    }
+                }
+
+                // 5) 如果尚未跑满 或者 已经开始减速，都执行平滑减速
+                if (!player.hasReachedMaxSpeed || player.decelStarted)
+                {
+                    player.currentSpeed = Mathf.MoveTowards(
+                        player.currentSpeed,
+                        player.idleFloat,
+                        player.decelerationSmooth * Time.fixedDeltaTime
+                    );
+                }
+                // 否则：仍在等待延迟，不做任何改动，保持当前速度
             }
 
 

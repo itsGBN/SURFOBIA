@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FreeRoamOnly : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class FreeRoamOnly : MonoBehaviour
         float targetFreq = (player.GetCurrentSpeed() + speedOffset >= player.moveSpeed)
             ? fastFrequency
             : slowFrequency;
-
+        
         // 三参数平滑阻尼（带缓冲效果）
         noise.m_FrequencyGain = Mathf.SmoothDamp(
             noise.m_FrequencyGain, 
