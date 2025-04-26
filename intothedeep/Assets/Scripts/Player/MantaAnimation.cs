@@ -53,6 +53,11 @@ public class MantaAnimation : MonoBehaviour
     float moveInput;
     Vector2 trickInput;
 
+    Vector3 mantaDisplacement;
+    Vector3 skeletonDisplacement;
+    Vector3 trickDisplacement;
+
+
     //public
     public float totalPoints;
 
@@ -86,6 +91,10 @@ public class MantaAnimation : MonoBehaviour
 
         rotationSpeed = startRotationSpeed;
         bodyRotationSpeed = startBodyRotationSpeed;
+
+        mantaDisplacement = player.transform.position - mantaRay.transform.position;
+        skeletonDisplacement = player.transform.position - skeleton.transform.position;
+        trickDisplacement = player.transform.position - trickSkeleton.transform.position;
     }
 
     // Update is called once per frame
@@ -215,7 +224,7 @@ public class MantaAnimation : MonoBehaviour
                 Debug.Log("stoppedTrick");
             } 
            
-
+            ResetPositions();
             //if (player.transform.rotation.y != mantaRay.transform.rotation.y) 
         }
 
@@ -405,6 +414,13 @@ public class MantaAnimation : MonoBehaviour
     {
         skeleton.transform.rotation = resetRotation;
         trickSkeleton.transform.rotation = resetRotation;
+    }
+
+    void ResetPositions()
+    {
+        mantaRay.transform.position = player.transform.position - mantaDisplacement;
+        skeleton.transform.position = player.transform.position - skeletonDisplacement;
+        trickSkeleton.transform.position = player.transform.position - trickDisplacement;
     }
 
 }
