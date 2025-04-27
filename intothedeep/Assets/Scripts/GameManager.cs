@@ -44,11 +44,11 @@ public class GameManager : MonoBehaviour
     {
         GetInputs.Disable();
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
         //UpdateState(GameState.MAIN);
     }
 
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
                     UpdateState(GameState.MAIN);
                     MusicManager.instance.FadeOut();
                 }
-            break;
+                break;
             case GameState.MAIN:
                 if (Input.anyKeyDown)
                 {
@@ -79,12 +79,12 @@ public class GameManager : MonoBehaviour
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
         {
-            switch (SceneManager.GetActiveScene().name)
-            {
-                case "Playtest Scene":
-                    UpdateState(GameState.READY);
-                    break;
-            }
+            // switch (SceneManager.GetActiveScene().name)
+            // {
+            // case "Playtest Scene":
+            UpdateState(GameState.READY);
+            // break;
+            // }
             MusicManager.instance.FadeOut();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -114,30 +114,30 @@ public class GameManager : MonoBehaviour
                 //pauseMenu.SetActive(true);
                 break;
             case GameState.COUNTING:
-            {
-                PlayerController tempPlayer = FindObjectOfType<PlayerController>();
-                if (tempPlayer != null)
                 {
-                    savedIdleFloat = tempPlayer.idleFloat;
-                    tempPlayer.idleFloat = 0;
-                }
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        savedIdleFloat = tempPlayer.idleFloat;
+                        tempPlayer.idleFloat = 0;
+                    }
 
-                playerInput = false;
-                StartCount();
-                break;
-            }
+                    playerInput = false;
+                    StartCount();
+                    break;
+                }
             case GameState.RACING:
-            {
-                PlayerController tempPlayer = FindObjectOfType<PlayerController>();
-                if (tempPlayer != null)
                 {
-                    tempPlayer.idleFloat = savedIdleFloat;
-                }
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        tempPlayer.idleFloat = savedIdleFloat;
+                    }
 
-                playerInput = true;
-                Time.timeScale = 1f;
-                break;
-            }
+                    playerInput = true;
+                    Time.timeScale = 1f;
+                    break;
+                }
             case GameState.ENDGAME:
                 playerInput = false;
                 HUD.instance.Endscreen();
