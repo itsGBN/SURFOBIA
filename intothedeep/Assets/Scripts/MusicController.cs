@@ -7,8 +7,10 @@ public class MusicController : MonoBehaviour
     AudioHighPassFilter filter;
     AudioLowPassFilter lowFilter;
     [SerializeField] GameObject player;
+    [SerializeField] LayerMask layerMask;
 
     bool isGrinding;
+    bool isCloseToGround;
 
     // Start is called before the first frame update
     void Start()
@@ -20,14 +22,17 @@ public class MusicController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
 
-        if (!player.GetComponent<PlayerController>().isGrounded)
+        RaycastHit hit;
+        isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3.5f, layerMask);
+
+
+        if (!isCloseToGround)
         {
-            if(filter.cutoffFrequency != 4000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 4000, 3 * Time.deltaTime);
+            if (filter.cutoffFrequency != 4000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 4000, 2 * Time.deltaTime);
         } else
         {
-            if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 3 * Time.deltaTime);
+            if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 12 * Time.deltaTime);
         }
         
 
