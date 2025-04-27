@@ -85,8 +85,9 @@ public class GameManager : MonoBehaviour
             UpdateState(GameState.READY);
             // break;
             // }
-            MusicManager.instance.FadeOut();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //MusicManager.instance.FadeOut();
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 0f));
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -104,9 +105,16 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1f;
                 break;
             case GameState.READY:
-                playerInput = false;
-                Time.timeScale = 1f;
-                break;
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (CheckPointScript.checkpointPosition != Vector3.zero){
+                        tempPlayer.transform.position = CheckPointScript.checkpointPosition;
+                        Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
+                    }
+                    playerInput = false;
+                    Time.timeScale = 1f;
+                    break;
+                }
             case GameState.PAUSED:
                 playerInput = false;
                 Time.timeScale = 0f;

@@ -130,7 +130,7 @@ public class MainMenuEvents : MonoBehaviour
     {
         Time.timeScale = 1;
         isTrasitioning = true;
-        StartCoroutine(onTransition(SceneManager.GetActiveScene().name, transitionName));
+        StartCoroutine(onTransition(SceneManager.GetActiveScene().name, transitionName, 1f));
     }
 
     private void onQuitButton(ClickEvent e)
@@ -139,12 +139,12 @@ public class MainMenuEvents : MonoBehaviour
         Application.Quit();
     }
 
-    public IEnumerator onTransition(string sceneName, VisualElement transitionName)
+    public IEnumerator onTransition(string sceneName, VisualElement transitionName, float waitTime)
     {
         transitionName.style.display = DisplayStyle.Flex;
         trasitionTypes.style.display = DisplayStyle.Flex;
         transitionName.RemoveFromClassList(transitionDescription);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(waitTime);
         SceneManager.LoadScene(sceneName);
     }
 

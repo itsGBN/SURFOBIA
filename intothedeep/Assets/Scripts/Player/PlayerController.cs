@@ -172,16 +172,16 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        // if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
+        // {
+        //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // }
 
         if (transform.position.y < -100)
         {
             Time.timeScale = 1;
             MainMenuEvents.instance.isTrasitioning = true;
-            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName));
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
     }
 
