@@ -5,7 +5,7 @@
 }
 
 .menuInactive {
-    left: -1920px;
+    opacity: 0;
 }
 
 .button {
@@ -16,7 +16,7 @@
     top: 305px;
     background-color: rgba(0, 0, 0, 0);
     -unity-font-style: bold;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
@@ -25,6 +25,7 @@
     transition-duration: 0.1s;
     transition-timing-function: ease-in;
     transition-delay: 0s;
+    background-image: url("project://database/Assets/Packages/Splines/2.8.0/Spline%20Examples%20(requires%20Shader%20Graph%20package)/Textures/Checker.png?fileID=2800000&guid=feb046db34f4d424f86ecd4c04a85f0a&type=3#Checker");
 }
 
 .button:hover {
