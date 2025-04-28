@@ -11,6 +11,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 using static System.TimeZoneInfo;
+using static GameManager;
 
 public class PlayerController : MonoBehaviour
 {
@@ -179,8 +180,7 @@ public class PlayerController : MonoBehaviour
 
         if (transform.position.y < -100)
         {
-            Time.timeScale = 1;
-            MainMenuEvents.instance.isTrasitioning = true;
+            GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
     }
