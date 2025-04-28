@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Animations;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using Cinemachine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
@@ -85,6 +86,17 @@ public class PlayerController : MonoBehaviour
     [Header("Intro Timeline")]
     [SerializeField] GameObject introDirectorGB;
     private PlayableDirector introDirector;
+    
+    [Header("Camera Animator")]
+    [SerializeField] Animator cameraAnimator;
+
+    public CinemachineVirtualCamera airCam;
+    bool prevIsGrounded;
+    private bool airFovSet = false;
+    [SerializeField] float defaultAirFOV = 70f;
+    [SerializeField] float maxAirFOV     = 80f;
+    [Range(0,1)] public float startThresholdFraction = 0.5f;
+    [SerializeField] float fovResetDuration = 0.21f;
 
     #region CONTROLLER
     private PS5Input GetInputs;
@@ -92,6 +104,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         GetInputs = new PS5Input();
+        if (cameraAnimator == null)
+            cameraAnimator = GameObject.Find("CameraControl").GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -112,7 +126,7 @@ public class PlayerController : MonoBehaviour
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
         currentState = zeroState;
-        GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
+        cameraAnimator.SetInteger("State", 2);
         if (introDirectorGB == null)
         {
             introDirectorGB = GameObject.Find("CutsceneDirector");
@@ -125,6 +139,9 @@ public class PlayerController : MonoBehaviour
 
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
+        prevIsGrounded = isGrounded;
+        cameraAnimator.SetBool("inAir", !isGrounded);
+        
     }
 
     //FIXED UPDATE
@@ -183,6 +200,58 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
+        
+        bool wasGrounded = prevIsGrounded;
+        
+        if (isGrounded != wasGrounded)
+        {
+            // —— 播放摄像机切换动画 —— 
+            cameraAnimator.SetBool("inAir", !isGrounded);
+
+            // —— 离地时，且速度满足阈值，只执行一次 FOV 设定 —— 
+            if (!isGrounded && !airFovSet)
+            {
+                // 动态阈值计算 (moveSpeed - currentSpeed)/2 也可以直接用 fraction
+                float dynamicThreshold = (moveSpeed - currentSpeed) * startThresholdFraction;
+                if (currentSpeed >= dynamicThreshold)
+                {
+                    SetAirFOV();
+                    airFovSet = true;
+                }
+            }
+            // —— 落地时，平滑恢复 FOV —— 
+            else if (isGrounded)
+            {
+                StartCoroutine(ResetAirFOVSmooth());
+                airFovSet = false;
+            }
+
+            // 4. 最后更新 prev 状态
+            prevIsGrounded = isGrounded;
+        }
+    }
+    
+    void SetAirFOV()
+    {
+        if (airCam == null) return;
+        // 线性插到 [defaultAirFOV, maxAirFOV]
+        float t = Mathf.Clamp01(currentSpeed / moveSpeed);
+        airCam.m_Lens.FieldOfView = Mathf.Lerp(defaultAirFOV, maxAirFOV, t);
+    }
+
+    IEnumerator ResetAirFOVSmooth()
+    {
+        if (airCam == null) yield break;
+        float startFov = airCam.m_Lens.FieldOfView;
+        float elapsed  = 0f;
+
+        while (elapsed < fovResetDuration)
+        {
+            elapsed += Time.deltaTime;
+            airCam.m_Lens.FieldOfView = Mathf.Lerp(startFov, defaultAirFOV, elapsed / fovResetDuration);
+            yield return null;
+        }
+        airCam.m_Lens.FieldOfView = defaultAirFOV;
     }
 
     //SETTING THE NEW STATE
@@ -204,6 +273,11 @@ public class PlayerController : MonoBehaviour
         }
 
         currentState = newState;
+        int stateInt = 0;
+        if (newState == freeRoamState) stateInt = 0;
+        else if (newState == grindState)  stateInt = 1;
+        else if (newState == zeroState)   stateInt = 2;
+        cameraAnimator.SetInteger("State", stateInt);
     }
 
     //ALIGN PLAYER TO SURFACE
@@ -347,8 +421,7 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
-
+            
             float moveInput = 0;
             float turnInput = 0;
             float deadZone = 0.1f;
@@ -525,7 +598,7 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 1);
+            
 
             if (player.currentSpline != null)
             {

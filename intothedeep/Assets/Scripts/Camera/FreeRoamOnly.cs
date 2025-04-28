@@ -13,6 +13,8 @@ public class FreeRoamOnly : MonoBehaviour
     public float slowFrequency;
     public float smoothTime = 0.3f;      // “追踪”所需的时间，越小越快
     private float freqVelocity = 0f;     // 内部用的速度缓存
+    
+    public MantaAnimation mantaAnimation;
 
     private CinemachineBasicMultiChannelPerlin noise;
     // Start is called before the first frame update
@@ -21,6 +23,11 @@ public class FreeRoamOnly : MonoBehaviour
         if (player == null)
         {
             player = FindObjectOfType<PlayerController>();
+        }
+
+        if (mantaAnimation == null)
+        {
+            mantaAnimation = FindObjectOfType<MantaAnimation>();
         }
 
         noise=vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
@@ -42,5 +49,10 @@ public class FreeRoamOnly : MonoBehaviour
             ref freqVelocity, 
             smoothTime
         );
+
+        if (mantaAnimation.GetIsDoingTrick())
+        {
+            
+        }
     }
 }
