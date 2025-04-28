@@ -93,11 +93,25 @@ public class PlayerController : MonoBehaviour
     public CinemachineVirtualCamera airCam;
     bool prevIsGrounded;
     private bool airFovSet = false;
+    CinemachineBasicMultiChannelPerlin airCamNoise;
+    private CinemachineComposer airCamComposer;
     [SerializeField] float defaultAirFOV = 70f;
+    [SerializeField] float defaultNoiseFreq     = 4f;
+    [SerializeField] private float defaultVerticalDamping = 0.6f;
     [SerializeField] float maxAirFOV     = 80f;
+    [SerializeField] float maxNoiseFreq         = 8f;
+    [SerializeField] float maxVerticalDamping = 1f;
+    
     [Range(0,1)] public float startThresholdFraction = 0.5f;
     [SerializeField] float fovResetDuration = 0.21f;
-
+    
+    [Header("Landing Shake")]
+    [SerializeField] CinemachineImpulseSource landingImpulse;
+    [SerializeField] float maxAirTime        = 2f;
+    [SerializeField] float minImpulseY       = -0.3f;
+    [SerializeField] float maxImpulseY       =  -1.5f;
+    float airTime;
+    
     #region CONTROLLER
     private PS5Input GetInputs;
 
@@ -141,6 +155,17 @@ public class PlayerController : MonoBehaviour
         curBoardYaw = graphics.transform.localEulerAngles.y;
         prevIsGrounded = isGrounded;
         cameraAnimator.SetBool("inAir", !isGrounded);
+        if (airCam != null)
+        {
+            airCamNoise = airCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            airCamComposer = airCam.GetCinemachineComponent<CinemachineComposer>();
+            if (airCamComposer != null)
+                defaultVerticalDamping = airCamComposer.m_VerticalDamping;
+
+            airCam.m_Lens.FieldOfView                  = defaultAirFOV;
+            if (airCamNoise != null) airCamNoise.m_FrequencyGain   = defaultNoiseFreq;
+        }
+
         
     }
 
@@ -202,7 +227,10 @@ public class PlayerController : MonoBehaviour
         }
         
         bool wasGrounded = prevIsGrounded;
-        
+        if (!isGrounded)
+        {
+            airTime += Time.deltaTime;
+        }
         if (isGrounded != wasGrounded)
         {
             // —— 播放摄像机切换动画 —— 
@@ -237,21 +265,32 @@ public class PlayerController : MonoBehaviour
         // 线性插到 [defaultAirFOV, maxAirFOV]
         float t = Mathf.Clamp01(currentSpeed / moveSpeed);
         airCam.m_Lens.FieldOfView = Mathf.Lerp(defaultAirFOV, maxAirFOV, t);
+        if (airCamNoise != null)
+            airCamNoise.m_FrequencyGain = Mathf.Lerp(defaultNoiseFreq, maxNoiseFreq, t);
+        if (airCamComposer != null)
+            airCamComposer.m_VerticalDamping = Mathf.Lerp(defaultVerticalDamping, maxVerticalDamping, t);
     }
 
     IEnumerator ResetAirFOVSmooth()
     {
         if (airCam == null) yield break;
         float startFov = airCam.m_Lens.FieldOfView;
+        float startNoiseFreq = airCamNoise.m_FrequencyGain;
+        float startDamp   = airCamComposer != null ? airCamComposer.m_VerticalDamping : defaultVerticalDamping;
         float elapsed  = 0f;
 
         while (elapsed < fovResetDuration)
         {
             elapsed += Time.deltaTime;
             airCam.m_Lens.FieldOfView = Mathf.Lerp(startFov, defaultAirFOV, elapsed / fovResetDuration);
+            airCamNoise.m_FrequencyGain = Mathf.Lerp(startNoiseFreq, defaultNoiseFreq, elapsed / fovResetDuration);
+            if (airCamComposer != null)
+                airCamComposer.m_VerticalDamping = Mathf.Lerp(startDamp, defaultVerticalDamping, elapsed / fovResetDuration);
             yield return null;
         }
         airCam.m_Lens.FieldOfView = defaultAirFOV;
+        airCamNoise.m_FrequencyGain = defaultNoiseFreq;
+        if (airCamComposer != null) airCamComposer.m_VerticalDamping = defaultVerticalDamping;
     }
 
     //SETTING THE NEW STATE
@@ -330,6 +369,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpHeight * 2, rb.velocity.z);
         }
+        airTime = 0f;
     }
 
     //DIVE
@@ -649,6 +689,21 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "HighGround")
         {
+
+            if (!grounding)
+            {
+                // 1) 归一化 airtime 到 [0,1]
+                float t = Mathf.InverseLerp(0f, maxAirTime, airTime);
+                // 2) ease-in-quad：f(t) = t²
+                float easedT = t * t;
+                // 3) 用 easedT 去映射到 [minImpulseY, maxImpulseY]
+                float velocityY = Mathf.Lerp(minImpulseY, maxImpulseY, easedT);
+                // 4) 生成抖动
+                if (landingImpulse != null)
+                    landingImpulse.GenerateImpulse(Vector3.up * velocityY);
+                Debug.Log($"Air Time: {airTime:F2} seconds");
+            }
+
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
