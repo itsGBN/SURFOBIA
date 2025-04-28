@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using static GameManager;
 
 public class MainMenuEvents : MonoBehaviour
 {
@@ -103,7 +104,7 @@ public class MainMenuEvents : MonoBehaviour
 
     private void Update()
     {
-        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !isTrasitioning)
+        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
         {
             //Debug.Log("check"); BUG THIS IF STATEMENT ISNT RUNNING WHEN RELOADING FROM ENTIRE GAME LOOP (MAIN MENU)
             if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
@@ -128,9 +129,8 @@ public class MainMenuEvents : MonoBehaviour
 
     private void onPlayParentButtons(ClickEvent e)
     {
-        Time.timeScale = 1;
-        isTrasitioning = true;
-        StartCoroutine(onTransition(SceneManager.GetActiveScene().name, transitionName, 1f));
+        GameManager.instance.UpdateState(GameState.READY);
+        StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));    
     }
 
     private void onQuitButton(ClickEvent e)

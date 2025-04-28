@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameState startingState = GameState.READY;
 
-    GameState gameState = GameState.MAIN;
+    public GameState gameState = GameState.MAIN;
     GameState lastState;
 
     float globalTimeScale = 1f;
