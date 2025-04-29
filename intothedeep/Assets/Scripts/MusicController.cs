@@ -29,7 +29,7 @@ public class MusicController : MonoBehaviour
 
         if (!isCloseToGround)
         {
-            if (filter.cutoffFrequency != 4000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 4000, 2 * Time.deltaTime);
+            if (filter.cutoffFrequency != 4000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 4000, 5 * Time.deltaTime);
         } else
         {
             if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 12 * Time.deltaTime);

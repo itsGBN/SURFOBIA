@@ -13,6 +13,8 @@ public class MantaAnimation : MonoBehaviour
     [SerializeField] SkinnedMeshRenderer movementSkeletonMesh;
     [SerializeField] SkinnedMeshRenderer trickSkeletonMesh;
 
+    [SerializeField] ParticleSystem perfectTrick;
+
     [Header("GameObjects")]
     [SerializeField] GameObject player;
     [SerializeField] GameObject skeleton;
@@ -318,6 +320,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 100;
                     if (rotationSpeed < 18) rotationSpeed += 2;
                     HUD.instance.onPlayerTrickHud("Spin +100");
+                    perfectTrick.Play();
                     totalRotation = 0;
                 }
             }
@@ -342,6 +345,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 100;
                     if (rotationSpeed < 18) rotationSpeed += 2;
                     HUD.instance.onPlayerTrickHud("Spin +100");
+                    perfectTrick.Play();
                     totalRotation = 0;
                 }
             }
