@@ -13,7 +13,10 @@ public class MantaAnimation : MonoBehaviour
     [SerializeField] SkinnedMeshRenderer movementSkeletonMesh;
     [SerializeField] SkinnedMeshRenderer trickSkeletonMesh;
 
+    [Header("Particles")]
     [SerializeField] ParticleSystem perfectTrick;
+    [SerializeField] ParticleSystem goodTrick;
+    [SerializeField] ParticleSystem badTrick;
 
     [Header("GameObjects")]
     [SerializeField] GameObject player;
@@ -187,28 +190,7 @@ public class MantaAnimation : MonoBehaviour
 
                 skeleton.transform.rotation = mantaRay.transform.rotation;
                 trickSkeleton.transform.rotation = mantaRay.transform.rotation;
-
-                /*
-                if (skeleton.transform.rotation != mantaRay.transform.rotation)
-                {
-                    skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, mantaRay.transform.rotation, 0.01f);
-                    trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, mantaRay.transform.rotation, 0.01f);
-                }
-                else
-                {
-                    
-                }
-                */
             }
-
-            /*
-            if (moveInput > 0)
-            {
-                mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.01f);
-                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
-                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, 0.01f);
-            }
-            */
         }
 
         if (!wasGrounded && isGrounded) {
@@ -267,7 +249,10 @@ public class MantaAnimation : MonoBehaviour
                 {
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+
                     HUD.instance.onPlayerTrickHud("Flip +200");
+                    perfectTrick.Play();
+
                     totalBodyRotation = 0;
                 }
 
@@ -292,7 +277,10 @@ public class MantaAnimation : MonoBehaviour
                 {
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+
                     HUD.instance.onPlayerTrickHud("Flip +200");
+                    perfectTrick.Play();
+
                     totalBodyRotation = 0;
                 }
 
@@ -320,7 +308,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 100;
                     if (rotationSpeed < 18) rotationSpeed += 2;
                     HUD.instance.onPlayerTrickHud("Spin +100");
-                    perfectTrick.Play();
+                    goodTrick.Play();
                     totalRotation = 0;
                 }
             }
@@ -345,7 +333,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 100;
                     if (rotationSpeed < 18) rotationSpeed += 2;
                     HUD.instance.onPlayerTrickHud("Spin +100");
-                    perfectTrick.Play();
+                    goodTrick.Play();
                     totalRotation = 0;
                 }
             }
