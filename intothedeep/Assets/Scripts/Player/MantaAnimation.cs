@@ -202,8 +202,11 @@ public class MantaAnimation : MonoBehaviour
             if (totalRotation != 0)
             {
                 totalRotation = 0;
+                totalBodyRotation = 0;
                 comboMultiplier = 0;
                 rotationSpeed = startRotationSpeed;
+                holdingRotationSpeed = startHoldingRotationSpeed;
+                bodyRotationSpeed = startBodyRotationSpeed;
             }
 
             if (isDoingTrick) {
@@ -226,7 +229,7 @@ public class MantaAnimation : MonoBehaviour
 
         if (isGrinding)
         {
-            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+            //mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
             skeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
             trickSkeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
         }
@@ -248,7 +251,7 @@ public class MantaAnimation : MonoBehaviour
                 totalBodyRotation += 1;
                 
 
-                comboThreshold = rotationSpeed * (26 / 10);
+                comboThreshold = bodyRotationSpeed * (36 / 10);
 
                 if (totalBodyRotation > comboThreshold)
                 {
@@ -276,7 +279,7 @@ public class MantaAnimation : MonoBehaviour
 
                 totalBodyRotation -= 1;
 
-                comboThreshold = rotationSpeed * (26 / 10);
+                comboThreshold = bodyRotationSpeed * (36 / 10);
 
                 if (totalBodyRotation < -comboThreshold)
                 {
@@ -308,13 +311,14 @@ public class MantaAnimation : MonoBehaviour
                 {
                     totalRotation += 1;
                     //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
-                    comboThreshold = holdingRotationSpeed * (26 / 10);
+                    comboThreshold = holdingRotationSpeed * (36 / 10);
+                    Debug.Log(totalRotation);
 
                     if (totalRotation > comboThreshold)
                     {
-                        totalPoints += 150;
+                        totalPoints += 100;
                         if (holdingRotationSpeed < 18) rotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Grab Spin +150");
+                        HUD.instance.onPlayerTrickHud("Grab Spin +100");
                         goodTrick.Play();
                         totalRotation = 0;
                     }
@@ -322,14 +326,14 @@ public class MantaAnimation : MonoBehaviour
                 {
                     totalRotation += 1;
                     //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
-                    comboThreshold = rotationSpeed * (26 / 10);
+                    comboThreshold = rotationSpeed * (26 / 14);
                     Debug.Log(totalRotation);
 
                     if (totalRotation > comboThreshold)
                     {
-                        totalPoints += 100;
+                        totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Spin +100");
+                        HUD.instance.onPlayerTrickHud("Spin +50");
                         badTrick.Play();
                         totalRotation = 0;
                     }
@@ -341,9 +345,9 @@ public class MantaAnimation : MonoBehaviour
             if (trickInput.x < -0.5f || isTurningLeft)
             {
                 isDoingTrick = true;
-                mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
+                if (isHolding) mantaRay.transform.Rotate(new Vector3(0, -holdingRotationSpeed, 0)); else mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
 
-                if(isHolding)
+                if (isHolding)
                 {
                     totalRotation -= 1;
                     comboThreshold = holdingRotationSpeed * (36 / 10);
@@ -357,16 +361,16 @@ public class MantaAnimation : MonoBehaviour
 
                     if (totalRotation < -comboThreshold)
                     {
-                        totalPoints += 150;
+                        totalPoints += 100;
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Grab Spin +150");
+                        HUD.instance.onPlayerTrickHud("Grab Spin +100");
                         goodTrick.Play();
                         totalRotation = 0;
                     }
                 } else
                 {
                     totalRotation -= 1;
-                    comboThreshold = rotationSpeed * (36 / 10);
+                    comboThreshold = rotationSpeed * (26 / 14);
 
                     if (totalRotation > 0)
                     {
@@ -377,9 +381,9 @@ public class MantaAnimation : MonoBehaviour
 
                     if (totalRotation < -comboThreshold)
                     {
-                        totalPoints += 100;
+                        totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Spin +100");
+                        HUD.instance.onPlayerTrickHud("Spin +50");
                         badTrick.Play();
                         totalRotation = 0;
                     }
