@@ -30,6 +30,7 @@ public class MantaAnimation : MonoBehaviour
     [SerializeField] float startRotationSpeed;
     [SerializeField] float startHoldingRotationSpeed;
     [SerializeField] float startBodyRotationSpeed;
+    [SerializeField] float rotationMultiplier; // SHOULD BE 26. Previously 36.
     [SerializeField] LayerMask layerMask;
 
     bool isGrounded;
@@ -247,7 +248,7 @@ public class MantaAnimation : MonoBehaviour
                 totalBodyRotation += 1;
                 
 
-                comboThreshold = rotationSpeed * (36 / 10);
+                comboThreshold = rotationSpeed * (26 / 10);
 
                 if (totalBodyRotation > comboThreshold)
                 {
@@ -275,7 +276,7 @@ public class MantaAnimation : MonoBehaviour
 
                 totalBodyRotation -= 1;
 
-                comboThreshold = rotationSpeed * (36 / 10);
+                comboThreshold = rotationSpeed * (26 / 10);
 
                 if (totalBodyRotation < -comboThreshold)
                 {
