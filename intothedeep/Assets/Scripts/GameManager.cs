@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     private float savedIdleFloat;
     
     public PlayableDirector openingCutscene;
+    public Image openingCutsceneImage;
 
     // PROPERTY GETTERS
     public bool InputActive { get { return playerInput; } }
@@ -136,6 +138,8 @@ public class GameManager : MonoBehaviour
                     }
 
                     playerInput = false;
+                    if(openingCutscene != null) { openingCutscene.Stop(); }
+                    if(openingCutsceneImage != null) { openingCutsceneImage.enabled = false; }
                     StartCount();
                     break;
                 }
