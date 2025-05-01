@@ -29,44 +29,6 @@ public class IntroSignal : MonoBehaviour
     {
         
     }
-
-    public void setDollyCart(int cart)
-    {
-        Debug.Log("Dolly ");
-        switch (cart)
-        {
-            case 1:
-                dollyCart_1.enabled = true;
-                Debug.Log("Dolly cart 1 enabled");
-                break;
-            case 2:
-                dollyCart_2.enabled = true;
-                break;
-        }
-        
-    }
-
-    public void closeimage()
-    {
-        imageObject.SetActive(false);
-        player.introDirectorEnds();
-        
-    }
-
-    public void fadeInAnim()
-    {
-        if (animator != null)
-        {
-            animator.Play("FadeIn");
-        }
-    }
     
-    public void fadeOutAnim()
-    {
-        if (animator != null)
-        {
-            animator.Play("FadeOut");
-        }
-    }
     
 }

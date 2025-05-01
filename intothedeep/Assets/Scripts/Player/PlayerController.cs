@@ -8,8 +8,6 @@ using UnityEngine.Animations;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using Cinemachine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 using static System.TimeZoneInfo;
 using static GameManager;
@@ -82,10 +80,6 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
-
-    [Header("Intro Timeline")]
-    [SerializeField] GameObject introDirectorGB;
-    private PlayableDirector introDirector;
     
     [Header("Camera Animator")]
     [SerializeField] Animator cameraAnimator;
@@ -141,16 +135,6 @@ public class PlayerController : MonoBehaviour
         grindState = new GrindState(this);
         currentState = zeroState;
         cameraAnimator.SetInteger("State", 2);
-        if (introDirectorGB == null)
-        {
-            introDirectorGB = GameObject.Find("CutsceneDirector");
-        }
-
-        if (introDirectorGB != null)
-        {
-            introDirector = introDirectorGB.GetComponent<PlayableDirector>();
-        }
-
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
         prevIsGrounded = isGrounded;
@@ -202,16 +186,9 @@ public class PlayerController : MonoBehaviour
         }
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
-            if (introDirectorGB != null && introDirectorGB.activeSelf)
-            {
-                introDirector.Play();
-            }
-            else
-            {
                 Debug.Log("control press");
                 SetState(freeRoamState);
                 Debug.Log("Escape registered in Update() - transition from ZeroState");
-            }
 
         }
 
@@ -429,11 +406,6 @@ public class PlayerController : MonoBehaviour
         }
 
         return closestT;
-    }
-
-    public void introDirectorEnds()
-    {
-        SetState(freeRoamState);
     }
     
     public float GetCurrentSpeed() {
