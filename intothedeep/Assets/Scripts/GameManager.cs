@@ -44,18 +44,32 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         GetInputs.Enable();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
         GetInputs.Disable();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        
+        if (scene.name == "Leve1")
+        {
+            var cutDirObj = GameObject.Find("CutsceneDirector");
+            openingCutscene = cutDirObj ? cutDirObj.GetComponent<PlayableDirector>() : null;
+
+            var cutImgObj = GameObject.Find("cutsceneTransition");
+            openingCutsceneImage = cutImgObj ? cutImgObj.GetComponent<Image>() : null;
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        openingCutscene = FindObjectOfType<PlayableDirector>();
-
+        openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
+        openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -112,7 +126,10 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.READY:
                 {
-                    if(openingCutscene != null) { openingCutscene.Play(); }
+                    if(openingCutscene != null) 
+                    {
+                        openingCutscene.Play();
+                    }
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
                     if (CheckPointScript.checkpointPosition != Vector3.zero){
                         tempPlayer.transform.position = CheckPointScript.checkpointPosition;
@@ -139,7 +156,7 @@ public class GameManager : MonoBehaviour
 
                     playerInput = false;
                     if(openingCutscene != null) { openingCutscene.Stop(); }
-                    if(openingCutsceneImage != null) { openingCutsceneImage.enabled = false; }
+                    if(openingCutsceneImage != null) { openingCutsceneImage.color = new Color(1f, 1f, 1f, 0f); }
                     StartCount();
                     break;
                 }
@@ -210,4 +227,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(time);
         Time.timeScale = 1;
     }
+    
+    
 }
