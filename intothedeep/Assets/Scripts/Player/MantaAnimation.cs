@@ -258,7 +258,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
 
-                    HUD.instance.onPlayerTrickHud("Flip +200");
+                    HUD.instance.onPlayerTrickHud("Flip", 20);
                     perfectTrick.Play();
 
                     totalBodyRotation = 0;
@@ -286,7 +286,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
 
-                    HUD.instance.onPlayerTrickHud("Flip +200");
+                    HUD.instance.onPlayerTrickHud("Flip" ,20);
                     perfectTrick.Play();
 
                     totalBodyRotation = 0;
@@ -318,7 +318,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 100;
                         if (holdingRotationSpeed < 18) rotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Grab Spin +100");
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
                         totalRotation = 0;
                     }
@@ -333,7 +333,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 1;
-                        HUD.instance.onPlayerTrickHud("Spin +50");
+                        HUD.instance.onPlayerTrickHud("Spin", 5);
 
                         badTrick.Play();
                         //AudioManager.instance.Trick();
@@ -366,7 +366,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 100;
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Grab Spin +100");
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
                         totalRotation = 0;
                     }
@@ -386,7 +386,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 1;
-                        HUD.instance.onPlayerTrickHud("Spin +50");
+                        HUD.instance.onPlayerTrickHud("Spin", 5);
                         badTrick.Play();
                         totalRotation = 0;
                     }
@@ -406,21 +406,21 @@ public class MantaAnimation : MonoBehaviour
 
         if (totalRotationDisplacement < 0.3f)
         {
-            HUD.instance.onPlayerTrickHud("Perfect +50");
+            HUD.instance.onPlayerTrickHud("Perfect", 5);
             totalPoints += 50;
         } else if(totalRotationDisplacement < 0.5f)
         {
-            HUD.instance.onPlayerTrickHud("Good +30");
+            HUD.instance.onPlayerTrickHud("Good", 3);
             totalPoints += 50;
         }
         else if (totalRotationDisplacement < 0.8f)
         {
-            HUD.instance.onPlayerTrickHud("Fine +10");
+            HUD.instance.onPlayerTrickHud("Fine", 1);
             totalPoints += 50;
         }
         else
         {
-            HUD.instance.onPlayerTrickHud("Awful +0");
+            HUD.instance.onPlayerTrickHud("Awful", 0);
             totalPoints += 50;
         }
     }

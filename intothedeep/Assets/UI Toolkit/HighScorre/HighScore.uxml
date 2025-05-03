@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/HighScorre/HighScore.uss?fileID=7433441132597879392&amp;guid=933b657ef883a8245a4c87e164636ad3&amp;type=3#HighScore" />
+    <ui:VisualElement name="Leaderboard" style="flex-grow: 1;">
+        <ui:LongField label="ENTER NAME" value="42" name="Name" class="Input" style="height: 72px; width: 463px; position: absolute; top: 478px; left: 410px; font-size: 48px; color: rgb(0, 0, 0);" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="1" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="2" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="3" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="4" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="5" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="6" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="7" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="8" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="9" class="Leaderboard" />
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="10" class="Leaderboard" />
+    </ui:VisualElement>
+</ui:UXML>

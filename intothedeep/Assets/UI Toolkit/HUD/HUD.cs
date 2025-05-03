@@ -16,9 +16,11 @@ public class HUD : MonoBehaviour
     private VisualElement redVisualElement;
     private VisualElement endscreenVisualElement;
     private Label countdownLabel;
+    private Label scoreLabel;
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
     private int trickNum;
+    private int scoreNum;
     private Queue<Label> playerTricks = new Queue<Label>();
 
     [SerializeField] [Range(1, 1000)] int distannceRange;
@@ -41,6 +43,7 @@ public class HUD : MonoBehaviour
         endscreenVisualElement = uIDocument.rootVisualElement.Q("Endscreen") as VisualElement;
         distanceLabel = uIDocument.rootVisualElement.Q("Distance") as Label;
         countdownLabel = uIDocument.rootVisualElement.Q("Countdown") as Label;
+        scoreLabel = uIDocument.rootVisualElement.Q("Score") as Label;
         List<Label> labels = uIDocument.rootVisualElement.Query<Label>(null, "scores").ToList();
         enemyScores = labels.ToDictionary(label => label, label => (0, "Name"));
   
@@ -56,10 +59,10 @@ public class HUD : MonoBehaviour
             var list = enemyScores.ToList();
             int index = list.FindIndex(entry => entry.Key == label);
 
-            if(index == 0) { enemyScores[label] = (score, "Mia"); }
-            if(index == 1) { enemyScores[label] = (score, "Maryam"); }
-            if(index == 2) { enemyScores[label] = (score, "Zoey"); }
-            if(index == 3) { enemyScores[label] = (score, "Victor"); }
+            if(index == 0) { enemyScores[label] = (score, "Tibia H"); }
+            if(index == 1) { enemyScores[label] = (score, "Ribcage"); }
+            if(index == 2) { enemyScores[label] = (score, "Boney S"); }
+            if(index == 3) { enemyScores[label] = (score, "Femur S"); }
         }
 
     }
@@ -152,12 +155,12 @@ public class HUD : MonoBehaviour
 
     private void onPlayerTrick()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { onPlayerTrickHud("FLIP"); }
-        if(Input.GetKeyDown(KeyCode.Alpha2)) {  onPlayerTrickHud("GRIND"); }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { onPlayerTrickHud("JUMP"); }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { onPlayerTrickHud("FLIP", 10); }
+        if(Input.GetKeyDown(KeyCode.Alpha2)) {  onPlayerTrickHud("GRIND", 20); }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { onPlayerTrickHud("JUMP", 30); }
     }
 
-    public void onPlayerTrickHud(string trickname)
+    public void onPlayerTrickHud(string trickname, int points)
     {
         trickNum++;
         trickLabel = new Label(trickname);
@@ -170,15 +173,25 @@ public class HUD : MonoBehaviour
         playerTricks.Enqueue(trickLabel);
         Label[] queueArray = playerTricks.ToArray();
 
+        StartCoroutine(MoveTrick(queueArray));
+
+        scoreNum+= points;
+        scoreLabel.text = scoreNum.ToString();  
+    }
+
+    IEnumerator MoveTrick(Label[] queueArray)
+    {
         for (int i = 0; i < queueArray.Length; i++)
         {
-            if (queueArray[i].ClassListContains("tricker")) { queueArray[i].RemoveFromClassList("tricker"); queueArray[i].AddToClassList(("tone")); }
+            yield return new WaitForSeconds(0f);
+            if (queueArray[i].ClassListContains("tricker")) { queueArray[i].RemoveFromClassList("tricker"); queueArray[i].AddToClassList(("tzero")); continue; }
             if (queueArray[i].ClassListContains("tzero")) { queueArray[i].RemoveFromClassList("tzero"); queueArray[i].AddToClassList(("tone")); continue; }
-            if (queueArray[i].ClassListContains("tone")) { queueArray[i].RemoveFromClassList("tone"); queueArray[i].AddToClassList(("ttwo")); continue;  }
+            if (queueArray[i].ClassListContains("tone")) { queueArray[i].RemoveFromClassList("tone"); queueArray[i].AddToClassList(("ttwo")); continue; }
             if (queueArray[i].ClassListContains("ttwo")) { queueArray[i].RemoveFromClassList("ttwo"); queueArray[i].AddToClassList(("tthree")); continue; }
             if (queueArray[i].ClassListContains("tthree")) { queueArray[i].RemoveFromClassList("tthree"); queueArray[i].AddToClassList(("tfour")); continue; }
             if (queueArray[i].ClassListContains("tfour")) { Label toDelete = playerTricks.Dequeue(); uIDocument.rootVisualElement.Remove(toDelete); toDelete = null; continue; }
         }
+
     }
 
     public void UpdateCountdown(float value)

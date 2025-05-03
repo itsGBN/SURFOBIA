@@ -52,32 +52,34 @@
 }
 
 .tricker {
-    left: 300px;
-    top: 972px;
+    left: 645px;
+    top: 692px;
+    font-size: 50px;
+    rotate: -21deg;
 }
 
 .tzero {
-    left: 300px;
-    top: 972px;
-    opacity: 0;
+    left: 42px;
+    top: 970px;
+    opacity: 1;
 }
 
 .tone {
-    top: 972px;
+    top: 920px;
     left: 42px;
 }
 
 .ttwo {
-    top: 923px;
+    top: 870px;
     opacity: 0.75;
 }
 
 .tthree {
-    top: 874px;
+    top: 820px;
     opacity: 0.5;
 }
 
 .tfour {
-    top: 798px;
+    top: 770px;
     opacity: 0.25;
 }

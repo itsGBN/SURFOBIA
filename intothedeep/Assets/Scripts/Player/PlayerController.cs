@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(HUD.instance.onRed());
         AudioManager.instance.Hit();
-        HUD.instance.onPlayerTrickHud("**COLLIDE**");
+        HUD.instance.onPlayerTrickHud("**COLLIDE**", -10);
         GameManager.instance.FreezeFrame(0.08f);
     }
 
@@ -377,7 +377,7 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(boostDirection * boostForce, ForceMode.Impulse);
 
-        HUD.instance.onPlayerTrickHud("BOOST!");
+        HUD.instance.onPlayerTrickHud("BOOST!", 10);
         // AudioManager.instance.Boost(); // Uncomment if sound exists
     }
 
@@ -695,14 +695,14 @@ public class PlayerController : MonoBehaviour
             // Print based on the angle direction
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("GOOD");
+                HUD.instance.onPlayerTrickHud("GOOD", 10);
                 AudioManager.instance.Land();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("OK");
+                HUD.instance.onPlayerTrickHud("OK", 10);
                 moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
@@ -710,7 +710,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (!grounding)
             {
-                HUD.instance.onPlayerTrickHud("PERFECT");
+                HUD.instance.onPlayerTrickHud("PERFECT", 10);
                 moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
@@ -720,7 +720,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "Grind")
         {
-            HUD.instance.onPlayerTrickHud("GRIND");
+            HUD.instance.onPlayerTrickHud("GRIND", 10);
             AudioManager.instance.Grind();
 
             SplineContainer spline = collision.gameObject.GetComponent<SplineContainer>();
