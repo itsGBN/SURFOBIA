@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour
 
         if (!isCloseToGround)
         {
-            if (filter.cutoffFrequency != 3000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 3000, 2 * Time.deltaTime);
+            if (filter.cutoffFrequency != 2000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 2000, 1 * Time.deltaTime);
         }
         else
         {
