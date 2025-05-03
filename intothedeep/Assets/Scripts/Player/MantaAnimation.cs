@@ -126,28 +126,17 @@ public class MantaAnimation : MonoBehaviour
         if (!wasGrinding && isGrinding) ActivateGrind();
         if (wasGrinding && !isGrinding) DeactivateGrind();
 
-        
-
-
-        if (GetInputs.PS5Map.Jump.WasPressedThisFrame())
-        {
-            //ActivateTrick();
-            //trickSkeletonAnim.SetTrigger("Jump");
-        }
-
-        if (GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame())
+        if (GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame() && !isGrinding)
         {
             isHolding = true;
             totalRotation = 0; //Resets rotation tracking
             trickSkeletonAnim.SetTrigger("StartGrab");
-            ActivateTrick();
+            ActivateTrick(); //Switches to trick skeleton
             Debug.Log("grabbed");
         }
-        if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame())
+        if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame() && !isGrinding)
         {
-            isHolding = false;
-            trickSkeletonAnim.SetTrigger("EndGrab");
-            Debug.Log("let go");
+            StartCoroutine(EndGrab());
         }
 
         if(GetInputs.PS5Map.LeftBumper.WasPressedThisFrame()) {
@@ -173,6 +162,7 @@ public class MantaAnimation : MonoBehaviour
         if (isGrounded)
         {
             if (mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.05f);
+            //if (graphics.transform.rotation != player.transform.rotation) graphics.transform.rotation = Quaternion.Lerp(graphics.transform.rotation, player.transform.rotation, 0.05f); ;
             if (skeleton.transform.rotation != player.transform.rotation)
             {
                 skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
@@ -188,8 +178,6 @@ public class MantaAnimation : MonoBehaviour
         }
         else
         {
-            
-
             if (isHolding)
             {
                 skeleton.transform.rotation = mantaRay.transform.rotation;
@@ -199,24 +187,23 @@ public class MantaAnimation : MonoBehaviour
 
         if (!wasGrounded && isGrounded) {
 
-            if (totalRotation != 0)
-            {
+            if (isDoingTrick) {
+                isDoingTrick = false;
+
                 totalRotation = 0;
                 totalBodyRotation = 0;
                 comboMultiplier = 0;
                 rotationSpeed = startRotationSpeed;
                 holdingRotationSpeed = startHoldingRotationSpeed;
                 bodyRotationSpeed = startBodyRotationSpeed;
-            }
 
-            if (isDoingTrick) {
-                isDoingTrick = false;
-                LandingCheck();
+                graphics.transform.rotation = player.transform.rotation;
+
                 Debug.Log("stoppedTrick");
             } 
            
             ResetPositions();
-            //if (player.transform.rotation.y != mantaRay.transform.rotation.y) 
+            if(!isHolding) ActivateMove();
         }
 
         skeletonAnim.SetFloat("Joystick", joystick);
@@ -344,7 +331,6 @@ public class MantaAnimation : MonoBehaviour
 
                 
             }
-            //if ()
             if (trickInput.x < -0.5f || isTurningLeft)
             {
                 isDoingTrick = true;
@@ -455,7 +441,11 @@ public class MantaAnimation : MonoBehaviour
     {
         trickSkeletonAnim.SetTrigger("EndGrind");
         ActivateMove();
-        ResetSkeleton(player.transform.rotation);
+
+        ResetSkeleton(Quaternion.identity);
+        graphics.transform.rotation = Quaternion.identity;
+        ResetPositions();
+
         Debug.Log("EndGrind");
     }
 
@@ -470,6 +460,17 @@ public class MantaAnimation : MonoBehaviour
         mantaRay.transform.position = player.transform.position - mantaDisplacement;
         skeleton.transform.position = player.transform.position - skeletonDisplacement;
         trickSkeleton.transform.position = player.transform.position - trickDisplacement;
+    }
+
+    IEnumerator EndGrab()
+    {
+        trickSkeletonAnim.SetTrigger("EndGrab");
+        
+        yield return new WaitForSeconds(0.6f);
+
+        isHolding = false;
+        ActivateMove(); //Switches to move skeleton
+        Debug.Log("let go");
     }
 
 }
