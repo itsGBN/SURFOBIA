@@ -332,9 +332,12 @@ public class MantaAnimation : MonoBehaviour
                     if (totalRotation > comboThreshold)
                     {
                         totalPoints += 50;
-                        if (rotationSpeed < 22) rotationSpeed += 2;
+                        if (rotationSpeed < 22) rotationSpeed += 1;
                         HUD.instance.onPlayerTrickHud("Spin +50");
+
                         badTrick.Play();
+                        //AudioManager.instance.Trick();
+
                         totalRotation = 0;
                     }
                 }
@@ -382,7 +385,7 @@ public class MantaAnimation : MonoBehaviour
                     if (totalRotation < -comboThreshold)
                     {
                         totalPoints += 50;
-                        if (rotationSpeed < 22) rotationSpeed += 2;
+                        if (rotationSpeed < 22) rotationSpeed += 1;
                         HUD.instance.onPlayerTrickHud("Spin +50");
                         badTrick.Play();
                         totalRotation = 0;
