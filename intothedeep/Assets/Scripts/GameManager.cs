@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviour
 
             var cutImgObj = GameObject.Find("cutsceneTransition");
             openingCutsceneImage = cutImgObj ? cutImgObj.GetComponent<Image>() : null;
+            if (gameState == GameState.READY && openingCutscene != null)
+                    openingCutscene.Play();
         }
     }
 
@@ -126,10 +128,6 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.READY:
                 {
-                    if(openingCutscene != null) 
-                    {
-                        openingCutscene.Play();
-                    }
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
                     if (CheckPointScript.checkpointPosition != Vector3.zero){
                         tempPlayer.transform.position = CheckPointScript.checkpointPosition;
