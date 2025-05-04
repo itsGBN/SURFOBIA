@@ -7,13 +7,15 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField] AudioSource[] Audio;
-    [SerializeField] AudioSource musicNoDrums;
-    [SerializeField] AudioSource drumsOnly;
+    [SerializeField] AudioHighPassFilter filter;
+    [SerializeField] AudioLowPassFilter lowFilter;
+    [SerializeField] LayerMask layerMask;
 
     [SerializeField] GameObject player;
 
     bool isGrounded;
     bool isGrinding;
+    bool isCloseToGround;
 
     private void Awake()
     {
@@ -26,23 +28,31 @@ public class AudioManager : MonoBehaviour
         isGrounded = player.GetComponent<PlayerController>().isGrounded;
         isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
 
+        RaycastHit hit;
+        isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3.5f, layerMask);
 
-        if (isGrinding)
-        {
-            drumsOnly.volume = 1.0f;
-        } else if(drumsOnly.volume != 0.6f)
-        {
-            musicNoDrums.volume = 0.6f;
-        }
 
-        if (isGrounded)
+        if (!isCloseToGround)
         {
-            if (drumsOnly.volume != 1) drumsOnly.volume = 0.6f;
+            if (filter.cutoffFrequency != 2000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 2000, 1 * Time.deltaTime);
         }
         else
         {
-            drumsOnly.volume = 0.2f;
+            if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 12 * Time.deltaTime);
         }
+
+
+        isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
+
+        if (isGrinding)
+        {
+            if (lowFilter.cutoffFrequency != 5000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 5000, 3 * Time.deltaTime);
+        }
+        else
+        {
+            if (lowFilter.cutoffFrequency != 22000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 22000, 3 * Time.deltaTime);
+        }
+
     }
 
     // Play the sound of the Player Walking
@@ -56,4 +66,13 @@ public class AudioManager : MonoBehaviour
     public void GrindStop() { Audio[5].Stop(); }
     public void Hit() { if (!Audio[6].isPlaying) { Audio[6].pitch = Random.Range(0.8f, 1.2f); Audio[6].Play(); } }
     public void Pop() { if (!Audio[7].isPlaying) { Audio[7].pitch = Random.Range(0.8f, 1.2f); Audio[7].Play(); } }
+
+    public void Trick() { 
+        if (!Audio[8].isPlaying) { 
+            //Audio[8].pitch = Random.Range(0.8f, 1.2f); 
+            Audio[8].Play(); 
+        } 
+    }
+
+
 }

@@ -13,6 +13,11 @@ public class MantaAnimation : MonoBehaviour
     [SerializeField] SkinnedMeshRenderer movementSkeletonMesh;
     [SerializeField] SkinnedMeshRenderer trickSkeletonMesh;
 
+    [Header("Particles")]
+    [SerializeField] ParticleSystem perfectTrick;
+    [SerializeField] ParticleSystem goodTrick;
+    [SerializeField] ParticleSystem badTrick;
+
     [Header("GameObjects")]
     [SerializeField] GameObject player;
     [SerializeField] GameObject skeleton;
@@ -23,7 +28,9 @@ public class MantaAnimation : MonoBehaviour
     [Header("Changable Variables")]
     [SerializeField] float trickAnimationSpeed;
     [SerializeField] float startRotationSpeed;
+    [SerializeField] float startHoldingRotationSpeed;
     [SerializeField] float startBodyRotationSpeed;
+    [SerializeField] float rotationMultiplier; // SHOULD BE 26. Previously 36.
     [SerializeField] LayerMask layerMask;
 
     bool isGrounded;
@@ -35,6 +42,7 @@ public class MantaAnimation : MonoBehaviour
     bool wasGrinding;
 
     bool isHolding;
+    bool isDoingTrick;
 
     float totalRotation;
     float comboMultiplier;
@@ -44,10 +52,19 @@ public class MantaAnimation : MonoBehaviour
     float totalBodyRotation;
 
     float rotationSpeed;
+    float holdingRotationSpeed;
     float bodyRotationSpeed;
+
+    bool isTurningRight;
+    bool isTurningLeft;
 
     float moveInput;
     Vector2 trickInput;
+
+    Vector3 mantaDisplacement;
+    Vector3 skeletonDisplacement;
+    Vector3 trickDisplacement;
+
 
     //public
     public float totalPoints;
@@ -81,7 +98,12 @@ public class MantaAnimation : MonoBehaviour
         trickSkeletonAnim.speed = trickAnimationSpeed;
 
         rotationSpeed = startRotationSpeed;
+        holdingRotationSpeed = startHoldingRotationSpeed;
         bodyRotationSpeed = startBodyRotationSpeed;
+
+        mantaDisplacement = player.transform.position - mantaRay.transform.position;
+        skeletonDisplacement = player.transform.position - skeleton.transform.position;
+        trickDisplacement = player.transform.position - trickSkeleton.transform.position;
     }
 
     // Update is called once per frame
@@ -104,32 +126,43 @@ public class MantaAnimation : MonoBehaviour
         if (!wasGrinding && isGrinding) ActivateGrind();
         if (wasGrinding && !isGrinding) DeactivateGrind();
 
-        
-
-
-        if (GetInputs.PS5Map.Jump.WasPressedThisFrame())
-        {
-            //ActivateTrick();
-            //trickSkeletonAnim.SetTrigger("Jump");
-        }
-
-        if (GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame())
+        if (GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame() && !isGrinding)
         {
             isHolding = true;
+            totalRotation = 0; //Resets rotation tracking
             trickSkeletonAnim.SetTrigger("StartGrab");
-            ActivateTrick();
+            ActivateTrick(); //Switches to trick skeleton
             Debug.Log("grabbed");
         }
-        if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame())
+        if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame() && !isGrinding)
         {
-            isHolding = false;
-            trickSkeletonAnim.SetTrigger("EndGrab");
-            Debug.Log("let go");
+            StartCoroutine(EndGrab());
         }
+
+        if(GetInputs.PS5Map.LeftBumper.WasPressedThisFrame()) {
+            isTurningLeft = true;
+            isTurningRight = false;
+        }
+        if(GetInputs.PS5Map.LeftBumper.WasReleasedThisFrame())
+        {
+            isTurningLeft = false;
+        }
+
+        if (GetInputs.PS5Map.RightBumper.WasPressedThisFrame())
+        {
+            isTurningRight = true;
+            isTurningLeft = false;
+        }
+        if (GetInputs.PS5Map.RightBumper.WasReleasedThisFrame())
+        {
+            isTurningRight = false;
+        }
+
 
         if (isGrounded)
         {
             if (mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.05f);
+            //if (graphics.transform.rotation != player.transform.rotation) graphics.transform.rotation = Quaternion.Lerp(graphics.transform.rotation, player.transform.rotation, 0.05f); ;
             if (skeleton.transform.rotation != player.transform.rotation)
             {
                 skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
@@ -145,47 +178,32 @@ public class MantaAnimation : MonoBehaviour
         }
         else
         {
-            
-
             if (isHolding)
             {
-
                 skeleton.transform.rotation = mantaRay.transform.rotation;
                 trickSkeleton.transform.rotation = mantaRay.transform.rotation;
-
-                /*
-                if (skeleton.transform.rotation != mantaRay.transform.rotation)
-                {
-                    skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, mantaRay.transform.rotation, 0.01f);
-                    trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, mantaRay.transform.rotation, 0.01f);
-                }
-                else
-                {
-                    
-                }
-                */
             }
-
-            /*
-            if (moveInput > 0)
-            {
-                mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.01f);
-                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
-                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, 0.01f);
-            }
-            */
         }
 
         if (!wasGrounded && isGrounded) {
 
-            if (totalRotation != 0)
-            {
+            if (isDoingTrick) {
+                isDoingTrick = false;
+
                 totalRotation = 0;
+                totalBodyRotation = 0;
                 comboMultiplier = 0;
                 rotationSpeed = startRotationSpeed;
-            }
+                holdingRotationSpeed = startHoldingRotationSpeed;
+                bodyRotationSpeed = startBodyRotationSpeed;
 
-            if (player.transform.rotation.y != mantaRay.transform.rotation.y) LandingCheck();
+                graphics.transform.rotation = player.transform.rotation;
+
+                Debug.Log("stoppedTrick");
+            } 
+           
+            ResetPositions();
+            if(!isHolding) ActivateMove();
         }
 
         skeletonAnim.SetFloat("Joystick", joystick);
@@ -198,104 +216,173 @@ public class MantaAnimation : MonoBehaviour
 
         if (isGrinding)
         {
-            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
+            //mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
             skeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
             trickSkeleton.transform.Rotate(new Vector3(0, rotationSpeed, 0));
         }
 
-        if (isHolding && trickInput.y > 0.1f)
+        if(!isGrounded)
         {
-            graphics.transform.Rotate(new Vector3(bodyRotationSpeed, 0, 0));
-
-            if (totalBodyRotation < 0)
+            if (isHolding && trickInput.y > 0.5f)
             {
-                totalBodyRotation = 0;
-                bodyRotationSpeed = startBodyRotationSpeed;
-                comboMultiplier = 0;
+                isDoingTrick = true;
+                graphics.transform.Rotate(new Vector3(bodyRotationSpeed, 0, 0));
+
+                if (totalBodyRotation < 0)
+                {
+                    totalBodyRotation = 0;
+                    bodyRotationSpeed = startBodyRotationSpeed;
+                    comboMultiplier = 0;
+                }
+
+                totalBodyRotation += 1;
+                
+
+                comboThreshold = bodyRotationSpeed * (36 / 10);
+
+                if (totalBodyRotation > comboThreshold)
+                {
+                    totalPoints += 200;
+                    if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+
+                    HUD.instance.onPlayerTrickHud("Flip", 20);
+                    perfectTrick.Play();
+
+                    totalBodyRotation = 0;
+                }
+
+            }
+            if (isHolding && trickInput.y < -0.5f)
+            {
+                isDoingTrick = true;
+                graphics.transform.Rotate(new Vector3(-bodyRotationSpeed, 0, 0));
+
+                if (totalBodyRotation > 0)
+                {
+                    totalBodyRotation = 0;
+                    bodyRotationSpeed = startBodyRotationSpeed;
+                    comboMultiplier = 0;
+                }
+
+                totalBodyRotation -= 1;
+
+                comboThreshold = bodyRotationSpeed * (36 / 10);
+
+                if (totalBodyRotation < -comboThreshold)
+                {
+                    totalPoints += 200;
+                    if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
+
+                    HUD.instance.onPlayerTrickHud("Flip" ,20);
+                    perfectTrick.Play();
+
+                    totalBodyRotation = 0;
+                }
+
             }
 
-            totalBodyRotation += 1;
-
-            comboThreshold = rotationSpeed * (36 / 10);
-
-            if (totalBodyRotation > comboThreshold)
+            //if (trickInput.x > 0.5f)
+            if(trickInput.x > 0.5f || isTurningRight)
             {
-                totalPoints += 200;
-                if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
-                HUD.instance.onPlayerTrickHud("Flip +200");
-                totalBodyRotation = 0;
-            }
+                isDoingTrick = true;
+                if(isHolding) mantaRay.transform.Rotate(new Vector3(0, holdingRotationSpeed, 0)); else mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
 
+                if (totalRotation < 0)
+                {
+                    totalRotation = 0;
+                    rotationSpeed = startRotationSpeed;
+                    comboMultiplier = 0;
+                }
+
+                if(isHolding)
+                {
+                    totalRotation += 1;
+                    //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
+                    comboThreshold = holdingRotationSpeed * (36 / 10);
+                    Debug.Log(totalRotation);
+
+                    if (totalRotation > comboThreshold)
+                    {
+                        totalPoints += 100;
+                        if (holdingRotationSpeed < 18) rotationSpeed += 2;
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
+                        goodTrick.Play();
+                        totalRotation = 0;
+                    }
+                } else
+                {
+                    totalRotation += 1;
+                    //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
+                    comboThreshold = rotationSpeed * (26 / 14);
+                    Debug.Log(totalRotation);
+
+                    if (totalRotation > comboThreshold)
+                    {
+                        totalPoints += 50;
+                        if (rotationSpeed < 22) rotationSpeed += 1;
+                        HUD.instance.onPlayerTrickHud("Spin", 5);
+
+                        badTrick.Play();
+                        //AudioManager.instance.Trick();
+
+                        totalRotation = 0;
+                    }
+                }
+
+                
+            }
+            if (trickInput.x < -0.5f || isTurningLeft)
+            {
+                isDoingTrick = true;
+                if (isHolding) mantaRay.transform.Rotate(new Vector3(0, -holdingRotationSpeed, 0)); else mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
+
+                if (isHolding)
+                {
+                    totalRotation -= 1;
+                    comboThreshold = holdingRotationSpeed * (36 / 10);
+
+                    if (totalRotation > 0)
+                    {
+                        totalRotation = 0;
+                        holdingRotationSpeed = startHoldingRotationSpeed;
+                        comboMultiplier = 0;
+                    }
+
+                    if (totalRotation < -comboThreshold)
+                    {
+                        totalPoints += 100;
+                        if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
+                        goodTrick.Play();
+                        totalRotation = 0;
+                    }
+                } else
+                {
+                    totalRotation -= 1;
+                    comboThreshold = rotationSpeed * (26 / 14);
+
+                    if (totalRotation > 0)
+                    {
+                        totalRotation = 0;
+                        rotationSpeed = startRotationSpeed;
+                        comboMultiplier = 0;
+                    }
+
+                    if (totalRotation < -comboThreshold)
+                    {
+                        totalPoints += 50;
+                        if (rotationSpeed < 22) rotationSpeed += 1;
+                        HUD.instance.onPlayerTrickHud("Spin", 5);
+                        badTrick.Play();
+                        totalRotation = 0;
+                    }
+                }
+
+                
+            }
         }
-        if (isHolding && trickInput.y < -0.1f)
-        {
-            graphics.transform.Rotate(new Vector3(-bodyRotationSpeed, 0, 0));
 
-            if (totalBodyRotation > 0)
-            {
-                totalBodyRotation = 0;
-                bodyRotationSpeed = startBodyRotationSpeed;
-                comboMultiplier = 0;
-            }
-
-            totalBodyRotation -= 1;
-
-            comboThreshold = rotationSpeed * (36 / 10);
-
-            if (totalBodyRotation < -comboThreshold)
-            {
-                totalPoints += 200;
-                if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
-                HUD.instance.onPlayerTrickHud("Flip +200");
-                totalBodyRotation = 0;
-            }
-
-        }
-
-        if (trickInput.x > 0.5f)
-        {
-            mantaRay.transform.Rotate(new Vector3(0, rotationSpeed, 0));
-
-            if (totalRotation < 0)
-            {
-                totalRotation = 0;
-                rotationSpeed = startRotationSpeed;
-                comboMultiplier = 0;
-            }
-
-            totalRotation += 1;
-            //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
-            comboThreshold = rotationSpeed * (36 / 10);
-
-            if (totalRotation > comboThreshold)
-            {
-                totalPoints += 100;
-                if (rotationSpeed < 18) rotationSpeed += 2;
-                HUD.instance.onPlayerTrickHud("Spin +100");
-                totalRotation = 0;
-            }
-        }
-        if (trickInput.x < -0.5f) {
-            mantaRay.transform.Rotate(new Vector3(0, -rotationSpeed, 0));
-
-            totalRotation -= 1;
-            comboThreshold = rotationSpeed * (36 / 10);
-
-            if (totalRotation > 0)
-            {
-                totalRotation = 0;
-                rotationSpeed = startRotationSpeed;
-                comboMultiplier = 0;
-            }
-
-            if (totalRotation < -comboThreshold)
-            {
-                totalPoints += 100;
-                if (rotationSpeed < 18) rotationSpeed += 2;
-                HUD.instance.onPlayerTrickHud("Spin +100");
-                totalRotation = 0;
-            }
-        }
+        
     }
 
     public void LandingCheck()
@@ -303,25 +390,30 @@ public class MantaAnimation : MonoBehaviour
         float totalRotationDisplacement = 0;
         totalRotationDisplacement = Mathf.Abs(player.transform.rotation.y - mantaRay.transform.rotation.y);
 
-        if (totalRotationDisplacement < comboThreshold)
+        if (totalRotationDisplacement < 0.3f)
         {
-            HUD.instance.onPlayerTrickHud("Perfect +50");
+            HUD.instance.onPlayerTrickHud("Perfect", 5);
             totalPoints += 50;
-        } else if(totalRotationDisplacement < 0.2f)
+        } else if(totalRotationDisplacement < 0.5f)
         {
-            HUD.instance.onPlayerTrickHud("Good +30");
+            HUD.instance.onPlayerTrickHud("Good", 3);
             totalPoints += 50;
         }
-        else if (totalRotationDisplacement < 0.6f)
+        else if (totalRotationDisplacement < 0.8f)
         {
-            HUD.instance.onPlayerTrickHud("Fine +10");
+            HUD.instance.onPlayerTrickHud("Fine", 1);
             totalPoints += 50;
         }
         else
         {
-            HUD.instance.onPlayerTrickHud("Awful +0");
+            HUD.instance.onPlayerTrickHud("Awful", 0);
             totalPoints += 50;
         }
+    }
+
+    public bool GetIsDoingTrick()
+    {
+        return isDoingTrick;
     }
 
     void ActivateTrick()
@@ -349,7 +441,11 @@ public class MantaAnimation : MonoBehaviour
     {
         trickSkeletonAnim.SetTrigger("EndGrind");
         ActivateMove();
-        ResetSkeleton(player.transform.rotation);
+
+        ResetSkeleton(Quaternion.identity);
+        graphics.transform.rotation = Quaternion.identity;
+        ResetPositions();
+
         Debug.Log("EndGrind");
     }
 
@@ -357,6 +453,24 @@ public class MantaAnimation : MonoBehaviour
     {
         skeleton.transform.rotation = resetRotation;
         trickSkeleton.transform.rotation = resetRotation;
+    }
+
+    void ResetPositions()
+    {
+        mantaRay.transform.position = player.transform.position - mantaDisplacement;
+        skeleton.transform.position = player.transform.position - skeletonDisplacement;
+        trickSkeleton.transform.position = player.transform.position - trickDisplacement;
+    }
+
+    IEnumerator EndGrab()
+    {
+        trickSkeletonAnim.SetTrigger("EndGrab");
+        
+        yield return new WaitForSeconds(0.6f);
+
+        isHolding = false;
+        ActivateMove(); //Switches to move skeleton
+        Debug.Log("let go");
     }
 
 }

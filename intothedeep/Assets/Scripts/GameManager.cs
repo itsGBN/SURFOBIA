@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameState startingState = GameState.READY;
 
-    GameState gameState = GameState.MAIN;
+    public GameState gameState = GameState.MAIN;
     GameState lastState;
 
     float globalTimeScale = 1f;
@@ -19,6 +22,11 @@ public class GameManager : MonoBehaviour
     float countdownTimer;
 
     public static GameManager instance;
+
+    private float savedIdleFloat;
+    
+    public PlayableDirector openingCutscene;
+    public Image openingCutsceneImage;
 
     // PROPERTY GETTERS
     public bool InputActive { get { return playerInput; } }
@@ -36,18 +44,34 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         GetInputs.Enable();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
         GetInputs.Disable();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-    
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        
+        if (scene.name == "Leve1")
+        {
+            var cutDirObj = GameObject.Find("CutsceneDirector");
+            openingCutscene = cutDirObj ? cutDirObj.GetComponent<PlayableDirector>() : null;
+
+            var cutImgObj = GameObject.Find("cutsceneTransition");
+            openingCutsceneImage = cutImgObj ? cutImgObj.GetComponent<Image>() : null;
+            if (gameState == GameState.READY && openingCutscene != null)
+                    openingCutscene.Play();
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
-        //UpdateState(GameState.MAIN);
+        openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
+        openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -66,7 +90,7 @@ public class GameManager : MonoBehaviour
                     UpdateState(GameState.MAIN);
                     MusicManager.instance.FadeOut();
                 }
-            break;
+                break;
             case GameState.MAIN:
                 if (Input.anyKeyDown)
                 {
@@ -77,14 +101,15 @@ public class GameManager : MonoBehaviour
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
         {
-            switch (SceneManager.GetActiveScene().name)
-            {
-                case "Playtest Scene":
-                    UpdateState(GameState.READY);
-                    break;
-            }
-            MusicManager.instance.FadeOut();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // switch (SceneManager.GetActiveScene().name)
+            // {
+            // case "Playtest Scene":
+            UpdateState(GameState.READY);
+            // break;
+            // }
+            //MusicManager.instance.FadeOut();
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 0f));
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -102,9 +127,16 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1f;
                 break;
             case GameState.READY:
-                playerInput = false;
-                Time.timeScale = 1f;
-                break;
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (CheckPointScript.checkpointPosition != Vector3.zero){
+                        tempPlayer.transform.position = CheckPointScript.checkpointPosition;
+                        Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
+                    }
+                    playerInput = false;
+                    Time.timeScale = 1f;
+                    break;
+                }
             case GameState.PAUSED:
                 playerInput = false;
                 Time.timeScale = 0f;
@@ -112,13 +144,32 @@ public class GameManager : MonoBehaviour
                 //pauseMenu.SetActive(true);
                 break;
             case GameState.COUNTING:
-                playerInput = false;
-                StartCount();
-                break;
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        savedIdleFloat = tempPlayer.idleFloat;
+                        tempPlayer.idleFloat = 0;
+                    }
+
+                    playerInput = false;
+                    if(openingCutscene != null) { openingCutscene.Stop(); }
+                    if(openingCutsceneImage != null) { openingCutsceneImage.color = new Color(1f, 1f, 1f, 0f); }
+                    StartCount();
+                    break;
+                }
             case GameState.RACING:
-                playerInput = true;
-                Time.timeScale = 1f;
-                break;
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        tempPlayer.idleFloat = savedIdleFloat;
+                    }
+
+                    playerInput = true;
+                    Time.timeScale = 1f;
+                    break;
+                }
             case GameState.ENDGAME:
                 playerInput = false;
                 HUD.instance.Endscreen();
@@ -174,4 +225,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(time);
         Time.timeScale = 1;
     }
+    
+    
 }

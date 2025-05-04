@@ -74,7 +74,7 @@ Material:
     - _GlossyReflections: 1
     - _LightLayersCount: 8
     - _LightLayersExtensionRange: 0.1
-    - _LightLayersPowerContrast: 1
+    - _LightLayersPowerContrast: 0.79
     - _LightLayersScale: 22
     - _LightLayersStepOffset: 1.8
     - _Metallic: 0
@@ -96,9 +96,9 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LightPos: {r: 0.06, g: 1.68, b: 0.53, a: 0}
-    - _SkyBrightColor: {r: 0.5764706, g: 0.8769447, b: 0.8784314, a: 1}
-    - _SkyDarkColor: {r: 0.008810962, g: 0.08035603, b: 0.20754719, a: 1}
-    - _SkyMediumColor: {r: 0.11372548, g: 0.25419155, b: 0.3019608, a: 1}
+    - _SkyBrightColor: {r: 0.46431115, g: 0.6981132, b: 0.6981132, a: 1}
+    - _SkyDarkColor: {r: 0.29076186, g: 0.3682082, b: 0.509434, a: 1}
+    - _SkyMediumColor: {r: 0.122552514, g: 0.27120414, b: 0.3207547, a: 1}
     - _WaterRipplesColor: {r: 0.5391376, g: 0.7132867, b: 0.9292453, a: 1}
     - _WaterSurfaceColor: {r: 0.04705882, g: 0.3123356, b: 0.46666667, a: 1}
   m_BuildTextureStacks: []

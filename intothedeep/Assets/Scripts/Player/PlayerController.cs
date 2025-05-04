@@ -7,10 +7,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.Animations;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
+using Cinemachine;
 using UnityEngine.UIElements;
 using static System.TimeZoneInfo;
+using static GameManager;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,8 +31,15 @@ public class PlayerController : MonoBehaviour
     private float turnHold; // how long we've been holding turn
 
     public float idleFloat = 0.2f;
+    [Header("Auto Deceleration")]
     [Tooltip("After forward is released，speed decelerates to idleSpeed")]
     public float decelerationSmooth = 0.2f;
+    public float decelerationDelay = 0.2f;
+
+// 运行时用，不要在 Inspector 显示
+    [HideInInspector] public float timeSinceRelease = 0f;
+    [HideInInspector] public bool hasReachedMaxSpeed = false;
+    [HideInInspector] public bool decelStarted = false;
 
     [Header("Braking")]
     public float brakeDecel = 8;
@@ -73,17 +80,40 @@ public class PlayerController : MonoBehaviour
     private float curBoardYaw;
     public float rollSpeed = 2.5f;
     public float boardRollAmount = 25f;
+    
+    [Header("Camera Animator")]
+    [SerializeField] Animator cameraAnimator;
 
-    [Header("Intro Timeline")]
-    [SerializeField] GameObject introDirectorGB;
-    private PlayableDirector introDirector;
-
+    public CinemachineVirtualCamera airCam;
+    bool prevIsGrounded;
+    private bool airFovSet = false;
+    CinemachineBasicMultiChannelPerlin airCamNoise;
+    private CinemachineComposer airCamComposer;
+    [SerializeField] float defaultAirFOV = 70f;
+    [SerializeField] float defaultNoiseFreq     = 4f;
+    [SerializeField] private float defaultVerticalDamping = 0.6f;
+    [SerializeField] float maxAirFOV     = 80f;
+    [SerializeField] float maxNoiseFreq         = 8f;
+    [SerializeField] float maxVerticalDamping = 1f;
+    
+    [Range(0,1)] public float startThresholdFraction = 0.5f;
+    [SerializeField] float fovResetDuration = 0.21f;
+    
+    [Header("Landing Shake")]
+    [SerializeField] CinemachineImpulseSource landingImpulse;
+    [SerializeField] float maxAirTime        = 2f;
+    [SerializeField] float minImpulseY       = -0.3f;
+    [SerializeField] float maxImpulseY       =  -1.5f;
+    float airTime;
+    
     #region CONTROLLER
     private PS5Input GetInputs;
 
     private void Awake()
     {
         GetInputs = new PS5Input();
+        if (cameraAnimator == null)
+            cameraAnimator = GameObject.Find("CameraControl").GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -104,19 +134,23 @@ public class PlayerController : MonoBehaviour
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
         currentState = zeroState;
-        GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 2);
-        if (introDirectorGB == null)
-        {
-            introDirectorGB = GameObject.Find("CutsceneDirector");
-        }
-
-        if (introDirectorGB != null)
-        {
-            introDirector = introDirectorGB.GetComponent<PlayableDirector>();
-        }
-
+        cameraAnimator.SetInteger("State", 2);
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
+        prevIsGrounded = isGrounded;
+        cameraAnimator.SetBool("inAir", !isGrounded);
+        if (airCam != null)
+        {
+            airCamNoise = airCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            airCamComposer = airCam.GetCinemachineComponent<CinemachineComposer>();
+            if (airCamComposer != null)
+                defaultVerticalDamping = airCamComposer.m_VerticalDamping;
+
+            airCam.m_Lens.FieldOfView                  = defaultAirFOV;
+            if (airCamNoise != null) airCamNoise.m_FrequencyGain   = defaultNoiseFreq;
+        }
+
+        
     }
 
     //FIXED UPDATE
@@ -152,30 +186,88 @@ public class PlayerController : MonoBehaviour
         }
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
-            if (introDirectorGB != null && introDirectorGB.activeSelf)
-            {
-                introDirector.Play();
-            }
-            else
-            {
                 Debug.Log("control press");
                 SetState(freeRoamState);
                 Debug.Log("Escape registered in Update() - transition from ZeroState");
-            }
 
         }
 
-        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        // if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
+        // {
+        //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // }
 
         if (transform.position.y < -100)
         {
-            Time.timeScale = 1;
-            MainMenuEvents.instance.isTrasitioning = true;
-            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName));
+            GameManager.instance.UpdateState(GameState.READY);
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
+        
+        bool wasGrounded = prevIsGrounded;
+        if (!isGrounded)
+        {
+            airTime += Time.deltaTime;
+        }
+        if (isGrounded != wasGrounded)
+        {
+            // —— 播放摄像机切换动画 —— 
+            cameraAnimator.SetBool("inAir", !isGrounded);
+
+            // —— 离地时，且速度满足阈值，只执行一次 FOV 设定 —— 
+            if (!isGrounded && !airFovSet)
+            {
+                // 动态阈值计算 (moveSpeed - currentSpeed)/2 也可以直接用 fraction
+                float dynamicThreshold = (moveSpeed - currentSpeed) * startThresholdFraction;
+                if (currentSpeed >= dynamicThreshold)
+                {
+                    SetAirFOV();
+                    airFovSet = true;
+                }
+            }
+            // —— 落地时，平滑恢复 FOV —— 
+            else if (isGrounded)
+            {
+                StartCoroutine(ResetAirFOVSmooth());
+                airFovSet = false;
+            }
+
+            // 4. 最后更新 prev 状态
+            prevIsGrounded = isGrounded;
+        }
+    }
+    
+    void SetAirFOV()
+    {
+        if (airCam == null) return;
+        // 线性插到 [defaultAirFOV, maxAirFOV]
+        float t = Mathf.Clamp01(currentSpeed / moveSpeed);
+        airCam.m_Lens.FieldOfView = Mathf.Lerp(defaultAirFOV, maxAirFOV, t);
+        if (airCamNoise != null)
+            airCamNoise.m_FrequencyGain = Mathf.Lerp(defaultNoiseFreq, maxNoiseFreq, t);
+        if (airCamComposer != null)
+            airCamComposer.m_VerticalDamping = Mathf.Lerp(defaultVerticalDamping, maxVerticalDamping, t);
+    }
+
+    IEnumerator ResetAirFOVSmooth()
+    {
+        if (airCam == null) yield break;
+        float startFov = airCam.m_Lens.FieldOfView;
+        float startNoiseFreq = airCamNoise.m_FrequencyGain;
+        float startDamp   = airCamComposer != null ? airCamComposer.m_VerticalDamping : defaultVerticalDamping;
+        float elapsed  = 0f;
+
+        while (elapsed < fovResetDuration)
+        {
+            elapsed += Time.deltaTime;
+            airCam.m_Lens.FieldOfView = Mathf.Lerp(startFov, defaultAirFOV, elapsed / fovResetDuration);
+            airCamNoise.m_FrequencyGain = Mathf.Lerp(startNoiseFreq, defaultNoiseFreq, elapsed / fovResetDuration);
+            if (airCamComposer != null)
+                airCamComposer.m_VerticalDamping = Mathf.Lerp(startDamp, defaultVerticalDamping, elapsed / fovResetDuration);
+            yield return null;
+        }
+        airCam.m_Lens.FieldOfView = defaultAirFOV;
+        airCamNoise.m_FrequencyGain = defaultNoiseFreq;
+        if (airCamComposer != null) airCamComposer.m_VerticalDamping = defaultVerticalDamping;
     }
 
     //SETTING THE NEW STATE
@@ -197,6 +289,11 @@ public class PlayerController : MonoBehaviour
         }
 
         currentState = newState;
+        int stateInt = 0;
+        if (newState == freeRoamState) stateInt = 0;
+        else if (newState == grindState)  stateInt = 1;
+        else if (newState == zeroState)   stateInt = 2;
+        cameraAnimator.SetInteger("State", stateInt);
     }
 
     //ALIGN PLAYER TO SURFACE
@@ -249,6 +346,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpHeight * 2, rb.velocity.z);
         }
+        airTime = 0f;
     }
 
     //DIVE
@@ -268,7 +366,7 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(HUD.instance.onRed());
         AudioManager.instance.Hit();
-        HUD.instance.onPlayerTrickHud("**COLLIDE**");
+        HUD.instance.onPlayerTrickHud("**COLLIDE**", -10);
         GameManager.instance.FreezeFrame(0.08f);
     }
 
@@ -279,7 +377,7 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(boostDirection * boostForce, ForceMode.Impulse);
 
-        HUD.instance.onPlayerTrickHud("BOOST!");
+        HUD.instance.onPlayerTrickHud("BOOST!", 10);
         // AudioManager.instance.Boost(); // Uncomment if sound exists
     }
 
@@ -309,11 +407,6 @@ public class PlayerController : MonoBehaviour
 
         return closestT;
     }
-
-    public void introDirectorEnds()
-    {
-        SetState(freeRoamState);
-    }
     
     public float GetCurrentSpeed() {
         return currentSpeed;
@@ -340,8 +433,7 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 0);
-
+            
             float moveInput = 0;
             float turnInput = 0;
             float deadZone = 0.1f;
@@ -386,23 +478,46 @@ public class PlayerController : MonoBehaviour
                 if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(player.currentSpeed / player.moveSpeed * 0.75f, player.currentSpeed / player.moveSpeed * 0.7f); }
             }
 
-            // acceleration / deceleration after release
-            // if input is greater than deadZone，then player boost；otherwise decelerate smoothly to idleFloat
+            // --- acceleration / deceleration after release ---
             if (moveInput > deadZone)
             {
-                // acceleration：currentSpeed += acceleration × moveInput × Time
+                // 1) 有输入：立即加速，重置所有延迟相关的状态
+                player.timeSinceRelease = 0f;
+                player.decelStarted = false;
+                player.hasReachedMaxSpeed = false;
+
+                // 原先的加速逻辑
                 player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
-                // make the speed no greater than max
                 player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+
+                // 2) 如果达到了极限速，就打标记
+                if (player.currentSpeed >= player.moveSpeed)
+                    player.hasReachedMaxSpeed = true;
             }
             else
             {
-                // if forward button is released：decelerate to idleFloat
-                player.currentSpeed = Mathf.MoveTowards(
-                    player.currentSpeed,
-                    player.idleFloat,
-                    player.decelerationSmooth * Time.fixedDeltaTime
-                );
+                // 玩家松开前进杆
+                if (player.hasReachedMaxSpeed && !player.decelStarted)
+                {
+                    // 3) 只有在“曾经跑满”且“还未开始减速”时，才累加延迟计时
+                    player.timeSinceRelease += Time.fixedDeltaTime;
+                    if (player.timeSinceRelease >= player.decelerationDelay)
+                    {
+                        // 4) 延迟结束，正式启动减速
+                        player.decelStarted = true;
+                    }
+                }
+
+                // 5) 如果尚未跑满 或者 已经开始减速，都执行平滑减速
+                if (!player.hasReachedMaxSpeed || player.decelStarted)
+                {
+                    player.currentSpeed = Mathf.MoveTowards(
+                        player.currentSpeed,
+                        player.idleFloat,
+                        player.decelerationSmooth * Time.fixedDeltaTime
+                    );
+                }
+                // 否则：仍在等待延迟，不做任何改动，保持当前速度
             }
 
 
@@ -495,7 +610,7 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            GameObject.Find("CameraControl").GetComponent<Animator>().SetInteger("State", 1);
+            
 
             if (player.currentSpline != null)
             {
@@ -546,12 +661,27 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "HighGround")
         {
+
+            if (!grounding)
+            {
+                // 1) 归一化 airtime 到 [0,1]
+                float t = Mathf.InverseLerp(0f, maxAirTime, airTime);
+                // 2) ease-in-quad：f(t) = t²
+                float easedT = t * t;
+                // 3) 用 easedT 去映射到 [minImpulseY, maxImpulseY]
+                float velocityY = Mathf.Lerp(minImpulseY, maxImpulseY, easedT);
+                // 4) 生成抖动
+                if (landingImpulse != null)
+                    landingImpulse.GenerateImpulse(Vector3.up * velocityY);
+                Debug.Log($"Air Time: {airTime:F2} seconds");
+            }
+
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
             AudioManager.instance.GrindStop();
 
-            if (collision.gameObject.tag == "Ground") { moveSpeed = 50f; }
+            if (collision.gameObject.tag == "Ground") { moveSpeed = 30f; }
             if (collision.gameObject.tag == "HighGround") { moveSpeed = 100f; }
 
 
@@ -565,14 +695,14 @@ public class PlayerController : MonoBehaviour
             // Print based on the angle direction
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("GOOD");
+                HUD.instance.onPlayerTrickHud("GOOD", 10);
                 AudioManager.instance.Land();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("OK");
+                HUD.instance.onPlayerTrickHud("OK", 10);
                 moveSpeed -= 1f;
                 AudioManager.instance.BadLand();
                 grounding = true;
@@ -580,7 +710,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (!grounding)
             {
-                HUD.instance.onPlayerTrickHud("PERFECT");
+                HUD.instance.onPlayerTrickHud("PERFECT", 10);
                 moveSpeed += 2f;
                 AudioManager.instance.GoodLand();
                 grounding = true;
@@ -590,7 +720,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "Grind")
         {
-            HUD.instance.onPlayerTrickHud("GRIND");
+            HUD.instance.onPlayerTrickHud("GRIND", 10);
             AudioManager.instance.Grind();
 
             SplineContainer spline = collision.gameObject.GetComponent<SplineContainer>();

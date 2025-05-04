@@ -61,5 +61,5 @@ Material:
     - _SeeThroughDistance: 3
     - _Smoothness: 0.275
     m_Colors:
-    - _Color: {r: 1, g: 0.9970449, b: 0.35686278, a: 0}
+    - _Color: {r: 0.70312524, g: 1, b: 0.35686278, a: 0}
   m_BuildTextureStacks: []

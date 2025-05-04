@@ -5,7 +5,7 @@
 }
 
 .menuInactive {
-    left: -1920px;
+    opacity: 0;
 }
 
 .button {
@@ -25,6 +25,10 @@
     transition-duration: 0.1s;
     transition-timing-function: ease-in;
     transition-delay: 0s;
+    background-image: url("project://database/Assets/UI%20Toolkit/UIImages/Setting%20Button.png?fileID=2800000&guid=e66ca4ab0e5f27446b1be8ce7a3654bf&type=3#Setting Button");
+    -unity-font: url("project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=e7f4afa449ee18a409948374e74742dc&type=3#NotInter-Regular");
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/UIImages/LowerResolution%20SDF.asset?fileID=11400000&guid=fbe5783332767214398bbc7a09830787&type=2#LowerResolution SDF");
+    letter-spacing: 12px;
 }
 
 .button:hover {

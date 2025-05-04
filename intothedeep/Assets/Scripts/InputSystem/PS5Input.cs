@@ -152,6 +152,24 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftBumper"",
+                    ""type"": ""Button"",
+                    ""id"": ""23ae4a19-425a-40e1-8456-c9ca974d2623"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightBumper"",
+                    ""type"": ""Button"",
+                    ""id"": ""40ec2d43-c5dc-4053-b4f8-bc3f3a6d4a09"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -279,7 +297,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""04d494d4-02cd-4a71-ad47-cbe9fc3e1183"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -291,6 +309,17 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""34d78974-3572-4763-a357-805b528f21c4"",
                     ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52d594c4-3517-4b7c-b8d0-3964b5db2738"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -357,6 +386,17 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""c79865ec-5e3c-4bb1-8589-b88c7fea08ca"",
                     ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6869a102-0eb7-4085-b384-7d9f183b7699"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -499,7 +539,18 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""205a2fa6-0394-4989-b256-20badcf5b6e3"",
-                    ""path"": ""<Keyboard>/z"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eaa4844e-cc06-4136-911b-6ea67bd75eeb"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -552,7 +603,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
+                    ""name"": ""right"",
                     ""id"": ""2a5b07c9-d9b2-454b-80b3-921ac872f701"",
                     ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
@@ -563,7 +614,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
+                    ""name"": ""left"",
                     ""id"": ""9254f9c7-814a-4de7-9168-6574e91d9581"",
                     ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
@@ -605,6 +656,28 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32cff3a0-5578-4d2f-b74c-6cda3a42c9ab"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftBumper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff541657-d372-4662-9e62-1a579fe7497e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightBumper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -627,6 +700,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         m_PS5Map_Down = m_PS5Map.FindAction("Down", throwIfNotFound: true);
         m_PS5Map_Left = m_PS5Map.FindAction("Left", throwIfNotFound: true);
         m_PS5Map_Right = m_PS5Map.FindAction("Right", throwIfNotFound: true);
+        m_PS5Map_LeftBumper = m_PS5Map.FindAction("LeftBumper", throwIfNotFound: true);
+        m_PS5Map_RightBumper = m_PS5Map.FindAction("RightBumper", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -702,6 +777,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_PS5Map_Down;
     private readonly InputAction m_PS5Map_Left;
     private readonly InputAction m_PS5Map_Right;
+    private readonly InputAction m_PS5Map_LeftBumper;
+    private readonly InputAction m_PS5Map_RightBumper;
     public struct PS5MapActions
     {
         private @PS5Input m_Wrapper;
@@ -720,6 +797,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         public InputAction @Down => m_Wrapper.m_PS5Map_Down;
         public InputAction @Left => m_Wrapper.m_PS5Map_Left;
         public InputAction @Right => m_Wrapper.m_PS5Map_Right;
+        public InputAction @LeftBumper => m_Wrapper.m_PS5Map_LeftBumper;
+        public InputAction @RightBumper => m_Wrapper.m_PS5Map_RightBumper;
         public InputActionMap Get() { return m_Wrapper.m_PS5Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -771,6 +850,12 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
+            @LeftBumper.started += instance.OnLeftBumper;
+            @LeftBumper.performed += instance.OnLeftBumper;
+            @LeftBumper.canceled += instance.OnLeftBumper;
+            @RightBumper.started += instance.OnRightBumper;
+            @RightBumper.performed += instance.OnRightBumper;
+            @RightBumper.canceled += instance.OnRightBumper;
         }
 
         private void UnregisterCallbacks(IPS5MapActions instance)
@@ -817,6 +902,12 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
+            @LeftBumper.started -= instance.OnLeftBumper;
+            @LeftBumper.performed -= instance.OnLeftBumper;
+            @LeftBumper.canceled -= instance.OnLeftBumper;
+            @RightBumper.started -= instance.OnRightBumper;
+            @RightBumper.performed -= instance.OnRightBumper;
+            @RightBumper.canceled -= instance.OnRightBumper;
         }
 
         public void RemoveCallbacks(IPS5MapActions instance)
@@ -850,5 +941,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         void OnDown(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
+        void OnLeftBumper(InputAction.CallbackContext context);
+        void OnRightBumper(InputAction.CallbackContext context);
     }
 }
