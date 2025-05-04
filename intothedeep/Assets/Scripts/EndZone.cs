@@ -21,6 +21,7 @@ public class EndZone : MonoBehaviour
         if (other.GetComponent<PlayerController>() != null)
         {
             GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
+            HighScore.instance.scoreActive = true;
         }
     }
 }
