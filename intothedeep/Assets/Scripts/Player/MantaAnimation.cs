@@ -17,6 +17,7 @@ public class MantaAnimation : MonoBehaviour
     [SerializeField] ParticleSystem perfectTrick;
     [SerializeField] ParticleSystem goodTrick;
     [SerializeField] ParticleSystem badTrick;
+    [SerializeField] ParticleSystem landing;
 
     [Header("GameObjects")]
     [SerializeField] GameObject player;
@@ -120,7 +121,10 @@ public class MantaAnimation : MonoBehaviour
         isGrounded = player.GetComponent<PlayerController>().isGrounded;
         isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
 
-
+        if (GetInputs.PS5Map.Move.ReadValue<Vector2>().y != 0 && !GetInputs.PS5Map.LeftTrigger.WasPressedThisFrame() && !isGrinding && !isHolding && !isMove)
+        {
+            ActivateMove();
+        }
         //RaycastHit hit;
         //isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.5f, layerMask);
 
@@ -137,7 +141,8 @@ public class MantaAnimation : MonoBehaviour
         }
         if (GetInputs.PS5Map.LeftTrigger.WasReleasedThisFrame() && !isGrinding)
         {
-            StartCoroutine(EndGrab());
+            trickSkeletonAnim.SetTrigger("EndGrab");
+            isHolding = false;
         }
 
         if(GetInputs.PS5Map.LeftBumper.WasPressedThisFrame()) {
@@ -159,10 +164,7 @@ public class MantaAnimation : MonoBehaviour
             isTurningRight = false;
         }
 
-        if(GetInputs.PS5Map.Move.ReadValue<Vector2>().y != 0 && !isGrinding && !isHolding && !isMove)
-        {
-            ActivateMove();
-        }
+        
 
 
         if (isGrounded)
@@ -195,6 +197,7 @@ public class MantaAnimation : MonoBehaviour
 
             if (isDoingTrick) {
                 isDoingTrick = false;
+                LandingCheck();
 
                 totalRotation = 0;
                 totalBodyRotation = 0;
@@ -204,12 +207,11 @@ public class MantaAnimation : MonoBehaviour
                 bodyRotationSpeed = startBodyRotationSpeed;
 
                 graphics.transform.rotation = player.transform.rotation;
-
                 Debug.Log("stoppedTrick");
             } 
            
             ResetPositions();
-            if(!isHolding) ActivateMove();
+            if(!isHolding && !isMove) ActivateMove();
         }
 
         skeletonAnim.SetFloat("Joystick", joystick);
@@ -394,27 +396,36 @@ public class MantaAnimation : MonoBehaviour
     public void LandingCheck()
     {
         float totalRotationDisplacement = 0;
-        totalRotationDisplacement = Mathf.Abs(player.transform.rotation.y - mantaRay.transform.rotation.y);
 
-        if (totalRotationDisplacement < 0.3f)
+        float mantaPercent = 0;
+        float graphicsPercent = 0;
+
+        /*
+        float mantaRotationDisplacement = Mathf.Abs(player.transform.rotation.y - mantaRay.transform.rotation.y);
+        float graphicsRotationDisplacement = Mathf.Abs(Quaternion.identity.x - graphics.transform.rotation.x);
+
+        Debug.Log("Manta: " + Mathf.Abs(mantaRay.transform.rotation.y) + " Graphics: " + Mathf.Abs(graphics.transform.rotation.x));
+        */
+
+        if(isHolding)
         {
-            HUD.instance.onPlayerTrickHud("Perfect", 5);
-            totalPoints += 50;
-        } else if(totalRotationDisplacement < 0.5f)
+            mantaPercent = 100 * totalRotation / (holdingRotationSpeed * (36 / 10));
+        } else
         {
-            HUD.instance.onPlayerTrickHud("Good", 3);
-            totalPoints += 50;
+            mantaPercent = 100 * totalRotation / (rotationSpeed * (26 / 14));
         }
-        else if (totalRotationDisplacement < 0.8f)
+
+        graphicsPercent = 100 * totalBodyRotation / (bodyRotationSpeed * (36 / 10));
+
+        Debug.Log("Manta: " + mantaPercent + " Graphics: " + graphicsPercent);
+
+        if(graphicsPercent < 10 || graphicsPercent > 90)
         {
-            HUD.instance.onPlayerTrickHud("Fine", 1);
-            totalPoints += 50;
+            //landing.Play();
+            HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
         }
-        else
-        {
-            HUD.instance.onPlayerTrickHud("Awful", 0);
-            totalPoints += 50;
-        }
+
+        //
     }
 
     public bool GetIsDoingTrick()
@@ -468,17 +479,6 @@ public class MantaAnimation : MonoBehaviour
         mantaRay.transform.position = player.transform.position - mantaDisplacement;
         skeleton.transform.position = player.transform.position - skeletonDisplacement;
         trickSkeleton.transform.position = player.transform.position - trickDisplacement;
-    }
-
-    IEnumerator EndGrab()
-    {
-        trickSkeletonAnim.SetTrigger("EndGrab");
-        
-        yield return new WaitForSeconds(0.6f);
-
-        isHolding = false;
-        //ActivateMove(); //Switches to move skeleton
-        Debug.Log("let go");
     }
 
 }
