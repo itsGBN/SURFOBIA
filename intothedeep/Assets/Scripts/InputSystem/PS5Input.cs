@@ -395,6 +395,17 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6869a102-0eb7-4085-b384-7d9f183b7699"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""779c9527-ead1-4b18-8197-81fcf3aa6bc0"",
                     ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",

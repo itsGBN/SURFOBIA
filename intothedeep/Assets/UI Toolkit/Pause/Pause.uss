@@ -12,4 +12,13 @@
     border-right-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/UIImages/LowerResolution%20SDF.asset?fileID=11400000&guid=fbe5783332767214398bbc7a09830787&type=2#LowerResolution SDF");
+    letter-spacing: 6px;
+}
+
+.text:hover {
+    font-size: 55px;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in;
 }

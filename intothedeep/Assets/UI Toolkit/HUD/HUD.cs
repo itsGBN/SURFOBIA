@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,11 +18,16 @@ public class HUD : MonoBehaviour
     private VisualElement endscreenVisualElement;
     private Label countdownLabel;
     private Label scoreLabel;
+    private Label comboLabel;
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
     private int trickNum;
     private int scoreNum;
+    private float comboNum;
+    private int enemyNum;
     private Queue<Label> playerTricks = new Queue<Label>();
+    private ProgressBar progressBar;
+    private float elapsedTime = 0f;
 
     [SerializeField] [Range(1, 1000)] int distannceRange;
 
@@ -44,9 +50,12 @@ public class HUD : MonoBehaviour
         distanceLabel = uIDocument.rootVisualElement.Q("Distance") as Label;
         countdownLabel = uIDocument.rootVisualElement.Q("Countdown") as Label;
         scoreLabel = uIDocument.rootVisualElement.Q("Score") as Label;
+        comboLabel = uIDocument.rootVisualElement.Q("Mult") as Label;
+        comboLabel.text = "x"+comboNum.ToString();
         List<Label> labels = uIDocument.rootVisualElement.Query<Label>(null, "scores").ToList();
         enemyScores = labels.ToDictionary(label => label, label => (0, "Name"));
-  
+        progressBar = uIDocument.rootVisualElement.Q("Combo") as ProgressBar;
+
 
         //Miscellaneous Things
         //Naming the Scorer
@@ -88,6 +97,11 @@ public class HUD : MonoBehaviour
         redVisualElement.style.opacity = 0.5f;
     }
 
+    public void SetColor()
+    {
+
+    }
+
     private void onVisibility()
     {
         if (MainMenuEvents.instance.focusMenu || focusEndscreen)
@@ -102,7 +116,16 @@ public class HUD : MonoBehaviour
 
     private void onDistance()
     {
-        distanceLabel.text = distannceRange.ToString();
+        if(GameManager.instance.gameState == GameManager.GameState.RACING)
+        {
+            elapsedTime += Time.deltaTime;
+
+            int minutes = (int)(elapsedTime / 60);
+            int seconds = (int)(elapsedTime % 60);
+            int milliseconds = (int)((elapsedTime * 1000) % 1000);
+
+            distanceLabel.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
+        }
     }
 
     private void OnEnemyScore()
@@ -176,7 +199,11 @@ public class HUD : MonoBehaviour
         StartCoroutine(MoveTrick(queueArray));
 
         scoreNum+= points;
-        scoreLabel.text = scoreNum.ToString();  
+        scoreLabel.text = scoreNum.ToString(); 
+
+        progressBar.value += points;
+        if(progressBar.value > 100) { progressBar.value = 0; comboNum += .5f; comboLabel.text = "x"+comboNum.ToString(); }
+
     }
 
     IEnumerator MoveTrick(Label[] queueArray)

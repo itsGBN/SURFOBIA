@@ -120,11 +120,13 @@ public class MainMenuEvents : MonoBehaviour
     //Play Button
     private void onPlayButton(ClickEvent e)
     {
+        /**
         foreach (Button button in levelChildrenButtons)
         {
             if (button.ClassListContains("levelChildrenInactive")) { button.RemoveFromClassList("levelChildrenInactive"); }
             else { button.AddToClassList("levelChildrenInactive"); }
         }
+        */
     }
 
     private void onPlayParentButtons(ClickEvent e)
