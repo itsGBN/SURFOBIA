@@ -106,11 +106,11 @@ public class HUD : MonoBehaviour
     {
         if (MainMenuEvents.instance.focusMenu || focusEndscreen)
         {
-            hudVisualElement.style.opacity = 0;
+            hudVisualElement.style.visibility = Visibility.Hidden;
         }
         else
         {
-            hudVisualElement.style.opacity = 100;
+            hudVisualElement.style.visibility = Visibility.Visible;
         }
     }
 
