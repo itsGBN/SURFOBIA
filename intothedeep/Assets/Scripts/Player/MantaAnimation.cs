@@ -43,6 +43,7 @@ public class MantaAnimation : MonoBehaviour
 
     bool isHolding;
     bool isDoingTrick;
+    bool isMove;
 
     float totalRotation;
     float comboMultiplier;
@@ -156,6 +157,11 @@ public class MantaAnimation : MonoBehaviour
         if (GetInputs.PS5Map.RightBumper.WasReleasedThisFrame())
         {
             isTurningRight = false;
+        }
+
+        if(GetInputs.PS5Map.Move.ReadValue<Vector2>().y != 0 && !isGrinding && !isHolding && !isMove)
+        {
+            ActivateMove();
         }
 
 
@@ -420,12 +426,14 @@ public class MantaAnimation : MonoBehaviour
     {
         trickSkeletonMesh.enabled = true;
         movementSkeletonMesh.enabled = false;
+        isMove = false;
     }
 
     void ActivateMove()
     {
         movementSkeletonMesh.enabled = true;
         trickSkeletonMesh.enabled = false;
+        isMove = true;
     }
 
     void ActivateGrind()
@@ -469,7 +477,7 @@ public class MantaAnimation : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
 
         isHolding = false;
-        ActivateMove(); //Switches to move skeleton
+        //ActivateMove(); //Switches to move skeleton
         Debug.Log("let go");
     }
 
