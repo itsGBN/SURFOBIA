@@ -85,10 +85,10 @@ public class GameManager : MonoBehaviour
                 if (Input.anyKeyDown)
                 {
                     // go to main menu
-                    SceneManager.LoadScene(0);
+                    //SceneManager.LoadScene(0);
                     //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                    UpdateState(GameState.MAIN);
-                    MusicManager.instance.FadeOut();
+                    //UpdateState(GameState.MAIN);
+                    //MusicManager.instance.FadeOut();
                 }
                 break;
             case GameState.MAIN:
