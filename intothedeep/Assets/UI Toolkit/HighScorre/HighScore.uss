@@ -1,5 +1,34 @@
 .Leaderboard {
     font-size: 50px;
-    top: 174px;
-    left: 1127px;
+    top: 176px;
+    left: 1920px;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-left;
+    background-image: url("project://database/Assets/UI%20Toolkit/UIImages/other_posistion.png?fileID=2800000&guid=455811ffe2f9c1a43882ced2f1db9f66&type=3#other_posistion");
+    height: 70px;
+    width: 1000px;
+    padding-left: 150px;
+    padding-bottom: 17px;
+    margin-bottom: 6px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.Leaderboard-Active {
+    left: 1120px;
+}
+
+.Leaderboard-Submit {
+    background-image: url("project://database/Assets/UI%20Toolkit/UIImages/1st_postion.png?fileID=2800000&guid=5e56864f7023b5e498b64951333ad37b&type=3#1st_postion");
+}
+
+.Button {
+    font-size: 40px;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in;
+}
+
+.Button:hover {
+    font-size: 50px;
 }

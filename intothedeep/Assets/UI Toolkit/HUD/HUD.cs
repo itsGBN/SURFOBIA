@@ -104,7 +104,7 @@ public class HUD : MonoBehaviour
 
     private void onVisibility()
     {
-        if (MainMenuEvents.instance.focusMenu || focusEndscreen)
+        if (MainMenuEvents.instance.focusMenu || focusEndscreen || HighScore.instance.scoreActive)
         {
             hudVisualElement.style.visibility = Visibility.Hidden;
         }
@@ -228,16 +228,24 @@ public class HUD : MonoBehaviour
         if (value <= 0) { countdownLabel.style.visibility = Visibility.Hidden; }
     }
 
+
     public void Endscreen()
     {
+        /*
         focusEndscreen = true;
         endscreenVisualElement.style.opacity = 1;
         endscreenVisualElement.style.visibility = Visibility.Visible;
         // update stats
+        */
+    }
+
+    public int GetScore()
+    {
+        return scoreNum;
     }
 }
 
- class Trick
+class Trick
 {
     public Label trickLabel;
     public int trickInt;
