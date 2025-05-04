@@ -134,7 +134,8 @@ public class HighScore : MonoBehaviour
     private void OnSubmitName()
     {
         string playerName = holder.value.Trim();
-        float finalScore = HUD.instance.GetScore();
+        int timeBonus = Mathf.FloorToInt(HUD.instance.elapsedTime / 30f) * 500;
+        float finalScore = HUD.instance.GetScore() + timeBonus;
 
         if (!string.IsNullOrEmpty(playerName))
         {

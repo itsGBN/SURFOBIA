@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,7 +27,7 @@ public class HUD : MonoBehaviour
     private int enemyNum;
     private Queue<Label> playerTricks = new Queue<Label>();
     private ProgressBar progressBar;
-    private float elapsedTime = 0f;
+    public float elapsedTime = 60f;
 
     [SerializeField] [Range(1, 1000)] int distannceRange;
 
@@ -116,9 +116,15 @@ public class HUD : MonoBehaviour
 
     private void onDistance()
     {
-        if(GameManager.instance.gameState == GameManager.GameState.RACING)
+        if (GameManager.instance.gameState == GameManager.GameState.RACING)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime -= Time.deltaTime;
+            if (elapsedTime <= 0f)
+            {
+                elapsedTime = 0f;
+                GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
+                HighScore.instance.scoreActive = true;
+            }
 
             int minutes = (int)(elapsedTime / 60);
             int seconds = (int)(elapsedTime % 60);
@@ -127,6 +133,7 @@ public class HUD : MonoBehaviour
             distanceLabel.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
         }
     }
+
 
     private void OnEnemyScore()
     {
