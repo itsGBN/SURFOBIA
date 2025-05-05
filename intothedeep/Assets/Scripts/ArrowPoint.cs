@@ -6,6 +6,8 @@ using UnityEngine;
 public class ArrowPoint : MonoBehaviour
 {
     public GameObject target;
+
+    public GameObject childObj;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,14 @@ public class ArrowPoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.gameState == GameManager.GameState.READY)
+        {
+            childObj.SetActive(false);
+        }
+        else
+        {
+            childObj.SetActive(true);
+        }
         if (target != null)
         {
 
@@ -33,5 +43,6 @@ public class ArrowPoint : MonoBehaviour
             }
 
         }
+        
     }
 }
