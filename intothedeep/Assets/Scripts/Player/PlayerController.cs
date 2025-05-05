@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
     private bool isDiving = false;
     public float diveForwardSpeed = 5f;
     public float diveFallSpeed = -2f;
+
+    public bool isBoosting = false;
     public Vector3 currentSurfaceNormal = Vector3.up;
 
     [Header("Graphics")]
@@ -331,6 +333,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public IEnumerator BoostActivate(float duration)
+    {
+        Debug.Log("Boosting");
+        isBoosting = true;
+        yield return new WaitForSeconds(duration);
+        isBoosting = false;
+    }
+
 
     //JUMP
     public void Jump()
@@ -479,7 +489,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // --- acceleration / deceleration after release ---
-            if (moveInput > deadZone)
+            if (moveInput > deadZone || player.isBoosting)
             {
                 // 1) 有输入：立即加速，重置所有延迟相关的状态
                 player.timeSinceRelease = 0f;
@@ -487,8 +497,19 @@ public class PlayerController : MonoBehaviour
                 player.hasReachedMaxSpeed = false;
 
                 // 原先的加速逻辑
-                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
-                player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+                //!!adding boost possibilty
+                if (player.isBoosting)
+                {
+                    player.currentSpeed += player.accel * 5f * Time.fixedDeltaTime;
+                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed * 1.5f);
+                }
+                else
+                {
+                    player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+                }
+                //player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                
 
                 // 2) 如果达到了极限速，就打标记
                 if (player.currentSpeed >= player.moveSpeed)

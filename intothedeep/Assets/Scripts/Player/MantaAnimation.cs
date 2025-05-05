@@ -405,15 +405,17 @@ public class MantaAnimation : MonoBehaviour
         mantaRay.transform.rotation.ToAngleAxis(out mantaAngle, out axis);
 
         graphicsPercent = 100 * totalBodyRotation / (bodyRotationSpeed * (36 / 10));
-
+        
         //Debug.Log("Manta: " + mantaAngle + " Graphics: " + graphicsPercent);
 
-        if((graphicsPercent < 5 || graphicsPercent > 95) && (mantaAngle < 30 || mantaAngle > 330))
+        if((graphicsPercent < 10 || graphicsPercent > 90) && (mantaAngle < 45 || mantaAngle > 315))
         {
             landing.Play();
+            StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.25f));
             HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
-        } else if((graphicsPercent < 20 || graphicsPercent > 80) && (mantaAngle < 55 || mantaAngle > 305))
+        } else if((graphicsPercent < 30 || graphicsPercent > 70) && (mantaAngle < 70 || mantaAngle > 290))
         {
+            StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.15f));
             HUD.instance.onPlayerTrickHud("Good Landing", 5);
         }
     }
