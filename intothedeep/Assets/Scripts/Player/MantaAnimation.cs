@@ -396,36 +396,26 @@ public class MantaAnimation : MonoBehaviour
     public void LandingCheck()
     {
         float totalRotationDisplacement = 0;
-
-        float mantaPercent = 0;
         float graphicsPercent = 0;
 
-        /*
-        float mantaRotationDisplacement = Mathf.Abs(player.transform.rotation.y - mantaRay.transform.rotation.y);
-        float graphicsRotationDisplacement = Mathf.Abs(Quaternion.identity.x - graphics.transform.rotation.x);
+        //Debug.Log(totalRotation);
 
-        Debug.Log("Manta: " + Mathf.Abs(mantaRay.transform.rotation.y) + " Graphics: " + Mathf.Abs(graphics.transform.rotation.x));
-        */
-
-        if(isHolding)
-        {
-            mantaPercent = 100 * totalRotation / (holdingRotationSpeed * (36 / 10));
-        } else
-        {
-            mantaPercent = 100 * totalRotation / (rotationSpeed * (26 / 14));
-        }
+        float mantaAngle;
+        Vector3 axis;
+        mantaRay.transform.rotation.ToAngleAxis(out mantaAngle, out axis);
 
         graphicsPercent = 100 * totalBodyRotation / (bodyRotationSpeed * (36 / 10));
 
-        Debug.Log("Manta: " + mantaPercent + " Graphics: " + graphicsPercent);
+        //Debug.Log("Manta: " + mantaAngle + " Graphics: " + graphicsPercent);
 
-        if(graphicsPercent < 10 || graphicsPercent > 90)
+        if((graphicsPercent < 5 || graphicsPercent > 95) && (mantaAngle < 30 || mantaAngle > 330))
         {
             landing.Play();
             HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
+        } else if((graphicsPercent < 20 || graphicsPercent > 80) && (mantaAngle < 55 || mantaAngle > 305))
+        {
+            HUD.instance.onPlayerTrickHud("Good Landing", 5);
         }
-
-        //
     }
 
     public bool GetIsDoingTrick()

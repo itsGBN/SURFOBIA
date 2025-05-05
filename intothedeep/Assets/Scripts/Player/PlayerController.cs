@@ -695,24 +695,24 @@ public class PlayerController : MonoBehaviour
             // Print based on the angle direction
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("GOOD", 10);
-                AudioManager.instance.Land();
-                grounding = true;
+                //HUD.instance.onPlayerTrickHud("GOOD", 10);
+                //AudioManager.instance.Land();
+                //grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("OK", 10);
-                moveSpeed -= 1f;
-                AudioManager.instance.BadLand();
+                //HUD.instance.onPlayerTrickHud("OK", 10);
+                //moveSpeed -= 1f;
+                //AudioManager.instance.BadLand();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (!grounding)
             {
-                HUD.instance.onPlayerTrickHud("PERFECT", 10);
-                moveSpeed += 2f;
-                AudioManager.instance.GoodLand();
+                //HUD.instance.onPlayerTrickHud("PERFECT", 10);
+                //moveSpeed += 2f;
+                //AudioManager.instance.GoodLand();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
