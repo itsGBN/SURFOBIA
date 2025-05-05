@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
     {
         lastState = gameState;
         gameState = newState;
+        Debug.Log("Game state changed: " + gameState.ToString());
 
         // TODO FIX LOOPING INPUT
 

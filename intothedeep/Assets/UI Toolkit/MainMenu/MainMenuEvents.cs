@@ -132,7 +132,7 @@ public class MainMenuEvents : MonoBehaviour
     private void onPlayParentButtons(ClickEvent e)
     {
         GameManager.instance.UpdateState(GameState.READY);
-        StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));    
+        StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
     }
 
     private void onQuitButton(ClickEvent e)
@@ -147,7 +147,9 @@ public class MainMenuEvents : MonoBehaviour
         trasitionTypes.style.display = DisplayStyle.Flex;
         transitionName.RemoveFromClassList(transitionDescription);
         yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadScene(sceneName);
+        
+        StartCoroutine(onTransition(transitionName));
+        //SceneManager.LoadScene(sceneName);
     }
 
     IEnumerator onTransition(VisualElement transitionName)
@@ -155,8 +157,16 @@ public class MainMenuEvents : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         transitionName.AddToClassList(transitionDescription);
         yield return new WaitForSeconds(1);
+        PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+        if (CheckPointScript.checkpointPosition != Vector3.zero)
+        {
+            tempPlayer.transform.position = CheckPointScript.checkpointPosition;
+            GameManager.instance.UpdateState(GameState.RACING);
+           // Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
+        }
         transitionName.style.display = DisplayStyle.None;
         trasitionTypes.style.display = DisplayStyle.None;
+
         isTrasitioning = false;
     }
 }
