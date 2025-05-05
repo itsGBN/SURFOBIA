@@ -500,8 +500,8 @@ public class PlayerController : MonoBehaviour
                 //!!adding boost possibilty
                 if (player.isBoosting)
                 {
-                    player.currentSpeed += player.accel * 5f * Time.fixedDeltaTime;
-                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed * 1.5f);
+                    player.currentSpeed += player.accel * 2.5f * Time.fixedDeltaTime;
+                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed * 2f);
                 }
                 else
                 {
