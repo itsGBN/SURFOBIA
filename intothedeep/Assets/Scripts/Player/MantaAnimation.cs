@@ -421,7 +421,7 @@ public class MantaAnimation : MonoBehaviour
 
         if(graphicsPercent < 10 || graphicsPercent > 90)
         {
-            //landing.Play();
+            landing.Play();
             HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
         }
 
