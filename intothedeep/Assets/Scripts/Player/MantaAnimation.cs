@@ -67,6 +67,9 @@ public class MantaAnimation : MonoBehaviour
     Vector3 skeletonDisplacement;
     Vector3 trickDisplacement;
 
+    int mantaTrickCount;
+    int bodyTrickCount;
+
 
     //public
     public float totalPoints;
@@ -257,6 +260,7 @@ public class MantaAnimation : MonoBehaviour
                     perfectTrick.Play();
 
                     totalBodyRotation = 0;
+                    bodyTrickCount++;
                 }
 
             }
@@ -285,6 +289,7 @@ public class MantaAnimation : MonoBehaviour
                     perfectTrick.Play();
 
                     totalBodyRotation = 0;
+                    bodyTrickCount++;
                 }
 
             }
@@ -313,9 +318,12 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 100;
                         if (holdingRotationSpeed < 18) rotationSpeed += 2;
+
                         HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
+
                         totalRotation = 0;
+                        mantaTrickCount++;
                     }
                 } else
                 {
@@ -334,6 +342,7 @@ public class MantaAnimation : MonoBehaviour
                         //AudioManager.instance.Trick();
 
                         totalRotation = 0;
+                        mantaTrickCount++;
                     }
                 }
 
@@ -363,6 +372,7 @@ public class MantaAnimation : MonoBehaviour
                         HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
                         totalRotation = 0;
+                        mantaTrickCount++;
                     }
                 } else
                 {
@@ -383,6 +393,7 @@ public class MantaAnimation : MonoBehaviour
                         HUD.instance.onPlayerTrickHud("Spin", 5);
                         badTrick.Play();
                         totalRotation = 0;
+                        mantaTrickCount++;
                     }
                 }
 
@@ -408,16 +419,22 @@ public class MantaAnimation : MonoBehaviour
         
         //Debug.Log("Manta: " + mantaAngle + " Graphics: " + graphicsPercent);
 
-        if((graphicsPercent < 10 || graphicsPercent > 90) && (mantaAngle < 45 || mantaAngle > 315))
+        if(mantaTrickCount > 0 || bodyTrickCount > 0 || graphicsPercent > 20 || mantaAngle > 45)
         {
-            landing.Play();
-            StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.25f));
-            HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
-        } else if((graphicsPercent < 30 || graphicsPercent > 70) && (mantaAngle < 70 || mantaAngle > 290))
-        {
-            StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.15f));
-            HUD.instance.onPlayerTrickHud("Good Landing", 5);
+            if ((graphicsPercent < 10 || graphicsPercent > 90) && (mantaAngle < 45 || mantaAngle > 315))
+            {
+                landing.Play();
+                StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.25f));
+                HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
+            }
+            else if ((graphicsPercent < 30 || graphicsPercent > 70) && (mantaAngle < 70 || mantaAngle > 290))
+            {
+                StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.15f));
+                HUD.instance.onPlayerTrickHud("Good Landing", 5);
+            }
         }
+
+        
     }
 
     public bool GetIsDoingTrick()
