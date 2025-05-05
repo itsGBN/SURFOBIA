@@ -55,6 +55,7 @@ public class HighScore : MonoBehaviour
             leaderBoard[i].text = (i+1).ToString() + "     " + tenScores[i].score + "   :   " + tenScores[i].Name;
 
         //Turn the Visibility off
+        LoadLeaderboardFromPrefs();
         scoreHUD.style.visibility = Visibility.Hidden;
     }
 
@@ -124,7 +125,7 @@ public class HighScore : MonoBehaviour
         {
             leaderBoard[i].text = tenScores[i].Name + " : " + tenScores[i].score.ToString("F0");
         }
-
+        SaveLeaderboardToPrefs();
         return insertIndex;
     }
 
@@ -133,7 +134,8 @@ public class HighScore : MonoBehaviour
     private void OnSubmitName()
     {
         string playerName = holder.value.Trim();
-        float finalScore = HUD.instance.GetScore();
+        int timeBonus = Mathf.FloorToInt(HUD.instance.elapsedTime / 30f) * 500;
+        float finalScore = HUD.instance.GetScore() + timeBonus;
 
         if (!string.IsNullOrEmpty(playerName))
         {
@@ -154,5 +156,45 @@ public class HighScore : MonoBehaviour
         GameManager.instance.UpdateState(GameState.READY);
         StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
     }
+    #endregion
+
+    #region Player Prefs
+    public void SaveLeaderboardToPrefs()
+    {
+        for (int i = 0; i < tenScores.Length; i++)
+        {
+            PlayerPrefs.SetString($"HighScore{i}_Name", tenScores[i].Name);
+            PlayerPrefs.SetFloat($"HighScore{i}_Score", tenScores[i].score);
+        }
+
+        PlayerPrefs.Save(); // important!
+        Debug.Log("Leaderboard saved to PlayerPrefs.");
+    }
+
+    public void LoadLeaderboardFromPrefs()
+    {
+        for (int i = 0; i < tenScores.Length; i++)
+        {
+            string nameKey = $"HighScore{i}_Name";
+            string scoreKey = $"HighScore{i}_Score";
+
+            if (PlayerPrefs.HasKey(nameKey) && PlayerPrefs.HasKey(scoreKey))
+            {
+                tenScores[i].Name = PlayerPrefs.GetString(nameKey);
+                tenScores[i].score = PlayerPrefs.GetFloat(scoreKey);
+            }
+            else
+            {
+                // Fallback defaults if nothing exists
+                tenScores[i].Name = "---";
+                tenScores[i].score = 0;
+            }
+
+            leaderBoard[i].text = (i + 1) + "     " + tenScores[i].score.ToString("F0") + "   :   " + tenScores[i].Name;
+        }
+
+        Debug.Log("Leaderboard loaded from PlayerPrefs.");
+    }
+
     #endregion
 }
