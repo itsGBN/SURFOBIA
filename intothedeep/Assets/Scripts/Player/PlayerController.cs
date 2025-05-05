@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -100)
         {
             GameManager.instance.UpdateState(GameState.READY);
-            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
+            StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
         
         bool wasGrounded = prevIsGrounded;

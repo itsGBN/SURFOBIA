@@ -148,7 +148,18 @@ public class MainMenuEvents : MonoBehaviour
         transitionName.RemoveFromClassList(transitionDescription);
         yield return new WaitForSeconds(waitTime);
         
-        StartCoroutine(onTransition(transitionName));
+        //StartCoroutine(onTransition(transitionName));
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public IEnumerator onCheckTransition(string sceneName, VisualElement transitionName, float waitTime)
+    {
+        transitionName.style.display = DisplayStyle.Flex;
+        trasitionTypes.style.display = DisplayStyle.Flex;
+        transitionName.RemoveFromClassList(transitionDescription);
+        yield return new WaitForSeconds(waitTime);
+
+        StartCoroutine(onCheckTransition(transitionName));
         //SceneManager.LoadScene(sceneName);
     }
 
@@ -157,13 +168,23 @@ public class MainMenuEvents : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         transitionName.AddToClassList(transitionDescription);
         yield return new WaitForSeconds(1);
+        transitionName.style.display = DisplayStyle.None;
+        trasitionTypes.style.display = DisplayStyle.None;
+        isTrasitioning = false;
+    }
+
+    IEnumerator onCheckTransition(VisualElement transitionName)
+    {
+        yield return new WaitForSeconds(0.5f);
+        transitionName.AddToClassList(transitionDescription);
         PlayerController tempPlayer = FindObjectOfType<PlayerController>();
         if (CheckPointScript.checkpointPosition != Vector3.zero)
         {
             tempPlayer.transform.position = CheckPointScript.checkpointPosition;
             GameManager.instance.UpdateState(GameState.RACING);
-           // Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
+            // Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
         }
+        yield return new WaitForSeconds(1);
         transitionName.style.display = DisplayStyle.None;
         trasitionTypes.style.display = DisplayStyle.None;
 

@@ -13,7 +13,7 @@ public class HighScore : MonoBehaviour
     //Refernces
     private UIDocument uIDocument;
     private VisualElement scoreHUD;
-    private List<Label> leaderBoard = new List<Label>();
+    public List<Label> leaderBoard = new List<Label>();
     private TextField holder;
     private Label winText;
     private Button home;
