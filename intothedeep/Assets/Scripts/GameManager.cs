@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
+        if (GetInputs.PS5Map.Restart.WasPressedThisFrame() && MainMenuEvents.instance.focusMenu == true)
         {
             // switch (SceneManager.GetActiveScene().name)
             // {
