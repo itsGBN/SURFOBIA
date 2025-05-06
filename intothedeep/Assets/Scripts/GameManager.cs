@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     
     public PlayableDirector openingCutscene;
     public Image openingCutsceneImage;
+    public static bool INPUT_CONTROLLER = true; // if false, keyboard
 
     // PROPERTY GETTERS
     public bool InputActive { get { return playerInput; } }
@@ -70,8 +71,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
-        openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
+        //openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
+        //openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
     }
 
     // Update is called once per frame

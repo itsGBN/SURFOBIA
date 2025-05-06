@@ -74,6 +74,6 @@ public class TitleScreenControl : MonoBehaviour
     public void PlaySound()
     {
         source.PlayOneShot(sounds[soundIndex]);
-        if (soundIndex < sounds.Length) { soundIndex++; }
+        if (soundIndex < sounds.Length + 1) { soundIndex++; }
     }
 }
