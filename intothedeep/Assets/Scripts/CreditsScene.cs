@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CreditsScene : MonoBehaviour
 {
     [SerializeField] float scrollSpeed = 10f;
-    [SerializeField] RectTransform text;
+    [SerializeField] RectTransform container;
     
     // Start is called before the first frame update
     void Start()
@@ -17,6 +17,6 @@ public class CreditsScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.anchoredPosition += new Vector2(0, scrollSpeed * Time.deltaTime);
+        container.anchoredPosition += new Vector2(0, scrollSpeed * Time.deltaTime);
     }
 }
