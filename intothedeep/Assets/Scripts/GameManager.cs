@@ -86,10 +86,10 @@ public class GameManager : MonoBehaviour
                 if (Input.anyKeyDown)
                 {
                     // go to main menu
-                    SceneManager.LoadScene(0);
+                    //SceneManager.LoadScene(0);
                     //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                    UpdateState(GameState.MAIN);
-                    MusicManager.instance.FadeOut();
+                    //UpdateState(GameState.MAIN);
+                    //MusicManager.instance.FadeOut();
                 }
                 break;
             case GameState.MAIN:
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
+        if (GetInputs.PS5Map.Restart.WasPressedThisFrame() && MainMenuEvents.instance.focusMenu == true)
         {
             // switch (SceneManager.GetActiveScene().name)
             // {
@@ -118,6 +118,7 @@ public class GameManager : MonoBehaviour
     {
         lastState = gameState;
         gameState = newState;
+        Debug.Log("Game state changed: " + gameState.ToString());
 
         // TODO FIX LOOPING INPUT
 

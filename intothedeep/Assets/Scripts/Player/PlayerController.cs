@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
     private bool isDiving = false;
     public float diveForwardSpeed = 5f;
     public float diveFallSpeed = -2f;
+
+    public bool isBoosting = false;
     public Vector3 currentSurfaceNormal = Vector3.up;
 
     [Header("Graphics")]
@@ -200,7 +202,7 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -100)
         {
             GameManager.instance.UpdateState(GameState.READY);
-            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
+            StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
         
         bool wasGrounded = prevIsGrounded;
@@ -329,6 +331,14 @@ public class PlayerController : MonoBehaviour
             progressAlongSpline = closestT;
             SetState(grindState);
         }
+    }
+
+    public IEnumerator BoostActivate(float duration)
+    {
+        Debug.Log("Boosting");
+        isBoosting = true;
+        yield return new WaitForSeconds(duration);
+        isBoosting = false;
     }
 
 
@@ -479,7 +489,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // --- acceleration / deceleration after release ---
-            if (moveInput > deadZone)
+            if (moveInput > deadZone || player.isBoosting)
             {
                 // 1) 有输入：立即加速，重置所有延迟相关的状态
                 player.timeSinceRelease = 0f;
@@ -487,8 +497,19 @@ public class PlayerController : MonoBehaviour
                 player.hasReachedMaxSpeed = false;
 
                 // 原先的加速逻辑
-                player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
-                player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+                //!!adding boost possibilty
+                if (player.isBoosting)
+                {
+                    player.currentSpeed += player.accel * 2.5f * Time.fixedDeltaTime;
+                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed * 2f);
+                }
+                else
+                {
+                    player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                    player.currentSpeed = Mathf.Min(player.currentSpeed, player.moveSpeed);
+                }
+                //player.currentSpeed += player.accel * moveInput * Time.fixedDeltaTime;
+                
 
                 // 2) 如果达到了极限速，就打标记
                 if (player.currentSpeed >= player.moveSpeed)
@@ -695,24 +716,24 @@ public class PlayerController : MonoBehaviour
             // Print based on the angle direction
             if (Mathf.Abs(groundAngle) < 15f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("GOOD", 10);
-                AudioManager.instance.Land();
-                grounding = true;
+                //HUD.instance.onPlayerTrickHud("GOOD", 10);
+                //AudioManager.instance.Land();
+                //grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (groundAngle < 5f && !grounding)
             {
-                HUD.instance.onPlayerTrickHud("OK", 10);
-                moveSpeed -= 1f;
-                AudioManager.instance.BadLand();
+                //HUD.instance.onPlayerTrickHud("OK", 10);
+                //moveSpeed -= 1f;
+                //AudioManager.instance.BadLand();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }
             else if (!grounding)
             {
-                HUD.instance.onPlayerTrickHud("PERFECT", 10);
-                moveSpeed += 2f;
-                AudioManager.instance.GoodLand();
+                //HUD.instance.onPlayerTrickHud("PERFECT", 10);
+                //moveSpeed += 2f;
+                //AudioManager.instance.GoodLand();
                 grounding = true;
                 if (RumbleManager.instance != null) { RumbleManager.instance.RumbleForTime(0.2f, 0.1f, 0.5f); }
             }

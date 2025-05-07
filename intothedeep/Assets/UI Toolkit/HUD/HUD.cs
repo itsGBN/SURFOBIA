@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,12 +22,12 @@ public class HUD : MonoBehaviour
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
     private int trickNum;
-    private int scoreNum;
-    private float comboNum;
+    private float scoreNum;
+    private float comboNum = 1;
     private int enemyNum;
     private Queue<Label> playerTricks = new Queue<Label>();
     private ProgressBar progressBar;
-    private float elapsedTime = 0f;
+    public float elapsedTime = 60f;
 
     [SerializeField] [Range(1, 1000)] int distannceRange;
 
@@ -59,6 +59,7 @@ public class HUD : MonoBehaviour
 
         //Miscellaneous Things
         //Naming the Scorer
+        /*
         foreach (var entry in enemyScores.ToList())
         {
             Label label = entry.Key;
@@ -73,12 +74,22 @@ public class HUD : MonoBehaviour
             if(index == 2) { enemyScores[label] = (score, "Boney S"); }
             if(index == 3) { enemyScores[label] = (score, "Femur S"); }
         }
+        */
 
     }
 
     private void Start()
     {
-        InvokeRepeating("OnEnemyScore", 1, 1);
+        //InvokeRepeating("OnEnemyScore", 1, 1);
+        var scoreList = HighScore.instance.tenScores;
+
+        for (int i = 0; i < enemyScores.Count && i < scoreList.Length; i++)
+        {
+            var label = enemyScores.Keys.ElementAt(i);
+            var scoreData = scoreList[i];
+            enemyScores[label] = ((int)scoreData.score, scoreData.Name);
+            label.text = $"{scoreData.Name} : {(int)scoreData.score}";
+        }
     }
 
     private void Update()
@@ -104,7 +115,7 @@ public class HUD : MonoBehaviour
 
     private void onVisibility()
     {
-        if (MainMenuEvents.instance.focusMenu || focusEndscreen)
+        if (MainMenuEvents.instance.focusMenu || focusEndscreen || HighScore.instance.scoreActive)
         {
             hudVisualElement.style.visibility = Visibility.Hidden;
         }
@@ -116,9 +127,15 @@ public class HUD : MonoBehaviour
 
     private void onDistance()
     {
-        if(GameManager.instance.gameState == GameManager.GameState.RACING)
+        if (GameManager.instance.gameState == GameManager.GameState.RACING)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime -= Time.deltaTime;
+            if (elapsedTime <= 0f)
+            {
+                elapsedTime = 0f;
+                GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
+                HighScore.instance.scoreActive = true;
+            }
 
             int minutes = (int)(elapsedTime / 60);
             int seconds = (int)(elapsedTime % 60);
@@ -127,6 +144,7 @@ public class HUD : MonoBehaviour
             distanceLabel.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
         }
     }
+
 
     private void OnEnemyScore()
     {
@@ -183,7 +201,7 @@ public class HUD : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) { onPlayerTrickHud("JUMP", 30); }
     }
 
-    public void onPlayerTrickHud(string trickname, int points)
+    public void onPlayerTrickHud(string trickname, float points)
     {
         trickNum++;
         trickLabel = new Label(trickname);
@@ -198,7 +216,7 @@ public class HUD : MonoBehaviour
 
         StartCoroutine(MoveTrick(queueArray));
 
-        scoreNum+= points;
+        scoreNum+= (points * comboNum);
         scoreLabel.text = scoreNum.ToString(); 
 
         progressBar.value += points;
@@ -228,16 +246,24 @@ public class HUD : MonoBehaviour
         if (value <= 0) { countdownLabel.style.visibility = Visibility.Hidden; }
     }
 
+
     public void Endscreen()
     {
+        /*
         focusEndscreen = true;
         endscreenVisualElement.style.opacity = 1;
         endscreenVisualElement.style.visibility = Visibility.Visible;
         // update stats
+        */
+    }
+
+    public float GetScore()
+    {
+        return scoreNum;
     }
 }
 
- class Trick
+class Trick
 {
     public Label trickLabel;
     public int trickInt;
