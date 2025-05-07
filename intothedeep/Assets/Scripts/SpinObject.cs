@@ -12,6 +12,7 @@ public class SpinObject : MonoBehaviour
     void Start()
     {
         transform.rotation = Quaternion.identity;
+        transform.position = transform.position;
     }
 
     // Update is called once per frame
