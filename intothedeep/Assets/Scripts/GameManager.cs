@@ -227,5 +227,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
     
-    
+    public static void SetInputType(bool controller)
+    {
+        INPUT_CONTROLLER = controller;
+        if (FindObjectOfType<TutorialControl>() != null) { FindObjectOfType<TutorialControl>().SetMap(); }
+    }
 }

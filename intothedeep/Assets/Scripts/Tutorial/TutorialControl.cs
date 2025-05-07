@@ -12,7 +12,7 @@ public class TutorialControl : MonoBehaviour
 
     Flowchart chart;
 
-    bool falling = false;
+    bool falling = true;
 
     PS5Input GetInputs;
 
@@ -35,6 +35,7 @@ public class TutorialControl : MonoBehaviour
     void Start()
     {
         chart = FindObjectOfType<Flowchart>();
+        SetMap();
     }
 
     // Update is called once per frame
@@ -53,6 +54,7 @@ public class TutorialControl : MonoBehaviour
     {
         if (GameManager.INPUT_CONTROLLER) { anim.SetTrigger("controller"); }
         else { anim.SetTrigger("keyboard"); }
+        mapImage.SetNativeSize();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
