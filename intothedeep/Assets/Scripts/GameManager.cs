@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameState startingState = GameState.READY;
 
-    public GameState gameState = GameState.MAIN;
+    [HideInInspector] public GameState gameState = GameState.MAIN;
     GameState lastState;
 
     float globalTimeScale = 1f;
@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     
     public PlayableDirector openingCutscene;
     public Image openingCutsceneImage;
+
     public static bool INPUT_CONTROLLER = true; // if false, keyboard
 
     // PROPERTY GETTERS
@@ -231,6 +232,5 @@ public class GameManager : MonoBehaviour
     public static void SetInputType(bool controller)
     {
         INPUT_CONTROLLER = controller;
-        if (FindObjectOfType<TutorialControl>() != null) { FindObjectOfType<TutorialControl>().SetMap(); }
     }
 }

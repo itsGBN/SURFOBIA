@@ -14,6 +14,8 @@ using static GameManager;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool TUTORIAL = false;
+
     [Header("Speed")]
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
@@ -135,7 +137,7 @@ public class PlayerController : MonoBehaviour
         freeRoamState = new FreeRoamState(this);
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
-        currentState = zeroState;
+        currentState = !TUTORIAL ? zeroState : freeRoamState;
         cameraAnimator.SetInteger("State", 2);
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
@@ -199,7 +201,7 @@ public class PlayerController : MonoBehaviour
         //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         // }
 
-        if (transform.position.y < -100)
+        if (transform.position.y < -100 && !TUTORIAL)
         {
             GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
