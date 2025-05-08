@@ -57,10 +57,11 @@ public class TutorialControl : MonoBehaviour
         mapImage.SetNativeSize();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider other)
     {
         // disable player movement
         chart.SendFungusMessage("freefall");
         falling = true;
+        FindObjectOfType<PlayerController>().SetState(FindObjectOfType<PlayerController>().freefallState);
     }
 }

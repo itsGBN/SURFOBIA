@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     public FreeRoamState freeRoamState;
     public ZeroState zeroState;
     public GrindState grindState;
+    public FreefallState freefallState;
 
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
@@ -137,6 +138,7 @@ public class PlayerController : MonoBehaviour
         freeRoamState = new FreeRoamState(this);
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
+        freefallState = new FreefallState(this);
         currentState = !TUTORIAL ? zeroState : freeRoamState;
         cameraAnimator.SetInteger("State", 2);
         curBoardRoll = graphics.transform.localEulerAngles.z;
@@ -679,6 +681,22 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // (tutorial)
+    // STATE.FREEFALL
+    public class FreefallState : IPlayerState
+    {
+        private PlayerController player;
+
+        public FreefallState(PlayerController player)
+        {
+            this.player = player;
+        }
+
+        public void UpdateState()
+        {
+            player.rb.isKinematic = true;
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
