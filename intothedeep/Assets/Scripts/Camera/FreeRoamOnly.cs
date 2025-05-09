@@ -50,9 +50,9 @@ public class FreeRoamOnly : MonoBehaviour
             smoothTime
         );
 
-        if (mantaAnimation.GetIsDoingTrick())
-        {
+        //if (mantaAnimation.GetIsDoingTrick())
+        //{
             
-        }
+        //}
     }
 }

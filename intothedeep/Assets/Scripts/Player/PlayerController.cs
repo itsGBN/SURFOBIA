@@ -14,6 +14,8 @@ using static GameManager;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool TUTORIAL = false;
+
     [Header("Speed")]
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
@@ -61,6 +63,7 @@ public class PlayerController : MonoBehaviour
     public FreeRoamState freeRoamState;
     public ZeroState zeroState;
     public GrindState grindState;
+    public FreefallState freefallState;
 
     private SplineContainer currentSpline;
     private float progressAlongSpline = 0f;
@@ -142,7 +145,8 @@ public class PlayerController : MonoBehaviour
         freeRoamState = new FreeRoamState(this);
         zeroState = new ZeroState(this);
         grindState = new GrindState(this);
-        currentState = zeroState;
+        freefallState = new FreefallState(this);
+        currentState = !TUTORIAL ? zeroState : freeRoamState;
         cameraAnimator.SetInteger("State", 2);
         curBoardRoll = graphics.transform.localEulerAngles.z;
         curBoardYaw = graphics.transform.localEulerAngles.y;
@@ -211,7 +215,7 @@ public class PlayerController : MonoBehaviour
         //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         // }
 
-        if (transform.position.y < -100)
+        if (transform.position.y < -100 && !TUTORIAL)
         {
             GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
@@ -475,7 +479,8 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            
+            player.rb.isKinematic = false;
+
             float moveInput = 0;
             float turnInput = 0;
             float deadZone = 0.1f;
@@ -716,6 +721,25 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // (tutorial)
+    // STATE.FREEFALL
+    public class FreefallState : IPlayerState
+    {
+        private PlayerController player;
+
+        public FreefallState(PlayerController player)
+        {
+            this.player = player;
+        }
+
+        public void UpdateState()
+        {
+            player.rb.isKinematic = true;
+            player.SetAirFOV();
+            player.airFovSet = true;
+            player.transform.eulerAngles = Vector3.Lerp(player.transform.eulerAngles, new Vector3(60,0), 80 * Time.deltaTime);
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

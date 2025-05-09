@@ -170,6 +170,15 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TutorialForward"",
+                    ""type"": ""Button"",
+                    ""id"": ""60117aec-dfba-4ffc-8e18-411c25ab3b53"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -678,6 +687,28 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""action"": ""RightBumper"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ecf59423-3d6a-47f8-a4d8-5c930e2b3b50"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TutorialForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c448290-082e-4f31-a2e1-9b1001a531e0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TutorialForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -702,6 +733,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         m_PS5Map_Right = m_PS5Map.FindAction("Right", throwIfNotFound: true);
         m_PS5Map_LeftBumper = m_PS5Map.FindAction("LeftBumper", throwIfNotFound: true);
         m_PS5Map_RightBumper = m_PS5Map.FindAction("RightBumper", throwIfNotFound: true);
+        m_PS5Map_TutorialForward = m_PS5Map.FindAction("TutorialForward", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -779,6 +811,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_PS5Map_Right;
     private readonly InputAction m_PS5Map_LeftBumper;
     private readonly InputAction m_PS5Map_RightBumper;
+    private readonly InputAction m_PS5Map_TutorialForward;
     public struct PS5MapActions
     {
         private @PS5Input m_Wrapper;
@@ -799,6 +832,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         public InputAction @Right => m_Wrapper.m_PS5Map_Right;
         public InputAction @LeftBumper => m_Wrapper.m_PS5Map_LeftBumper;
         public InputAction @RightBumper => m_Wrapper.m_PS5Map_RightBumper;
+        public InputAction @TutorialForward => m_Wrapper.m_PS5Map_TutorialForward;
         public InputActionMap Get() { return m_Wrapper.m_PS5Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -856,6 +890,9 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @RightBumper.started += instance.OnRightBumper;
             @RightBumper.performed += instance.OnRightBumper;
             @RightBumper.canceled += instance.OnRightBumper;
+            @TutorialForward.started += instance.OnTutorialForward;
+            @TutorialForward.performed += instance.OnTutorialForward;
+            @TutorialForward.canceled += instance.OnTutorialForward;
         }
 
         private void UnregisterCallbacks(IPS5MapActions instance)
@@ -908,6 +945,9 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @RightBumper.started -= instance.OnRightBumper;
             @RightBumper.performed -= instance.OnRightBumper;
             @RightBumper.canceled -= instance.OnRightBumper;
+            @TutorialForward.started -= instance.OnTutorialForward;
+            @TutorialForward.performed -= instance.OnTutorialForward;
+            @TutorialForward.canceled -= instance.OnTutorialForward;
         }
 
         public void RemoveCallbacks(IPS5MapActions instance)
@@ -943,5 +983,6 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         void OnRight(InputAction.CallbackContext context);
         void OnLeftBumper(InputAction.CallbackContext context);
         void OnRightBumper(InputAction.CallbackContext context);
+        void OnTutorialForward(InputAction.CallbackContext context);
     }
 }

@@ -175,16 +175,14 @@ public class TutorialAnimations : MonoBehaviour
         }
 
 
-
-
         if (isGrounded)
         {
             if (mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.05f);
             //if (graphics.transform.rotation != player.transform.rotation) graphics.transform.rotation = Quaternion.Lerp(graphics.transform.rotation, player.transform.rotation, 0.05f); ;
             if (skeleton.transform.rotation != player.transform.rotation)
             {
-                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
-                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, 0.01f);
+                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 20 * Time.deltaTime);
+                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, 20 * Time.deltaTime);
             }
 
             if (totalRotation != 0)
@@ -198,6 +196,15 @@ public class TutorialAnimations : MonoBehaviour
         {
             if (isHolding)
             {
+                skeleton.transform.rotation = mantaRay.transform.rotation;
+                trickSkeleton.transform.rotation = mantaRay.transform.rotation;
+            }
+
+            // return back to "upward" position
+            if (trickInput.y == 0)
+            {
+                graphics.transform.localRotation = Quaternion.Lerp(graphics.transform.localRotation, Quaternion.Euler(0,0,0), 2f * Time.deltaTime);
+                mantaRay.transform.localRotation = Quaternion.Lerp(mantaRay.transform.localRotation, Quaternion.Euler(0, 0, 0), 2f * Time.deltaTime);
                 skeleton.transform.rotation = mantaRay.transform.rotation;
                 trickSkeleton.transform.rotation = mantaRay.transform.rotation;
             }
@@ -321,7 +328,6 @@ public class TutorialAnimations : MonoBehaviour
                     totalRotation += 1;
                     //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
                     comboThreshold = holdingRotationSpeed * (36 / 10);
-                    Debug.Log(totalRotation);
 
                     if (totalRotation > comboThreshold)
                     {

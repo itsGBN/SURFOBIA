@@ -61,4 +61,21 @@ public class TextFloat : MonoBehaviour
 
 
     }
+
+    public void FadeOut()
+    {
+        StartCoroutine(Fade());
+    }
+
+    IEnumerator Fade()
+    {
+        float a = 1;
+        while (a > 0)
+        {
+            a -= Time.deltaTime;
+            textComponenet.color = new Color(textComponenet.color.r, textComponenet.color.g, textComponenet.color.b, a);
+            yield return null;
+        }
+        textComponenet.color = new Color(textComponenet.color.r, textComponenet.color.g, textComponenet.color.b, 0);
+    }
 }

@@ -55,11 +55,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Metallic: 0.158
+    - _Metallic: 0.306
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SeeThroughDistance: 3
-    - _Smoothness: 0.275
+    - _Smoothness: 0.483
     m_Colors:
     - _Color: {r: 0.41553932, g: 0.5116726, b: 0.5471698, a: 0}
   m_BuildTextureStacks: []

@@ -8,11 +8,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState { MAIN, READY, PAUSED, COUNTING, RACING, ENDGAME, CREDITS }
+    public enum GameState { MAIN, READY, PAUSED, COUNTING, RACING, ENDGAME, CREDITS, TUTORIAL }
 
     [SerializeField] GameState startingState = GameState.READY;
 
-    public GameState gameState = GameState.MAIN;
+    [HideInInspector] public GameState gameState = GameState.MAIN;
     GameState lastState;
 
     float globalTimeScale = 1f;
@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     
     public PlayableDirector openingCutscene;
     public Image openingCutsceneImage;
+
+    public static bool INPUT_CONTROLLER = true; // if false, keyboard
 
     // PROPERTY GETTERS
     public bool InputActive { get { return playerInput; } }
@@ -70,8 +72,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
-        openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
+        //openingCutscene = GameObject.Find("CutsceneDirector").GetComponent<PlayableDirector>();
+        //openingCutsceneImage= GameObject.Find("cutsceneTransition").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -176,6 +178,18 @@ public class GameManager : MonoBehaviour
                 playerInput = false;
                 HUD.instance.Endscreen();
                 break;
+            case GameState.TUTORIAL:
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        savedIdleFloat = tempPlayer.idleFloat;
+                        tempPlayer.idleFloat = 0;
+                    }
+                    playerInput = false;
+                    Time.timeScale = 1f;
+                    break;
+                }
         }
 
         Debug.Log("Game state updated: " + gameState.ToString());
@@ -228,5 +242,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
     
-    
+    public static void SetInputType(bool controller)
+    {
+        INPUT_CONTROLLER = controller;
+    }
 }
