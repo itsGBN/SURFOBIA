@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState { MAIN, READY, PAUSED, COUNTING, RACING, ENDGAME, CREDITS }
+    public enum GameState { MAIN, READY, PAUSED, COUNTING, RACING, ENDGAME, CREDITS, TUTORIAL }
 
     [SerializeField] GameState startingState = GameState.READY;
 
@@ -177,6 +177,18 @@ public class GameManager : MonoBehaviour
                 playerInput = false;
                 HUD.instance.Endscreen();
                 break;
+            case GameState.TUTORIAL:
+                {
+                    PlayerController tempPlayer = FindObjectOfType<PlayerController>();
+                    if (tempPlayer != null)
+                    {
+                        savedIdleFloat = tempPlayer.idleFloat;
+                        tempPlayer.idleFloat = 0;
+                    }
+                    playerInput = false;
+                    Time.timeScale = 1f;
+                    break;
+                }
         }
 
         Debug.Log("Game state updated: " + gameState.ToString());

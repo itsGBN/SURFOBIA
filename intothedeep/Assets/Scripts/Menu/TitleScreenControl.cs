@@ -69,6 +69,7 @@ public class TitleScreenControl : MonoBehaviour
             yield return null;
         }
         SceneManager.LoadScene(sceneIndex);
+        GameManager.instance.UpdateState(GameManager.GameState.READY);
     }
 
     public void PlaySound()

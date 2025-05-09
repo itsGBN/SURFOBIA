@@ -275,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollSpeed: 50
   container: {fileID: 834592864}
+  menuSceneIndex: 1
 --- !u!114 &122397124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,6 +530,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonTricks
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 938de59250dd7224385bd397078becef,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 938de59250dd7224385bd397078becef,
         type: 3}
       propertyPath: m_Controller
@@ -582,6 +588,46 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -726}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &916466317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 62bed7f2164feb845afbb5bade276898,
+    type: 3}
+  m_PrefabInstance: {fileID: 1583681755}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &916466318
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916466317}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 938de59250dd7224385bd397078becef, type: 3}
+  m_Controller: {fileID: 9100000, guid: 96bc172d3a198d64fbe1d65c49431610, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &916466320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916466317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fced080574444f4896519e0310325b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 15
 --- !u!1 &1218159328 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 938de59250dd7224385bd397078becef,
@@ -729,6 +775,104 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399825247}
   m_CullTransparentMesh: 1
+--- !u!1001 &1583681755
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4183117
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4183117
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4183117
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.057549585
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9983427
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -186.598
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_Name
+      value: Dancing Twerk
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029313066246466240, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 65702495048144492, guid: 62bed7f2164feb845afbb5bade276898, type: 3}
+    - {fileID: -8700617353114198275, guid: 62bed7f2164feb845afbb5bade276898, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 916466318}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 62bed7f2164feb845afbb5bade276898,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 916466320}
+  m_SourcePrefab: {fileID: 100100000, guid: 62bed7f2164feb845afbb5bade276898, type: 3}
 --- !u!1 &1890838298
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,27 +948,39 @@ MonoBehaviour:
     Victor Stroie
     - Audio, Level Design, Programming
 
-    Alan Wu - Programmer, Camera Design
+    Alan Wu - Programmer, Cinematographer
 
     Tina
     Xiang - Character Artist, Animator
 
 
 
-    <i>Thanks to the original Surfobia
-    team</i>
+    <i>Soundtrack</i>
 
-    Dade Fuller, Sydney Munn, Amber Qu, Lukas Wedberg
+    Eamon Ayers,
+    Connor Elmore
 
 
 
-    Thanks
-    to:
+    <i>Thanks to the original Surfobia team</i>
 
-    Finnley Xuereb'
+    Dade Fuller,
+    Sydney Munn, Amber Qu, Lukas Wedberg
+
+
+
+    <i>Additional Thanks to</i>
+
+    Finnley
+    Xuereb
+
+    Louis the Dog
+
+    NYU Game Center'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a0f79e5b064fc254ca1f1eb36096a5e7, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: a0f79e5b064fc254ca1f1eb36096a5e7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d1e01404d7537ee4e8024a236eb43e1d, type: 2}
+  m_sharedMaterial: {fileID: 4300802281240271942, guid: d1e01404d7537ee4e8024a236eb43e1d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -858,7 +1014,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 12.61
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1045,3 +1201,4 @@ SceneRoots:
   - {fileID: 319824727}
   - {fileID: 400299731}
   - {fileID: 1379984231}
+  - {fileID: 1583681755}

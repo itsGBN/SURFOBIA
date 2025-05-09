@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.046997216, g: 0.097825184, b: 0.17838964, a: 1}
+  m_IndirectSpecularColor: {r: 0.04841406, g: 0.0998437, b: 0.1820494, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2693,7 +2693,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &490018600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2714,10 +2714,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '''any button to resurrect'''
+  m_text: any button to resurrect
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d1e01404d7537ee4e8024a236eb43e1d, type: 2}
+  m_sharedMaterial: {fileID: 4300802281240271942, guid: d1e01404d7537ee4e8024a236eb43e1d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2741,7 +2742,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.05
+  m_fontSize: 20.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2806,7 +2807,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: 4300802281240271942, guid: d1e01404d7537ee4e8024a236eb43e1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2844,7 +2845,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.5, y: 0}
+  m_AnchoredPosition: {x: -0.5, y: 1.5}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &490018603
@@ -4138,14 +4139,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654474217}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.031175617, y: 0.40206665, z: -0.013699551, w: -0.914977}
-  m_LocalPosition: {x: -0.52, y: 15.02, z: -23.96}
+  m_LocalRotation: {x: -0.029226154, y: 0.5129177, z: -0.017476536, w: -0.85776216}
+  m_LocalPosition: {x: 0.96, y: 15.02, z: -21.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1356990714}
   m_Father: {fileID: 284704278}
-  m_LocalEulerAnglesHint: {x: 3.903, y: -47.444, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.903, y: -61.756, z: 0}
 --- !u!114 &654474219
 MonoBehaviour:
   m_ObjectHideFlags: 0

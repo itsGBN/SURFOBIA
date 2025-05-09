@@ -447,7 +447,8 @@ public class PlayerController : MonoBehaviour
 
         public void UpdateState()
         {
-            
+            player.rb.isKinematic = false;
+
             float moveInput = 0;
             float turnInput = 0;
             float deadZone = 0.1f;
@@ -695,6 +696,9 @@ public class PlayerController : MonoBehaviour
         public void UpdateState()
         {
             player.rb.isKinematic = true;
+            player.SetAirFOV();
+            player.airFovSet = true;
+            player.transform.eulerAngles = Vector3.Lerp(player.transform.eulerAngles, new Vector3(60,0), 80 * Time.deltaTime);
         }
     }
 
