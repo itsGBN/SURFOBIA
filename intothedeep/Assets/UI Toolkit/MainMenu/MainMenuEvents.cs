@@ -60,7 +60,7 @@ public class MainMenuEvents : MonoBehaviour
         //Reference Buttons
         levelButton = uIDocument.rootVisualElement.Q("LevelButton") as Button;
         level1Button = uIDocument.rootVisualElement.Q("Level1Button") as Button;
-        tutorialButton = uIDocument.rootVisualElement.Q("Turtorial") as Button;
+        tutorialButton = uIDocument.rootVisualElement.Q("Tutorial") as Button;
         inputButton = uIDocument.rootVisualElement.Q("Input") as Button;
         quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
@@ -77,8 +77,9 @@ public class MainMenuEvents : MonoBehaviour
         levelButton.RegisterCallback<ClickEvent>(onPlayButton);
         level1Button.RegisterCallback<ClickEvent>(onPlayParentButtons);
         // IDK WHY but registering these buttons is breaking the game start
-        //tutorialButton.RegisterCallback<ClickEvent>(onTutorialButton);
-        //inputButton.RegisterCallback<ClickEvent>(onInputButton);
+        // FIX ^^^ it was because the reference to the button was wrong lol
+        tutorialButton.RegisterCallback<ClickEvent>(onTutorialButton);
+        inputButton.RegisterCallback<ClickEvent>(onInputButton);
         quitButton.RegisterCallback<ClickEvent>(onQuitButton);
         foreach (Button button in allButtons) { button.RegisterCallback<ClickEvent>(onAllButtons); }
         //Miscelleaneous Things
