@@ -106,6 +106,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxAirTime        = 2f;
     [SerializeField] float minImpulseY       = -0.3f;
     [SerializeField] float maxImpulseY       =  -1.5f;
+    [SerializeField] float minAirTimeForShake = 0.2f; 
+    private bool wasInAir = false;  
     float airTime;
     
     #region CONTROLLER
@@ -205,20 +207,29 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
         
+        // 在 Update() 里
         bool wasGrounded = prevIsGrounded;
+
+// 离地：第一帧重置 airTime，之后累加
         if (!isGrounded)
         {
+            if (wasGrounded)
+            {
+                airTime = 0f;
+                wasInAir = true;          // ← 新增
+            }
             airTime += Time.deltaTime;
         }
+
+// 地面状态切换（落地或起跳）
         if (isGrounded != wasGrounded)
         {
-            // —— 播放摄像机切换动画 —— 
+            // 切摄像机动画
             cameraAnimator.SetBool("inAir", !isGrounded);
 
-            // —— 离地时，且速度满足阈值，只执行一次 FOV 设定 —— 
+            // 起跳时设 FOV
             if (!isGrounded && !airFovSet)
             {
-                // 动态阈值计算 (moveSpeed - currentSpeed)/2 也可以直接用 fraction
                 float dynamicThreshold = (moveSpeed - currentSpeed) * startThresholdFraction;
                 if (currentSpeed >= dynamicThreshold)
                 {
@@ -226,16 +237,12 @@ public class PlayerController : MonoBehaviour
                     airFovSet = true;
                 }
             }
-            // —— 落地时，平滑恢复 FOV —— 
-            else if (isGrounded)
-            {
-                StartCoroutine(ResetAirFOVSmooth());
-                airFovSet = false;
-            }
+            
 
-            // 4. 最后更新 prev 状态
             prevIsGrounded = isGrounded;
         }
+        
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.red);
     }
     
     void SetAirFOV()
@@ -682,21 +689,21 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "HighGround")
         {
-
-            if (!grounding)
+            if (wasInAir && airTime >= minAirTimeForShake && landingImpulse != null)
             {
-                // 1) 归一化 airtime 到 [0,1]
-                float t = Mathf.InverseLerp(0f, maxAirTime, airTime);
-                // 2) ease-in-quad：f(t) = t²
-                float easedT = t * t;
-                // 3) 用 easedT 去映射到 [minImpulseY, maxImpulseY]
+                float t         = Mathf.InverseLerp(0f, maxAirTime, airTime);
+                float easedT    = t * t;   // ease-in
                 float velocityY = Mathf.Lerp(minImpulseY, maxImpulseY, easedT);
-                // 4) 生成抖动
-                if (landingImpulse != null)
-                    landingImpulse.GenerateImpulse(Vector3.up * velocityY);
-                Debug.Log($"Air Time: {airTime:F2} seconds");
+                landingImpulse.GenerateImpulse(Vector3.up * velocityY);
+                Debug.Log($"[LandingShake] airTime={airTime:F2}s, velocityY={velocityY:F2}");
+                wasInAir = false;          // ← 重置，避免连续触发
             }
-
+            if (airFovSet)
+            {
+                StartCoroutine(ResetAirFOVSmooth());
+                airFovSet = false;
+            }
+            Debug.Log("is touching ground now");
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();
