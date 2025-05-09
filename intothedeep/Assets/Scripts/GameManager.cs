@@ -107,11 +107,13 @@ public class GameManager : MonoBehaviour
             // {
             // case "Playtest Scene":
             UpdateState(GameState.READY);
+            CheckPointScript.checkpointPosition = new Vector3(-231f, 91.46f,29.88f);
             // break;
             // }
             //MusicManager.instance.FadeOut();
-            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 0f));
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1.5f));
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            
         }
     }
 
