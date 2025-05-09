@@ -30,7 +30,7 @@ public class MusicTrigger : MonoBehaviour
 
         if (isLowering)
         {
-            music.volume = Mathf.Lerp(music.volume, 0, changeSpeed * 2 * Time.deltaTime);
+            music.volume = Mathf.Lerp(music.volume, 0, changeSpeed * 1 * Time.deltaTime);
 
             if (music.volume == 0) isLowering = false;
         }

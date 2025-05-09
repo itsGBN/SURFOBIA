@@ -172,12 +172,12 @@ public class MantaAnimation : MonoBehaviour
 
         if (isGrounded)
         {
-            if (mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, 0.05f);
+            if (mantaRay.transform.rotation != player.transform.rotation) mantaRay.transform.rotation = Quaternion.Lerp(mantaRay.transform.rotation, player.transform.rotation, Time.deltaTime);
             //if (graphics.transform.rotation != player.transform.rotation) graphics.transform.rotation = Quaternion.Lerp(graphics.transform.rotation, player.transform.rotation, 0.05f); ;
             if (skeleton.transform.rotation != player.transform.rotation)
             {
-                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, 0.01f);
-                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, 0.01f);
+                skeleton.transform.rotation = Quaternion.Lerp(skeleton.transform.rotation, player.transform.rotation, Time.deltaTime);
+                trickSkeleton.transform.rotation = Quaternion.Lerp(trickSkeleton.transform.rotation, player.transform.rotation, Time.deltaTime);
             }
 
             if (totalRotation != 0)
@@ -258,6 +258,7 @@ public class MantaAnimation : MonoBehaviour
 
                     HUD.instance.onPlayerTrickHud("Flip", 20);
                     perfectTrick.Play();
+                    AudioManager.instance.Trick();
 
                     totalBodyRotation = 0;
                     bodyTrickCount++;
@@ -287,6 +288,7 @@ public class MantaAnimation : MonoBehaviour
 
                     HUD.instance.onPlayerTrickHud("Flip" ,20);
                     perfectTrick.Play();
+                    AudioManager.instance.Trick();
 
                     totalBodyRotation = 0;
                     bodyTrickCount++;
@@ -321,6 +323,7 @@ public class MantaAnimation : MonoBehaviour
 
                         HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
+                        AudioManager.instance.Trick();
 
                         totalRotation = 0;
                         mantaTrickCount++;
@@ -339,6 +342,7 @@ public class MantaAnimation : MonoBehaviour
                         HUD.instance.onPlayerTrickHud("Spin", 5);
 
                         badTrick.Play();
+                        AudioManager.instance.Trick();
                         //AudioManager.instance.Trick();
 
                         totalRotation = 0;
@@ -371,6 +375,7 @@ public class MantaAnimation : MonoBehaviour
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
                         HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
+                        AudioManager.instance.Trick();
                         totalRotation = 0;
                         mantaTrickCount++;
                     }
@@ -392,6 +397,7 @@ public class MantaAnimation : MonoBehaviour
                         if (rotationSpeed < 22) rotationSpeed += 1;
                         HUD.instance.onPlayerTrickHud("Spin", 5);
                         badTrick.Play();
+                        AudioManager.instance.Trick();
                         totalRotation = 0;
                         mantaTrickCount++;
                     }
@@ -426,11 +432,13 @@ public class MantaAnimation : MonoBehaviour
                 landing.Play();
                 StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.25f));
                 HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
+                AudioManager.instance.Boost();
             }
             else if ((graphicsPercent < 30 || graphicsPercent > 70) && (mantaAngle < 70 || mantaAngle > 290))
             {
                 StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.15f));
                 HUD.instance.onPlayerTrickHud("Good Landing", 5);
+                AudioManager.instance.Boost();
             }
         }
 

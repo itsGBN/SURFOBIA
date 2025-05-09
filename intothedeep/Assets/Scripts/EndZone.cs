@@ -22,6 +22,7 @@ public class EndZone : MonoBehaviour
         {
             GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
             HighScore.instance.scoreActive = true;
+            other.GetComponent<PlayerController>().enabled = false;
         }
     }
 }

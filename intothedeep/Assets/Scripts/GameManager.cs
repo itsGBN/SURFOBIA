@@ -131,7 +131,8 @@ public class GameManager : MonoBehaviour
                 {
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
                     if (CheckPointScript.checkpointPosition != Vector3.zero){
-                        tempPlayer.transform.position = CheckPointScript.checkpointPosition;
+                        tempPlayer.gameObject.transform.position = CheckPointScript.checkpointPosition;
+                        tempPlayer.gameObject.transform.rotation = CheckPointScript.checkpointRotation;
                         Debug.Log("Player position set to checkpoint: " + CheckPointScript.checkpointPosition);
                     }
                     playerInput = false;
@@ -210,7 +211,7 @@ public class GameManager : MonoBehaviour
             {
                 // Start game
                 UpdateState(GameState.RACING);
-                MusicManager.instance.StartTrack();
+                //MusicManager.instance.StartTrack();
             }
         }
     }

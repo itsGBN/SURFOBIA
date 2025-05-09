@@ -5,6 +5,7 @@ using UnityEngine;
 public class CheckPointScript : MonoBehaviour
 {
     public static Vector3 checkpointPosition = Vector3.zero; // Static variable to store the checkpoint position
+    public static Quaternion checkpointRotation = Quaternion.identity;
     // Start is called before the first frame update
     void Awake()
     {
@@ -25,6 +26,7 @@ public class CheckPointScript : MonoBehaviour
         if (other.CompareTag("Checkpoint"))
         {
             checkpointPosition = other.transform.position;
+            checkpointRotation = other.transform.rotation;
             Debug.Log("Checkpoint reached: " + checkpointPosition);
         }
     }
