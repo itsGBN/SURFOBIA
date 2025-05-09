@@ -110,6 +110,11 @@ public class PlayerController : MonoBehaviour
     private bool wasInAir = false;  
     float airTime;
     
+    [Header("Special Spline")]
+    [SerializeField] CinemachineStateDrivenCamera stateDrivenCamera;
+
+    [SerializeField] private CinemachineVirtualCamera[] specialSplineCams;
+    
     #region CONTROLLER
     private PS5Input GetInputs;
 
@@ -154,6 +159,11 @@ public class PlayerController : MonoBehaviour
             if (airCamNoise != null) airCamNoise.m_FrequencyGain   = defaultNoiseFreq;
         }
 
+        if (specialSplineCams != null)
+        {
+            foreach (var cam in specialSplineCams)
+                cam.Priority = 0;
+        }
         
     }
 
@@ -334,6 +344,15 @@ public class PlayerController : MonoBehaviour
         currentSpline = splineContainer;
         if (currentSpline != null && currentSpline.Splines.Count > 0)
         {
+            if (specialSplineCams != null)
+            {
+                foreach (var cam in specialSplineCams)
+                    cam.Priority = 0;
+            }
+            if (splineContainer.TryGetComponent<SpecialSpline>(out var special))
+            {
+                special._vcam.Priority = stateDrivenCamera.Priority + 1;
+            }
             float closestT = GetClosestPointOnSpline(transform.position);
             progressAlongSpline = closestT;
             SetState(grindState);
@@ -670,7 +689,13 @@ public class PlayerController : MonoBehaviour
 
                 if (player.progressAlongSpline >= 1f)
                 {
+                    if (player.specialSplineCams != null)
+                    {
+                        foreach (var cam in player.specialSplineCams)
+                            cam.Priority = 0;
+                    }
                     player.SetState(player.freeRoamState);
+                    
                 }
 
                 if (Input.GetButtonDown("Jump") && !player)
