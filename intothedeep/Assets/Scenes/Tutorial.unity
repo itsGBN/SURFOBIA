@@ -324,8 +324,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.78700006}
-  m_AnchoredPosition: {x: -221.542, y: 53.65}
-  m_SizeDelta: {x: -141.177, y: -86.587}
+  m_AnchoredPosition: {x: -178.277, y: 53.65}
+  m_SizeDelta: {x: -12.956, y: -86.587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97954136
 MonoBehaviour:
@@ -377,9 +377,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d1e01404d7537ee4e8024a236eb43e1d, type: 2}
-  m_sharedMaterial: {fileID: 4300802281240271942, guid: d1e01404d7537ee4e8024a236eb43e1d,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1401,19 +1400,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 124.463425, y: 110.97317}
+  scrollPos: {x: 190.50107, y: 194.47873}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
-  blockViewHeight: 402
-  zoom: 0.94000006
+  blockViewHeight: 481
+  zoom: 1
   scrollViewRect:
     serializedVersion: 2
     x: -343
     y: -340
     width: 1114
     height: 859
-  selectedBlocks: []
-  selectedCommands: []
+  selectedBlocks:
+  - {fileID: 310734054}
+  selectedCommands:
+  - {fileID: 310734082}
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1444,7 +1445,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -24.251076
     y: 72.02126
-    width: 75.53191
+    width: 75
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1729,7 +1730,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 125.76168
     y: 128.90637
-    width: 92.55319
+    width: 92
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -6608,7 +6609,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 1600, y: 900}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
