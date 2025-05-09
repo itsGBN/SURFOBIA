@@ -412,7 +412,7 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(HUD.instance.onRed());
         AudioManager.instance.Hit();
-        HUD.instance.onPlayerTrickHud("**COLLIDE**", -10);
+        HUD.instance.onPlayerTrickHud("CRASH!", -10);
         GameManager.instance.FreezeFrame(0.08f);
     }
 
