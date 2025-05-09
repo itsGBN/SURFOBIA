@@ -36,21 +36,21 @@ public class SpeedLineOnly : MonoBehaviour
     void Update()
     {
         // 1) 判断当前是否超速
-        bool isHigh = player.GetCurrentSpeed() + speedOffset >= player.moveSpeed;
+        bool isHigh    = player.GetCurrentSpeed() + speedOffset >= player.moveSpeed;
+        // 2) 判断是否在 special spline 上
+        bool isSpecial = player.isOnSpecialSpline;
+        // 3) 只要超速或在 special spline 上都触发“fast”状态
+        bool trigger   = isHigh || isSpecial;
 
-        // 2) 选定目标值
-        float target = isHigh ? highSpeedTarget : lowSpeedTarget;
+        // 4) 选择目标值
+        float target = trigger ? highSpeedTarget : lowSpeedTarget;
 
-        foreach (Image image in images)
+        // 5) 平滑推进并应用到两张图
+        foreach (var img in images)
         {
-            Material mat = image.material;
-            // 3) 取当前 Shader 值
+            var mat     = img.material;
             float current = mat.GetFloat("_OpacityPower");
-
-            // 4) 平滑推进到目标
-            float next = Mathf.MoveTowards(current, target, changeSpeed * Time.deltaTime);
-
-            // 5) 应用到材质
+            float next    = Mathf.MoveTowards(current, target, changeSpeed * Time.deltaTime);
             mat.SetFloat("_OpacityPower", next);
         }
         

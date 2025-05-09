@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     
     [Header("Special Spline")]
     [SerializeField] CinemachineStateDrivenCamera stateDrivenCamera;
-
+    [HideInInspector] public bool isOnSpecialSpline = false;
     [SerializeField] private CinemachineVirtualCamera[] specialSplineCams;
     
     #region CONTROLLER
@@ -349,9 +349,15 @@ public class PlayerController : MonoBehaviour
                 foreach (var cam in specialSplineCams)
                     cam.Priority = 0;
             }
+
             if (splineContainer.TryGetComponent<SpecialSpline>(out var special))
             {
                 special._vcam.Priority = stateDrivenCamera.Priority + 1;
+                isOnSpecialSpline = true;
+            }
+            else
+            {
+                isOnSpecialSpline = false;
             }
             float closestT = GetClosestPointOnSpline(transform.position);
             progressAlongSpline = closestT;
@@ -693,6 +699,7 @@ public class PlayerController : MonoBehaviour
                     {
                         foreach (var cam in player.specialSplineCams)
                             cam.Priority = 0;
+                        player.isOnSpecialSpline = false;
                     }
                     player.SetState(player.freeRoamState);
                     
