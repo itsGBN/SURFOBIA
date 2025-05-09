@@ -20,6 +20,9 @@ public class Pause : MonoBehaviour
     //buttons
     private List<Button> allButtons = new List<Button>();
     private Button mainMenuButton;
+    private Button quitButton;
+    private Button resumeButton;
+
 
     //visualelement
     private VisualElement puase;
@@ -29,6 +32,8 @@ public class Pause : MonoBehaviour
 
     //Audio
     private AudioSource buttonSound;
+
+    bool isResume;
 
     private void Awake()
     {
@@ -43,6 +48,8 @@ public class Pause : MonoBehaviour
 
         //Reference Buttons
         mainMenuButton = uIDocument.rootVisualElement.Q("MainMenu") as Button;
+        quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
+        resumeButton = uIDocument.rootVisualElement.Q("Resume") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
 
         //Refernce Visual Elements
@@ -50,6 +57,8 @@ public class Pause : MonoBehaviour
 
         //Register
         mainMenuButton.RegisterCallback<ClickEvent>(onMainMenuButton);
+        quitButton.RegisterCallback<ClickEvent>(onQuitButton);
+        resumeButton.RegisterCallback<ClickEvent>(onResumeButton);
         foreach (Button button in allButtons) { button.RegisterCallback<ClickEvent>(onAllButtons); }
 
         //Get AudioSource
@@ -66,6 +75,8 @@ public class Pause : MonoBehaviour
         //Deregister
         GetInputs.Disable();
         mainMenuButton.UnregisterCallback<ClickEvent>(onMainMenuButton);
+        quitButton.UnregisterCallback<ClickEvent>(onQuitButton);
+        resumeButton.UnregisterCallback<ClickEvent>(onResumeButton);
         foreach (Button button in allButtons) { button.UnregisterCallback<ClickEvent>(onAllButtons); }
     }
 
@@ -82,10 +93,24 @@ public class Pause : MonoBehaviour
 
     private void Update()
     {
-        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
+        if ((GetInputs.PS5Map.Menu.WasPressedThisFrame() || isResume) && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
         {
             if (puase.ClassListContains("inactive")) { puase.RemoveFromClassList("inactive"); MainMenuEvents.instance.focusMenu = true; Time.timeScale = 0; }
             else { puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1; }
         }
+    }
+
+    private void onQuitButton(ClickEvent e)
+    {
+        Debug.Log("Application Quit");
+        Application.Quit();
+    }
+
+    private void onResumeButton(ClickEvent e)
+    {
+        Debug.Log("Resume");
+        puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1;
+
+        //isResume = true;
     }
 }
