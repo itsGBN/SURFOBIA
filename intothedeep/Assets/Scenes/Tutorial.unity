@@ -965,13 +965,13 @@ GameObject:
   - component: {fileID: 310734077}
   - component: {fileID: 310734076}
   - component: {fileID: 310734075}
-  - component: {fileID: 310734080}
   - component: {fileID: 310734079}
   - component: {fileID: 310734082}
   - component: {fileID: 310734081}
   - component: {fileID: 310734083}
   - component: {fileID: 310734084}
   - component: {fileID: 310734085}
+  - component: {fileID: 310734086}
   m_Layer: 0
   m_Name: Flowchart
   m_TagString: Untagged
@@ -1005,7 +1005,8 @@ MonoBehaviour:
     height: 859
   selectedBlocks:
   - {fileID: 310734067}
-  selectedCommands: []
+  selectedCommands:
+  - {fileID: 310734079}
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1330,11 +1331,11 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 310734068}
   commandList:
-  - {fileID: 310734079}
   - {fileID: 310734081}
-  - {fileID: 310734080}
+  - {fileID: 310734079}
   - {fileID: 310734083}
   - {fileID: 310734085}
+  - {fileID: 310734086}
   suppressAllAutoSelections: 0
 --- !u!114 &310734068
 MonoBehaviour:
@@ -1571,27 +1572,6 @@ MonoBehaviour:
   returnValueType: System.Void
   showInherited: 0
   callMode: 0
---- !u!114 &310734080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 310734052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbd8c931f22994b9d90e2037fffaa770, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 19
-  indentLevel: 0
-  _targetGameObject:
-    gameObjectRef: {fileID: 0}
-    gameObjectVal: {fileID: 2023218184}
-  activeState:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  targetGameObjectOLD: {fileID: 0}
 --- !u!114 &310734081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1729,6 +1709,34 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
+--- !u!114 &310734086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310734052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688e35811870d403f9e2b1ab2a699d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 26
+  indentLevel: 0
+  description: 
+  targetObject: {fileID: 1505726997}
+  targetComponentAssemblyName: TutorialControl, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  targetComponentFullname: UnityEngine.Component[]
+  targetComponentText: TutorialControl
+  targetMethod: Wait
+  targetMethodText: 'Wait (): Void'
+  methodParameters: []
+  saveReturnValue: 0
+  returnValueVariableKey: 
+  returnValueType: System.Void
+  showInherited: 0
+  callMode: 0
 --- !u!1 &340697245
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,9 +3504,9 @@ MonoBehaviour:
   targetAudioSource: {fileID: 0}
   audioMode: 0
   beepSounds:
-  - {fileID: 8300000, guid: 774486030b696474e8b3cf7f178123da, type: 3}
-  - {fileID: 8300000, guid: f637c5ce9d10e45c7855ed89bfc6b97e, type: 3}
-  - {fileID: 8300000, guid: c53b7c20372e444c6bd7f2ac0729bbe2, type: 3}
+  - {fileID: 8300000, guid: 3144576b5a84b3846ac91a290d84020f, type: 3}
+  - {fileID: 8300000, guid: f412c7fabb1c1ce44a71a3cbef3ec6e7, type: 3}
+  - {fileID: 8300000, guid: d572c851f1d7b404fbd78cc5ba2839a3, type: 3}
   soundEffect: {fileID: 0}
   inputSound: {fileID: 8300000, guid: 14a396b1562834718b2d52b9c4639264, type: 3}
 --- !u!114 &987012401
@@ -4071,7 +4079,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 757274638}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -5114,7 +5122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2023218185
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5147,7 +5155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

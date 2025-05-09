@@ -15,6 +15,8 @@ public class TutorialControl : MonoBehaviour
     Flowchart chart;
 
     bool falling = false;
+    bool waiting = false;
+    bool mapActive = false;
 
     PS5Input GetInputs;
 
@@ -37,7 +39,7 @@ public class TutorialControl : MonoBehaviour
     void Start()
     {
         chart = FindObjectOfType<Flowchart>();
-        SetMap();
+        anim.SetTrigger("controller");
     }
 
     // Update is called once per frame
@@ -47,10 +49,12 @@ public class TutorialControl : MonoBehaviour
         {
             if (GetInputs.PS5Map.Menu.WasPressedThisFrame())
             {
-                mapImage.gameObject.SetActive(!mapImage.gameObject.activeSelf);
+                mapActive = !mapActive;
+                if (mapActive) { StartCoroutine(FadeIn(mapImage, 2.2f)); }
+                else { StartCoroutine(FadeOut(mapImage, 2.2f)); }
             }
 
-            if (GetInputs.PS5Map.Jump.WasPressedThisFrame())
+            if (GetInputs.PS5Map.TutorialForward.WasPressedThisFrame() && waiting)
             {
                 Fall();
             }
@@ -62,6 +66,8 @@ public class TutorialControl : MonoBehaviour
         if (GameManager.INPUT_CONTROLLER) { anim.SetTrigger("controller"); }
         else { anim.SetTrigger("keyboard"); }
         mapImage.SetNativeSize();
+        mapActive = true;
+        StartCoroutine(FadeIn(mapImage, 2.2f));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -70,6 +76,11 @@ public class TutorialControl : MonoBehaviour
         falling = true;
         FindObjectOfType<PlayerController>().SetState(FindObjectOfType<PlayerController>().freefallState);
         Destroy(GetComponent<Collider>());
+    }
+
+    public void Wait()
+    {
+        waiting = true;
     }
 
     public void StartMovement()
@@ -86,18 +97,33 @@ public class TutorialControl : MonoBehaviour
     public void Fall()
     {
         FindObjectOfType<PlayerController>().SetState(FindObjectOfType<PlayerController>().freeRoamState);
-        StartCoroutine(Fade());
+        StartCoroutine(FadeIn(blackout, 0.8f));
     }
 
-    IEnumerator Fade()
+    IEnumerator FadeIn(Image image, float speed)
     {
         float a = 0;
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         while (a < 1)
         {
-            a += 1.2f * Time.deltaTime;
-            blackout.color = new Color(blackout.color.r, blackout.color.g, blackout.color.b, a);
+            a += speed * Time.deltaTime;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, a);
             yield return null;
         }
-        LoadMenu();
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        if (image == blackout) { LoadMenu(); }
+    }
+
+    IEnumerator FadeOut(Image image, float speed)
+    {
+        float a = 1;
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        while (a > 0)
+        {
+            a -= speed * Time.deltaTime;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, a);
+            yield return null;
+        }
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
     }
 }
