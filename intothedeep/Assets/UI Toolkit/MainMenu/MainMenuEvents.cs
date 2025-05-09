@@ -22,6 +22,7 @@ public class MainMenuEvents : MonoBehaviour
     private Button tutorialButton;
     private Button inputButton;
     private Button quitButton;
+    private Button creditsButton;
     private List<Button> levelChildrenButtons = new List<Button>();
     private List<VisualElement> allElements = new List<VisualElement>();
 
@@ -61,8 +62,9 @@ public class MainMenuEvents : MonoBehaviour
         levelButton = uIDocument.rootVisualElement.Q("LevelButton") as Button;
         level1Button = uIDocument.rootVisualElement.Q("Level1Button") as Button;
         tutorialButton = uIDocument.rootVisualElement.Q("Tutorial") as Button;
-        inputButton = uIDocument.rootVisualElement.Q("Input") as Button;
+        //inputButton = uIDocument.rootVisualElement.Q("Input") as Button;
         quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
+        creditsButton = uIDocument.rootVisualElement.Q("Credits") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
         levelChildrenButtons = uIDocument.rootVisualElement.Query<Button>(null, "levelChildren").ToList();
 
@@ -79,8 +81,9 @@ public class MainMenuEvents : MonoBehaviour
         // IDK WHY but registering these buttons is breaking the game start
         // FIX ^^^ it was because the reference to the button was wrong lol
         tutorialButton.RegisterCallback<ClickEvent>(onTutorialButton);
-        inputButton.RegisterCallback<ClickEvent>(onInputButton);
+        //inputButton.RegisterCallback<ClickEvent>(onInputButton);
         quitButton.RegisterCallback<ClickEvent>(onQuitButton);
+        creditsButton.RegisterCallback<ClickEvent>(onCreditsButton);
         foreach (Button button in allButtons) { button.RegisterCallback<ClickEvent>(onAllButtons); }
         //Miscelleaneous Things
         //Make Inactive Buttons Dissapear
@@ -106,8 +109,9 @@ public class MainMenuEvents : MonoBehaviour
         levelButton.UnregisterCallback<ClickEvent>(onPlayButton);
         level1Button.UnregisterCallback<ClickEvent>(onPlayParentButtons);
         tutorialButton.UnregisterCallback<ClickEvent>(onTutorialButton);
-        inputButton.UnregisterCallback<ClickEvent>(onInputButton);
+        //inputButton.UnregisterCallback<ClickEvent>(onInputButton);
         quitButton.UnregisterCallback<ClickEvent>(onQuitButton);
+        creditsButton.UnregisterCallback<ClickEvent>(onCreditsButton);
         foreach (Button button in allButtons) { button.UnregisterCallback<ClickEvent>(onAllButtons); }
     }
 
@@ -135,13 +139,8 @@ public class MainMenuEvents : MonoBehaviour
     //Play Button
     private void onPlayButton(ClickEvent e)
     {
-        /**
-        foreach (Button button in levelChildrenButtons)
-        {
-            if (button.ClassListContains("levelChildrenInactive")) { button.RemoveFromClassList("levelChildrenInactive"); }
-            else { button.AddToClassList("levelChildrenInactive"); }
-        }
-        */
+        if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
+        else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
     }
 
     private void onPlayParentButtons(ClickEvent e)
@@ -153,6 +152,11 @@ public class MainMenuEvents : MonoBehaviour
     private void onTutorialButton(ClickEvent e)
     {
         SceneManager.LoadScene("Tutorial");
+    }
+
+    private void onCreditsButton(ClickEvent e)
+    {
+        SceneManager.LoadScene("Credits");
     }
 
     private void onInputButton(ClickEvent e)

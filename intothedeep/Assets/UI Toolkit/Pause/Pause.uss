@@ -4,7 +4,7 @@
 
 .text {
     font-size: 48px;
-    color: rgb(255, 255, 255);
+    color: rgb(48, 151, 188);
     left: 104px;
     top: 314px;
     background-color: rgba(0, 0, 0, 0);
@@ -21,4 +21,13 @@
     font-size: 55px;
     transition-duration: 0.2s;
     transition-timing-function: ease-in;
+    color: rgb(255, 255, 255);
+}
+
+.button {
+    color: rgb(48, 151, 188);
+}
+
+.button:hover {
+    color: rgb(255, 255, 255);
 }
