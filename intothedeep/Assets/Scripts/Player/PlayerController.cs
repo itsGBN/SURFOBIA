@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private float currentTurnSpeed;
     private float turnHold; // how long we've been holding turn
 
+    private float savedIdleFloat;
     public float idleFloat = 0.2f;
     [Header("Auto Deceleration")]
     [Tooltip("After forward is released，speed decelerates to idleSpeed")]
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer; // Layer mask for ground detection
     public bool isGrounded;
     public bool grounding;
+    public float fallOffset = -100;
 
     public IPlayerState currentState;
     public FreeRoamState freeRoamState;
@@ -209,39 +211,35 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Escape registered in Update() - transition from ZeroState");
 
         }
-
-        // if (GetInputs.PS5Map.Restart.WasPressedThisFrame())
-        // {
-        //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        // }
-
-        if (transform.position.y < -100 && !TUTORIAL)
+        
+        float fallThreshold = CheckPointScript.checkpointPosition.y +fallOffset;
+        if (!TUTORIAL && transform.position.y < fallThreshold)
         {
+            ResetMovement();
             GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
         }
         
-        // 在 Update() 里
+       
         bool wasGrounded = prevIsGrounded;
 
-// 离地：第一帧重置 airTime，之后累加
+
         if (!isGrounded)
         {
             if (wasGrounded)
             {
                 airTime = 0f;
-                wasInAir = true;          // ← 新增
+                wasInAir = true;        
             }
             airTime += Time.deltaTime;
         }
-
-// 地面状态切换（落地或起跳）
+        
         if (isGrounded != wasGrounded)
         {
-            // 切摄像机动画
+            
             cameraAnimator.SetBool("inAir", !isGrounded);
 
-            // 起跳时设 FOV
+           
             if (!isGrounded && !airFovSet)
             {
                 float dynamicThreshold = (moveSpeed - currentSpeed) * startThresholdFraction;
@@ -291,6 +289,20 @@ public class PlayerController : MonoBehaviour
         airCam.m_Lens.FieldOfView = defaultAirFOV;
         airCamNoise.m_FrequencyGain = defaultNoiseFreq;
         if (airCamComposer != null) airCamComposer.m_VerticalDamping = defaultVerticalDamping;
+    }
+
+    public void ResetMovement()
+    {
+        rb.velocity        = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        currentSpeed       = 0f;
+        currentTurnSpeed   = 0f;
+        savedIdleFloat = idleFloat;
+        idleFloat = 0;
+    }
+    public void RestoreIdleFloatAfterRespawn()
+    {
+        idleFloat = savedIdleFloat;
     }
 
     //SETTING THE NEW STATE
@@ -495,7 +507,10 @@ public class PlayerController : MonoBehaviour
             // Get direction the player is facing and project it onto the surface plane
             Vector3 inputDirection = player.transform.forward;
             Vector3 flattenedDirection = Vector3.ProjectOnPlane(inputDirection, player.currentSurfaceNormal).normalized;
-
+            if (player.idleFloat == 0f && Mathf.Abs(moveInput) > deadZone)
+            {
+                player.idleFloat = player.savedIdleFloat;
+            }
             // Braking, threshold makes deadzone for pulling the stick back
             if (moveInput < player.brakeThreshold && player.currentSpeed > 0 && player.isGrounded)
             {
