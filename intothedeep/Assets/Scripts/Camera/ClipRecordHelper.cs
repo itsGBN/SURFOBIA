@@ -49,34 +49,11 @@ public class ClipRecordHelper : MonoBehaviour
     public void ReduceFocus()
     {
         
-        Time.timeScale = 0.2f;
-        player.idleFloat = 10f;
-        // 停掉上一次、再来一次
-        if (_running != null) StopCoroutine(_running);
-        _running = StartCoroutine(LerpFocus(_dof.focusDistance.value, targetFocusDistance, resetDuration));
+        Time.timeScale = 0.02f;
+        player.idleFloat = 20f;
+
     }
 
-    // 可选重置
-    public void ResetFocus()
-    {
-        if (_running != null) StopCoroutine(_running);
-        _running = StartCoroutine(LerpFocus(_dof.focusDistance.value, _originalFocusDistance, resetDuration));
-    }
 
-    // 核心：在 duration 秒内插值 from→to
-    private IEnumerator LerpFocus(float from, float to, float duration)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            // 你可以改 Ease（比如 t = t*t）
-            float cur = Mathf.Lerp(from, to, t);
-            _dof.focusDistance.value = cur;
-            yield return null;
-        }
-        _dof.focusDistance.value = to;
-        _running = null;
-    }
+
 }
