@@ -258,7 +258,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
 
-                    HUD.instance.onPlayerTrickHud("Flip", 20);
+                    HUD.instance.onPlayerTrickHud("Flip", 200);
                     perfectTrick.Play();
                     AudioManager.instance.Trick();
 
@@ -288,7 +288,7 @@ public class MantaAnimation : MonoBehaviour
                     totalPoints += 200;
                     if (bodyRotationSpeed < 15) bodyRotationSpeed += 1;
 
-                    HUD.instance.onPlayerTrickHud("Flip" ,20);
+                    HUD.instance.onPlayerTrickHud("Flip" ,200);
                     perfectTrick.Play();
                     AudioManager.instance.Trick();
 
@@ -324,7 +324,7 @@ public class MantaAnimation : MonoBehaviour
                         totalPoints += 100;
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
 
-                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 100);
                         goodTrick.Play();
                         AudioManager.instance.Trick();
 
@@ -342,7 +342,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 1;
-                        HUD.instance.onPlayerTrickHud("Spin", 5);
+                        HUD.instance.onPlayerTrickHud("Spin", 50);
 
                         badTrick.Play();
                         AudioManager.instance.Trick();
@@ -377,7 +377,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 100;
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
-                        HUD.instance.onPlayerTrickHud("Grab Spin", 10);
+                        HUD.instance.onPlayerTrickHud("Grab Spin", 100);
                         goodTrick.Play();
                         AudioManager.instance.Trick();
                         totalRotation = 0;
@@ -399,7 +399,7 @@ public class MantaAnimation : MonoBehaviour
                     {
                         totalPoints += 50;
                         if (rotationSpeed < 22) rotationSpeed += 1;
-                        HUD.instance.onPlayerTrickHud("Spin", 5);
+                        HUD.instance.onPlayerTrickHud("Spin", 50);
                         badTrick.Play();
                         AudioManager.instance.Trick();
                         totalRotation = 0;

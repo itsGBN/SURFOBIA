@@ -216,10 +216,10 @@ public class HUD : MonoBehaviour
 
         StartCoroutine(MoveTrick(queueArray));
 
-        scoreNum+= (points * comboNum);
+        scoreNum += (points * comboNum);
         scoreLabel.text = scoreNum.ToString(); 
 
-        progressBar.value += points;
+        progressBar.value += points / 10;
         if(progressBar.value > 100) { progressBar.value = 0; comboNum += .5f; comboLabel.text = "x"+comboNum.ToString(); }
 
     }
