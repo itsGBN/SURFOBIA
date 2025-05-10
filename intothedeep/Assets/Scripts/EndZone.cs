@@ -20,9 +20,16 @@ public class EndZone : MonoBehaviour
     {
         if (other.GetComponent<PlayerController>() != null)
         {
-            GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
+            StartCoroutine(EndGame());
             HighScore.instance.scoreActive = true;
             other.GetComponent<PlayerController>().enabled = false;
         }
+    }
+
+    //create endgame coroutine
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(2f);
+        GameManager.instance.UpdateState(GameManager.GameState.ENDGAME);
     }
 }
