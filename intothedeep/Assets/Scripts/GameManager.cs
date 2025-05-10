@@ -103,17 +103,10 @@ public class GameManager : MonoBehaviour
 
         if (GetInputs.PS5Map.Restart.WasPressedThisFrame() && MainMenuEvents.instance.focusMenu == true)
         {
-            // switch (SceneManager.GetActiveScene().name)
-            // {
-            // case "Playtest Scene":
+            
             UpdateState(GameState.READY);
             CheckPointScript.checkpointPosition = new Vector3(-231f, 91.46f,29.88f);
-            // break;
-            // }
-            //MusicManager.instance.FadeOut();
-            //StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1.5f));
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            
         }
     }
 
@@ -167,7 +160,7 @@ public class GameManager : MonoBehaviour
             case GameState.RACING:
                 {
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
-                    if (tempPlayer != null)
+                    if (tempPlayer != null && lastState==GameState.COUNTING)
                     {
                         tempPlayer.idleFloat = savedIdleFloat;
                     }

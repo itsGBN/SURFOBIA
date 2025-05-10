@@ -4,52 +4,66 @@ using UnityEngine;
 public class ResetPositionTool : EditorWindow
 {
     private GameObject player;
-    private Vector3 targetPosition;
+    private Vector3   targetPosition;
+    private float     idleFloatValue;
 
-    [MenuItem("Tools/Reset Player Position")]
+    [MenuItem("Tools/Reset Player Position & IdleFloat")]
     public static void ShowWindow()
     {
-        GetWindow<ResetPositionTool>("Reset Position");
+        GetWindow<ResetPositionTool>("Reset Player");
     }
 
     void OnGUI()
     {
-        GUILayout.Label("Player Teleport Tool", EditorStyles.boldLabel);
+        GUILayout.Label("Player Reset Tool", EditorStyles.boldLabel);
         
         // 选择玩家对象
         player = (GameObject)EditorGUILayout.ObjectField(
-            new GUIContent("Player GameObject", "drag the player object to here"),
+            new GUIContent("Player GameObject", "Drag the player object here"),
             player,
             typeof(GameObject),
             true
         );
 
-        // 设置目标位置
+        GUILayout.Space(5);
+        // 目标位置字段
         targetPosition = EditorGUILayout.Vector3Field(
-            new GUIContent("Target Position", "player will be moved to here"),
+            new GUIContent("Target Position", "Position to move the player to"),
             targetPosition
         );
 
-        GUILayout.Space(10);
+        GUILayout.Space(5);
+        // Idle Float 字段
+        idleFloatValue = EditorGUILayout.FloatField(
+            new GUIContent("Idle Float", "Value to assign to PlayerController.idleFloat"),
+            idleFloatValue
+        );
 
-        // 重置按钮
+        GUILayout.Space(10);
+        EditorGUI.BeginDisabledGroup(player == null);
+        // 重置位置按钮
         if (GUILayout.Button("Reset Position"))
         {
-            if (player != null)
+            Undo.RecordObject(player.transform, "Reset Player Position");
+            player.transform.position = targetPosition;
+        }
+
+        GUILayout.Space(5);
+        // 重置 idleFloat 按钮
+        if (GUILayout.Button("Reset Idle Float"))
+        {
+            var pc = player.GetComponent<PlayerController>();
+            if (pc != null)
             {
-                Undo.RecordObject(player.transform, "Reset Player Position");
-                player.transform.position = targetPosition;
-                // 如果你想也重置旋转，可加：
-                // player.transform.rotation = Quaternion.identity;
+                Undo.RecordObject(pc, "Reset idleFloat");
+                pc.idleFloat = idleFloatValue;
+                EditorUtility.SetDirty(pc);
             }
             else
             {
-                EditorUtility.DisplayDialog(
-                    "Error",
-                    "Please give me a player object",
-                    "OK"
-                );
+                EditorUtility.DisplayDialog("Error", "Selected object has no PlayerController component.", "OK");
             }
         }
+        EditorGUI.EndDisabledGroup();
     }
 }

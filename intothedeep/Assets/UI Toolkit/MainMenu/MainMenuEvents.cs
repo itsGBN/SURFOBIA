@@ -176,8 +176,8 @@ public class MainMenuEvents : MonoBehaviour
     //Play Button
     private void onPlayButton(ClickEvent e)
     {
-        if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
-        else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
+        //if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
+        //else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
     }
 
     private void onPlayParentButtons(ClickEvent e)
