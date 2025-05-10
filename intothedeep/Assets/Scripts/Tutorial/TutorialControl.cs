@@ -102,6 +102,7 @@ public class TutorialControl : MonoBehaviour
 
     IEnumerator FadeIn(Image image, float speed)
     {
+        Debug.Log("Fade in");
         float a = 0;
         image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         while (a < 1)
@@ -116,6 +117,7 @@ public class TutorialControl : MonoBehaviour
 
     IEnumerator FadeOut(Image image, float speed)
     {
+        Debug.Log("Fade out");
         float a = 1;
         image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
         while (a > 0)
