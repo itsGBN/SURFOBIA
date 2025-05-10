@@ -220,6 +220,8 @@ public class MantaAnimation : MonoBehaviour
         skeletonAnim.SetFloat("Joystick", joystick);
         mantaAnim.SetFloat("Joystick", joystick);
 
+        if (isGrinding && isMove) ActivateTrick();
+
     }
 
     private void FixedUpdate()
@@ -306,6 +308,7 @@ public class MantaAnimation : MonoBehaviour
                 {
                     totalRotation = 0;
                     rotationSpeed = startRotationSpeed;
+                    holdingRotationSpeed = startHoldingRotationSpeed;
                     comboMultiplier = 0;
                 }
 
@@ -319,7 +322,7 @@ public class MantaAnimation : MonoBehaviour
                     if (totalRotation > comboThreshold)
                     {
                         totalPoints += 100;
-                        if (holdingRotationSpeed < 18) rotationSpeed += 2;
+                        if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
 
                         HUD.instance.onPlayerTrickHud("Grab Spin", 10);
                         goodTrick.Play();
@@ -365,6 +368,7 @@ public class MantaAnimation : MonoBehaviour
                     if (totalRotation > 0)
                     {
                         totalRotation = 0;
+                        rotationSpeed = startRotationSpeed;
                         holdingRotationSpeed = startHoldingRotationSpeed;
                         comboMultiplier = 0;
                     }
