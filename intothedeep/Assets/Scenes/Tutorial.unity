@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 656733882}
-  m_IndirectSpecularColor: {r: 0.047465563, g: 0.098504886, b: 0.1795624, a: 1}
+  m_IndirectSpecularColor: {r: 0.048705958, g: 0.10028491, b: 0.18282105, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.7738964, g: 0.8773585, b: 0.87443906, a: 1}
+  m_fontColor: {r: 0.9481132, g: 1, b: 0.9980783, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1401,11 +1401,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 190.50107, y: 194.47873}
+  scrollPos: {x: 198.62462, y: 200.9171}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 481
-  zoom: 1
+  zoom: 0.97199965
   scrollViewRect:
     serializedVersion: 2
     x: -343
@@ -1414,7 +1414,8 @@ MonoBehaviour:
     height: 859
   selectedBlocks:
   - {fileID: 310734067}
-  selectedCommands: []
+  selectedCommands:
+  - {fileID: 310734081}
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1445,7 +1446,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -24.251076
     y: 72.02126
-    width: 76
+    width: 75.72018
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1730,7 +1731,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 125.76168
     y: 128.90637
-    width: 94
+    width: 93.20989
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1774,7 +1775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 13
   indentLevel: 0
-  storyText: <color=#00FFFF>Cod-dang it!</color> You ain't messing with me. Well
+  storyText: <color=#00FFBF>Cod-dang it!</color> You ain't messing with me. Well
     thank Poseidon I'm such a good surf instructor!
   description: 
   character: {fileID: 9205824353549915418}
@@ -1883,8 +1884,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 17
   indentLevel: 0
-  storyText: Only the surfer with the <color=#00FFFF>gnarliest</color> tricks will
-    be able to win, and only <b>one</b> surfer can win.
+  storyText: Only the surfer with the <color=#00FFBF><b>gnarliest</b></color> tricks
+    will be able to win, and only <color=#00FFBF><b>one</b></color> surfer can win.
   description: 
   character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
@@ -1939,7 +1940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 15
   indentLevel: 0
-  storyText: You are competing in Poseidon's infamous <color=#00FFFF>RAY SURFING
+  storyText: You are competing in Poseidon's infamous <color=#00FFBF>RAY SURFING
     COMPETITION</color>.
   description: 
   character: {fileID: 9205824353549915418}
@@ -1995,7 +1996,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 22
   indentLevel: 0
-  storyText: When in the air, you can perform tricks.
+  storyText: While in the air, you can perform tricks using <color=#00FFBF><b>RIGHT
+    STICK or IJKL</b></color>
   description: 
   character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
@@ -2022,8 +2024,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 21
   indentLevel: 0
-  storyText: Use <b>[LEFT STICK]</b> to move and steer your ray. Press <b>[X]</b>
-    to JUMP.
+  storyText: Use <color=#00FFBF><b>LEFT STICK or WASD</b></color> to move and steer
+    your ray. Press <color=#00FFBF><b>X or SPACE</b></color> to JUMP.
   description: 
   character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
@@ -2050,7 +2052,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 23
   indentLevel: 0
-  storyText: Press [START] to hide or show the control map.
+  storyText: Press <color=#00FFBF><b>START or ESCAPE</b></color> to hide or show
+    the control map.
   description: 
   character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
@@ -2105,7 +2108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 25
   indentLevel: 0
-  storyText: Press the JUMP button once you're ready for <color=#00FFFF>POSEIDON'S
+  storyText: Press the <color=#00FFBF>JUMP</color> button once you're ready for <color=#00FFBF>POSEIDON'S
     CHALLENGE</color>.
   description: 
   character: {fileID: 9205824353549915418}
@@ -2867,7 +2870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8443396, g: 0.9937777, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3590,7 +3593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5176471, g: 0.81960785, b: 0.84313726, a: 1}
+  m_Color: {r: 0.42512906, g: 0.9103774, b: 0.72340095, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8692,7 +8695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.51775545, g: 0.82156056, b: 0.8443396, a: 1}
+  m_Color: {r: 0.30348876, g: 0.7311321, b: 0.56625754, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -35054,6 +35057,7 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 0
   grounding: 0
+  fallOffset: -100
   diveForwardSpeed: 5
   diveFallSpeed: -5
   isBoosting: 0
