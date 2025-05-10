@@ -31,3 +31,10 @@
 .button:hover {
     color: rgb(255, 255, 255);
 }
+
+.buttonhover {
+    color: rgb(255, 255, 255);
+}
+
+.dpadbuttons {
+}

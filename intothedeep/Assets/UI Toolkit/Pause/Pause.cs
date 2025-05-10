@@ -22,6 +22,8 @@ public class Pause : MonoBehaviour
     private Button mainMenuButton;
     private Button quitButton;
     private Button resumeButton;
+    private List<Button> dpadButtons = new List<Button>();
+    private int dpadnum = 0;
 
 
     //visualelement
@@ -51,6 +53,7 @@ public class Pause : MonoBehaviour
         quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
         resumeButton = uIDocument.rootVisualElement.Q("Resume") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
+        dpadButtons = uIDocument.rootVisualElement.Query<Button>(null, "dpadbuttons").ToList();
 
         //Refernce Visual Elements
         puase = uIDocument.rootVisualElement.Q("Background") as VisualElement;
@@ -95,8 +98,43 @@ public class Pause : MonoBehaviour
     {
         if ((GetInputs.PS5Map.Menu.WasPressedThisFrame() || isResume) && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
         {
-            if (puase.ClassListContains("inactive")) { puase.RemoveFromClassList("inactive"); MainMenuEvents.instance.focusMenu = true; Time.timeScale = 0; }
-            else { puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1; }
+            switch (dpadnum)
+            {
+                case 0:
+                    if (puase.ClassListContains("inactive")) { puase.RemoveFromClassList("inactive"); MainMenuEvents.instance.focusMenu = true; Time.timeScale = 0; }
+                    else { puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1; }
+                    break;
+                case 1:
+                    GameManager.instance.gameState = GameManager.GameState.READY;
+                    SceneManager.LoadScene("Leve1");
+                    break;
+                case 2:
+                    SceneManager.LoadScene("Credits");
+                    break;
+                case 3:
+                    Debug.Log("Application Quit");
+                    Application.Quit();
+                    break;
+            }
+        }
+
+        if (GetInputs.PS5Map.MenuRight.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
+        {
+            dpadButtons[dpadnum].RemoveFromClassList("buttonhover");
+            dpadnum += 1;
+            if (dpadnum > 3) { dpadnum = 0; }
+            dpadButtons[dpadnum].AddToClassList("buttonhover");
+            print(dpadnum);
+
+        }
+        if (GetInputs.PS5Map.MenuLeft.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
+        {
+            dpadButtons[dpadnum].RemoveFromClassList("buttonhover");
+            dpadnum -= 1;
+            if (dpadnum < 0) { dpadnum = 3; }
+            dpadButtons[dpadnum].AddToClassList("buttonhover");
+            print(dpadnum);
+
         }
     }
 

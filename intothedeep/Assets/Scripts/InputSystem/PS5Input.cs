@@ -179,6 +179,24 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""38d4bcb9-c575-41e2-a93f-90a62b935b87"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d6056bc-faf2-45f5-b5e7-c8a268e81291"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -709,6 +727,94 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""action"": ""TutorialForward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa904f48-354f-4429-b6ae-0fb4a3669602"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5bd56257-9fa5-4a92-a81f-0a9b9bd246e2"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86ddc22d-f822-493a-bba8-333be10b9eb1"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2cf185e6-0b2f-4fb7-8008-2308690a2ad3"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b8bb1ef-c68c-4aa6-ab02-7d1496a4ab41"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92edc04a-9855-4f12-bff7-f1e1758e9cae"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89972cd6-95a8-458c-9090-3c87563127b5"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a05d427-51ad-4518-924b-395776b8a2fc"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -734,6 +840,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         m_PS5Map_LeftBumper = m_PS5Map.FindAction("LeftBumper", throwIfNotFound: true);
         m_PS5Map_RightBumper = m_PS5Map.FindAction("RightBumper", throwIfNotFound: true);
         m_PS5Map_TutorialForward = m_PS5Map.FindAction("TutorialForward", throwIfNotFound: true);
+        m_PS5Map_MenuLeft = m_PS5Map.FindAction("Menu Left", throwIfNotFound: true);
+        m_PS5Map_MenuRight = m_PS5Map.FindAction("Menu Right", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -812,6 +920,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_PS5Map_LeftBumper;
     private readonly InputAction m_PS5Map_RightBumper;
     private readonly InputAction m_PS5Map_TutorialForward;
+    private readonly InputAction m_PS5Map_MenuLeft;
+    private readonly InputAction m_PS5Map_MenuRight;
     public struct PS5MapActions
     {
         private @PS5Input m_Wrapper;
@@ -833,6 +943,8 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         public InputAction @LeftBumper => m_Wrapper.m_PS5Map_LeftBumper;
         public InputAction @RightBumper => m_Wrapper.m_PS5Map_RightBumper;
         public InputAction @TutorialForward => m_Wrapper.m_PS5Map_TutorialForward;
+        public InputAction @MenuLeft => m_Wrapper.m_PS5Map_MenuLeft;
+        public InputAction @MenuRight => m_Wrapper.m_PS5Map_MenuRight;
         public InputActionMap Get() { return m_Wrapper.m_PS5Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -893,6 +1005,12 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @TutorialForward.started += instance.OnTutorialForward;
             @TutorialForward.performed += instance.OnTutorialForward;
             @TutorialForward.canceled += instance.OnTutorialForward;
+            @MenuLeft.started += instance.OnMenuLeft;
+            @MenuLeft.performed += instance.OnMenuLeft;
+            @MenuLeft.canceled += instance.OnMenuLeft;
+            @MenuRight.started += instance.OnMenuRight;
+            @MenuRight.performed += instance.OnMenuRight;
+            @MenuRight.canceled += instance.OnMenuRight;
         }
 
         private void UnregisterCallbacks(IPS5MapActions instance)
@@ -948,6 +1066,12 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @TutorialForward.started -= instance.OnTutorialForward;
             @TutorialForward.performed -= instance.OnTutorialForward;
             @TutorialForward.canceled -= instance.OnTutorialForward;
+            @MenuLeft.started -= instance.OnMenuLeft;
+            @MenuLeft.performed -= instance.OnMenuLeft;
+            @MenuLeft.canceled -= instance.OnMenuLeft;
+            @MenuRight.started -= instance.OnMenuRight;
+            @MenuRight.performed -= instance.OnMenuRight;
+            @MenuRight.canceled -= instance.OnMenuRight;
         }
 
         public void RemoveCallbacks(IPS5MapActions instance)
@@ -984,5 +1108,7 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         void OnLeftBumper(InputAction.CallbackContext context);
         void OnRightBumper(InputAction.CallbackContext context);
         void OnTutorialForward(InputAction.CallbackContext context);
+        void OnMenuLeft(InputAction.CallbackContext context);
+        void OnMenuRight(InputAction.CallbackContext context);
     }
 }

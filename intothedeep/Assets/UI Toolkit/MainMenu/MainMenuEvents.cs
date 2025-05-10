@@ -24,6 +24,8 @@ public class MainMenuEvents : MonoBehaviour
     private Button quitButton;
     private Button creditsButton;
     private List<Button> levelChildrenButtons = new List<Button>();
+    private List<Button> dpadButtons = new List<Button>();
+    private int dpadnum = 0;
     private List<VisualElement> allElements = new List<VisualElement>();
 
     private VisualElement fadeIn;
@@ -67,6 +69,7 @@ public class MainMenuEvents : MonoBehaviour
         creditsButton = uIDocument.rootVisualElement.Q("Credits") as Button;
         allButtons = uIDocument.rootVisualElement.Query<Button>().ToList();
         levelChildrenButtons = uIDocument.rootVisualElement.Query<Button>(null, "levelChildren").ToList();
+        dpadButtons = uIDocument.rootVisualElement.Query<Button>(null, "dpadbuttons").ToList();
 
         //Reference Visual Elements
         trasitionTypes = uIDocument.rootVisualElement.Q("TransitionTypes") as VisualElement;
@@ -95,6 +98,7 @@ public class MainMenuEvents : MonoBehaviour
 
         //Get AudioSource
         buttonSound = GetComponent<AudioSource>();
+        dpadButtons[dpadnum].AddToClassList("buttonhover");
     }
 
     private void OnEnable()
@@ -125,9 +129,42 @@ public class MainMenuEvents : MonoBehaviour
     {
         if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
         {
-            //Debug.Log("check"); BUG THIS IF STATEMENT ISNT RUNNING WHEN RELOADING FROM ENTIRE GAME LOOP (MAIN MENU)
-            if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
-            else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
+            switch (dpadnum) 
+            {
+                case 0:
+                    if (mainMenu.ClassListContains("menuInactive")) { mainMenu.RemoveFromClassList("menuInactive"); focusMenu = true; GameManager.instance.PauseGame(); }
+                    else { mainMenu.AddToClassList("menuInactive"); focusMenu = false; GameManager.instance.UnpauseGame(); }
+                    break;
+                case 1:
+                    SceneManager.LoadScene("Tutorial");
+                    break;
+                case 2:
+                    SceneManager.LoadScene("Credits");
+                    break;
+                case 3:
+                    Debug.Log("Application Quit");
+                    Application.Quit();
+                    break;
+            }
+        }
+
+        if (GetInputs.PS5Map.MenuRight.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
+        {
+            dpadButtons[dpadnum].RemoveFromClassList("buttonhover");
+            dpadnum += 1;
+            if(dpadnum > 3) { dpadnum = 0; }
+            dpadButtons[dpadnum].AddToClassList("buttonhover");
+            print(dpadnum);
+
+        }
+        if (GetInputs.PS5Map.MenuLeft.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
+        {
+            dpadButtons[dpadnum].RemoveFromClassList("buttonhover");
+            dpadnum -= 1;
+            if (dpadnum < 0) { dpadnum = 3; }
+            dpadButtons[dpadnum].AddToClassList("buttonhover");
+            print(dpadnum);
+
         }
     }
 
