@@ -260,7 +260,7 @@ public class MantaAnimation : MonoBehaviour
 
                     HUD.instance.onPlayerTrickHud("Flip", 200);
                     perfectTrick.Play();
-                    AudioManager.instance.Trick();
+                    AudioManager.instance.Flip();
 
                     totalBodyRotation = 0;
                     bodyTrickCount++;
@@ -290,7 +290,7 @@ public class MantaAnimation : MonoBehaviour
 
                     HUD.instance.onPlayerTrickHud("Flip" ,200);
                     perfectTrick.Play();
-                    AudioManager.instance.Trick();
+                    AudioManager.instance.Flip();
 
                     totalBodyRotation = 0;
                     bodyTrickCount++;
@@ -326,7 +326,7 @@ public class MantaAnimation : MonoBehaviour
 
                         HUD.instance.onPlayerTrickHud("Grab Spin", 100);
                         goodTrick.Play();
-                        AudioManager.instance.Trick();
+                        AudioManager.instance.GrabSpin();
 
                         totalRotation = 0;
                         mantaTrickCount++;
@@ -345,7 +345,7 @@ public class MantaAnimation : MonoBehaviour
                         HUD.instance.onPlayerTrickHud("Spin", 50);
 
                         badTrick.Play();
-                        AudioManager.instance.Trick();
+                        AudioManager.instance.Spin();
                         //AudioManager.instance.Trick();
 
                         totalRotation = 0;
@@ -379,7 +379,7 @@ public class MantaAnimation : MonoBehaviour
                         if (holdingRotationSpeed < 18) holdingRotationSpeed += 2;
                         HUD.instance.onPlayerTrickHud("Grab Spin", 100);
                         goodTrick.Play();
-                        AudioManager.instance.Trick();
+                        AudioManager.instance.GrabSpin();
                         totalRotation = 0;
                         mantaTrickCount++;
                     }
@@ -401,7 +401,7 @@ public class MantaAnimation : MonoBehaviour
                         if (rotationSpeed < 22) rotationSpeed += 1;
                         HUD.instance.onPlayerTrickHud("Spin", 50);
                         badTrick.Play();
-                        AudioManager.instance.Trick();
+                        AudioManager.instance.Spin();
                         totalRotation = 0;
                         mantaTrickCount++;
                     }

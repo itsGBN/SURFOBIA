@@ -97,7 +97,7 @@
 }
 
 #Combo .unity-progress-bar__progress {
-    background-color: rgb(0, 229, 118);
+    background-color: rgb(0, 167, 45);
     background-image: none;
     -unity-text-outline-color: rgba(255, 255, 255, 0);
 }
