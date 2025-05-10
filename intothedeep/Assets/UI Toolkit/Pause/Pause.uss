@@ -26,10 +26,14 @@
 
 .button {
     color: rgb(48, 151, 188);
+    -unity-font: url("project://database/Assets/Fonts/Helvetica.ttf?fileID=12800000&guid=1cd6824dcf37f1d47a53c6d7d11ff869&type=3#Helvetica");
+    -unity-font-definition: url("project://database/Assets/Fonts/Helvetica%20SDF.asset?fileID=11400000&guid=13658d39d9b202d4aa5067ee4c40f6e5&type=2#Helvetica SDF");
 }
 
 .button:hover {
     color: rgb(255, 255, 255);
+    -unity-font: url("project://database/Assets/Fonts/Helvetica.ttf?fileID=12800000&guid=1cd6824dcf37f1d47a53c6d7d11ff869&type=3#Helvetica");
+    -unity-font-definition: url("project://database/Assets/Fonts/Helvetica%20SDF.asset?fileID=11400000&guid=13658d39d9b202d4aa5067ee4c40f6e5&type=2#Helvetica SDF");
 }
 
 .buttonhover {

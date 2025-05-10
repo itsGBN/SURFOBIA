@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 656733882}
-  m_IndirectSpecularColor: {r: 0.048705958, g: 0.10028491, b: 0.18282105, a: 1}
+  m_IndirectSpecularColor: {r: 0.047465563, g: 0.098504886, b: 0.1795624, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -324,8 +324,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.78700006}
-  m_AnchoredPosition: {x: -178.277, y: 53.65}
-  m_SizeDelta: {x: -12.956, y: -86.587}
+  m_AnchoredPosition: {x: -173.72693, y: 44.212982}
+  m_SizeDelta: {x: 0.5287, y: -30.2745}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97954136
 MonoBehaviour:
@@ -377,8 +377,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3d68667ac8ee3a548bb7329e2c85f2ec, type: 2}
+  m_sharedMaterial: {fileID: -837894802933809534, guid: 3d68667ac8ee3a548bb7329e2c85f2ec,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -402,8 +403,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 85.4
-  m_fontSizeBase: 85.4
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -438,7 +439,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -462.84796, w: 0}
+  m_margin: {x: 0, y: 0, z: -520.0136, w: -104.390305}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1412,9 +1413,8 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 310734054}
-  selectedCommands:
-  - {fileID: 310734082}
+  - {fileID: 310734067}
+  selectedCommands: []
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1445,7 +1445,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -24.251076
     y: 72.02126
-    width: 75
+    width: 76
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: <link=wiggle>Hey.</link>
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1574,7 +1574,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: HEY!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1601,7 +1601,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: ...
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1703,7 +1703,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: That was a pretty bad fall back there. You okay?
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1730,7 +1730,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 125.76168
     y: 128.90637
-    width: 92
+    width: 94
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1777,7 +1777,7 @@ MonoBehaviour:
   storyText: <color=#00FFFF>Cod-dang it!</color> You ain't messing with me. Well
     thank Poseidon I'm such a good surf instructor!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1804,7 +1804,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: You remember where we are, right?
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1831,7 +1831,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: You must have hit your head harder than I thought...
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1858,7 +1858,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Hello?
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   storyText: Only the surfer with the <color=#00FFFF>gnarliest</color> tricks will
     be able to win, and only <b>one</b> surfer can win.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1914,7 +1914,7 @@ MonoBehaviour:
   storyText: Once very millenia, Poseidon lets the top Ray Surfers from all across
     the ocean compete to get resurrected and join the mortal realm once more!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1942,7 +1942,7 @@ MonoBehaviour:
   storyText: You are competing in Poseidon's infamous <color=#00FFFF>RAY SURFING
     COMPETITION</color>.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1997,7 +1997,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: When in the air, you can perform tricks.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -2025,7 +2025,7 @@ MonoBehaviour:
   storyText: Use <b>[LEFT STICK]</b> to move and steer your ray. Press <b>[X]</b>
     to JUMP.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -2052,7 +2052,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Press [START] to hide or show the control map.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -2108,7 +2108,7 @@ MonoBehaviour:
   storyText: Press the JUMP button once you're ready for <color=#00FFFF>POSEIDON'S
     CHALLENGE</color>.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 9205824353549915418}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -2851,8 +2851,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 198.415, y: -71}
-  m_SizeDelta: {x: 354.463, y: 71}
+  m_AnchoredPosition: {x: 147.86826, y: -8}
+  m_SizeDelta: {x: 493.306, y: 203.1937}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &460677858
 MonoBehaviour:
@@ -2876,12 +2876,12 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 0887df800abdad945bf592c76c5f29b4, type: 3}
-    m_FontSize: 50
+    m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 50
-    m_Alignment: 3
+    m_MinSize: 6
+    m_MaxSize: 80
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -3540,6 +3540,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -44.392, y: -140.716, z: 97.22}
+--- !u!1 &639553126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 639553127}
+  - component: {fileID: 639553129}
+  - component: {fileID: 639553128}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &639553127
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639553126}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1843774257}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -603.58234, y: 164.89569}
+  m_SizeDelta: {x: 359.0953, y: 112.2086}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &639553128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639553126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.5176471, g: 0.81960785, b: 0.84313726, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 9a95dc2af40072a4bba62aecbbbe8d6d, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &639553129
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639553126}
+  m_CullTransparentMesh: 1
 --- !u!1 &640527996
 GameObject:
   m_ObjectHideFlags: 0
@@ -8654,9 +8729,10 @@ RectTransform:
   m_LocalScale: {x: 1.2617716, y: 1.2617716, z: 1.2617716}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 460677857}
   - {fileID: 214579921}
   - {fileID: 97954135}
+  - {fileID: 639553127}
+  - {fileID: 460677857}
   m_Father: {fileID: 987012407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -26435,11 +26511,12 @@ MonoBehaviour:
   - {fileID: 7786089456910364466}
   - {fileID: 3559139182275871912}
   - {fileID: 9166827425963386320}
-  filter: {fileID: 505471178342016283}
-  lowFilter: {fileID: 3870092045261957468}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  musicTrigger1: {fileID: 0}
+  musicTrigger2: {fileID: 0}
+  musicTrigger3: {fileID: 0}
   player: {fileID: 3097079286256423364}
 --- !u!1 &1307076196599149926
 GameObject:
@@ -33888,6 +33965,7 @@ GameObject:
   - component: {fileID: 877119210163730101}
   - component: {fileID: 13970646401655216}
   - component: {fileID: 4957633168208071075}
+  - component: {fileID: 9205824353549915418}
   m_Layer: 0
   m_Name: TUTORIALPLAYER
   m_TagString: Untagged
@@ -34997,6 +35075,10 @@ MonoBehaviour:
   maxAirTime: 2
   minImpulseY: -0.3
   maxImpulseY: -1.5
+  minAirTimeForShake: 0.2
+  stateDrivenCamera: {fileID: 0}
+  isOnSpecialSpline: 0
+  specialSplineCams: []
 --- !u!1 &3603935109213802557
 GameObject:
   m_ObjectHideFlags: 0
@@ -98242,6 +98324,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.2980943, y: 3.1314652, z: 1.2870398}
   m_Center: {x: -0.04198146, y: 1.0882645, z: 0.41335818}
+--- !u!114 &9205824353549915418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3097079286256423364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: Dusty Legend
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
+  soundEffect: {fileID: 0}
+  portraits: []
+  portraitsFace: 0
+  setSayDialog: {fileID: 0}
+  description: 
 --- !u!1 &9206137203158966819
 GameObject:
   m_ObjectHideFlags: 0
