@@ -17,13 +17,15 @@ public class HighScore : MonoBehaviour
     private TextField holder;
     private Label winText;
     private Button home;
-    
+    private PS5Input GetInputs;
+
     //Public Variables
     public ScoreSO[] tenScores;
     public bool scoreActive;
 
     private void Awake()
     {
+        GetInputs = new PS5Input();
         //Singleton
         if (instance != null && instance != this) { Destroy(instance); }
         else { instance = this; }
@@ -48,6 +50,17 @@ public class HighScore : MonoBehaviour
         home.RegisterCallback<ClickEvent>(onHomeButton);
     }
 
+    private void OnEnable()
+    {
+        GetInputs.Enable();
+    }
+
+    private void OnDisable()
+    {
+        //Deregister
+        GetInputs.Disable();
+    }
+
     private void Start()
     {
         //Set the Scores of the Leaderboard
@@ -64,6 +77,11 @@ public class HighScore : MonoBehaviour
     {
         //Update Methods
         onActive();
+        if (GetInputs.PS5Map.Menu.WasReleasedThisFrame() && scoreActive && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.ENDGAME)) 
+        {
+            GameManager.instance.UpdateState(GameState.READY);
+            StartCoroutine(MainMenuEvents.instance.onTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
+        }
     }
 
     #region Activating HUD
