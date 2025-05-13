@@ -435,14 +435,20 @@ public class MantaAnimation : MonoBehaviour
             {
                 landing.Play();
                 StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.25f));
-                HUD.instance.onPlayerTrickHud("Perfect Landing!", 10);
+                HUD.instance.onPlayerTrickHud("Perfect!", 15);
                 AudioManager.instance.Boost();
             }
             else if ((graphicsPercent < 30 || graphicsPercent > 70) && (mantaAngle < 70 || mantaAngle > 290))
             {
                 StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.15f));
-                HUD.instance.onPlayerTrickHud("Good Landing", 5);
+                HUD.instance.onPlayerTrickHud("Good", 10);
                 AudioManager.instance.Boost();
+            }
+            else if ((graphicsPercent < 40 || graphicsPercent > 60) && (mantaAngle < 130 || mantaAngle > 230))
+            {
+                StartCoroutine(player.GetComponent<PlayerController>().BoostActivate(0.5f));
+                HUD.instance.onPlayerTrickHud("Fine", 5);
+                //AudioManager.instance.Boost();
             }
         }
 
