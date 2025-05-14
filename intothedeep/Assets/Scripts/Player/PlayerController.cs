@@ -774,7 +774,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(ResetAirFOVSmooth());
                 airFovSet = false;
             }
-            Debug.Log("is touching ground now");
+            //Debug.Log("is touching ground now");
             rb.velocity = Vector3.zero;
             StopDive();
             AudioManager.instance.Run();

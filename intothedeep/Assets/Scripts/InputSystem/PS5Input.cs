@@ -197,6 +197,42 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c880a33-1d1d-4ec1-9449-3a9a57a22086"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""6b0d4b9c-089d-4fe6-a336-93522ffa0512"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""59a5384e-2003-4725-8d17-d99fdb6b8226"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""6da77667-29ee-4f8c-ae19-e35aa5b9333f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -815,6 +851,94 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
                     ""action"": ""Menu Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3929f0be-25ff-4e24-aeda-07d6370f2a8b"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""232d57c7-9b84-4e33-9701-1e47ecb43189"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0548d73-ab68-4320-969d-af2e6a4755f5"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1baae248-a5ae-40c4-b616-b25cda94b9bc"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ef4788f-ba2f-4ced-a9b2-92b8e8d95f69"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b74642f0-cfa1-4492-a10f-e69a66f0173b"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ccc27df8-c741-420b-8ce3-0b370476e90d"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f0d9039-b4d7-44fd-8af1-06019f95b5e8"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -842,6 +966,10 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         m_PS5Map_TutorialForward = m_PS5Map.FindAction("TutorialForward", throwIfNotFound: true);
         m_PS5Map_MenuLeft = m_PS5Map.FindAction("Menu Left", throwIfNotFound: true);
         m_PS5Map_MenuRight = m_PS5Map.FindAction("Menu Right", throwIfNotFound: true);
+        m_PS5Map_LUp = m_PS5Map.FindAction("LUp", throwIfNotFound: true);
+        m_PS5Map_LDown = m_PS5Map.FindAction("LDown", throwIfNotFound: true);
+        m_PS5Map_LLeft = m_PS5Map.FindAction("LLeft", throwIfNotFound: true);
+        m_PS5Map_LRight = m_PS5Map.FindAction("LRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -922,6 +1050,10 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_PS5Map_TutorialForward;
     private readonly InputAction m_PS5Map_MenuLeft;
     private readonly InputAction m_PS5Map_MenuRight;
+    private readonly InputAction m_PS5Map_LUp;
+    private readonly InputAction m_PS5Map_LDown;
+    private readonly InputAction m_PS5Map_LLeft;
+    private readonly InputAction m_PS5Map_LRight;
     public struct PS5MapActions
     {
         private @PS5Input m_Wrapper;
@@ -945,6 +1077,10 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         public InputAction @TutorialForward => m_Wrapper.m_PS5Map_TutorialForward;
         public InputAction @MenuLeft => m_Wrapper.m_PS5Map_MenuLeft;
         public InputAction @MenuRight => m_Wrapper.m_PS5Map_MenuRight;
+        public InputAction @LUp => m_Wrapper.m_PS5Map_LUp;
+        public InputAction @LDown => m_Wrapper.m_PS5Map_LDown;
+        public InputAction @LLeft => m_Wrapper.m_PS5Map_LLeft;
+        public InputAction @LRight => m_Wrapper.m_PS5Map_LRight;
         public InputActionMap Get() { return m_Wrapper.m_PS5Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1011,6 +1147,18 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @MenuRight.started += instance.OnMenuRight;
             @MenuRight.performed += instance.OnMenuRight;
             @MenuRight.canceled += instance.OnMenuRight;
+            @LUp.started += instance.OnLUp;
+            @LUp.performed += instance.OnLUp;
+            @LUp.canceled += instance.OnLUp;
+            @LDown.started += instance.OnLDown;
+            @LDown.performed += instance.OnLDown;
+            @LDown.canceled += instance.OnLDown;
+            @LLeft.started += instance.OnLLeft;
+            @LLeft.performed += instance.OnLLeft;
+            @LLeft.canceled += instance.OnLLeft;
+            @LRight.started += instance.OnLRight;
+            @LRight.performed += instance.OnLRight;
+            @LRight.canceled += instance.OnLRight;
         }
 
         private void UnregisterCallbacks(IPS5MapActions instance)
@@ -1072,6 +1220,18 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
             @MenuRight.started -= instance.OnMenuRight;
             @MenuRight.performed -= instance.OnMenuRight;
             @MenuRight.canceled -= instance.OnMenuRight;
+            @LUp.started -= instance.OnLUp;
+            @LUp.performed -= instance.OnLUp;
+            @LUp.canceled -= instance.OnLUp;
+            @LDown.started -= instance.OnLDown;
+            @LDown.performed -= instance.OnLDown;
+            @LDown.canceled -= instance.OnLDown;
+            @LLeft.started -= instance.OnLLeft;
+            @LLeft.performed -= instance.OnLLeft;
+            @LLeft.canceled -= instance.OnLLeft;
+            @LRight.started -= instance.OnLRight;
+            @LRight.performed -= instance.OnLRight;
+            @LRight.canceled -= instance.OnLRight;
         }
 
         public void RemoveCallbacks(IPS5MapActions instance)
@@ -1110,5 +1270,9 @@ public partial class @PS5Input: IInputActionCollection2, IDisposable
         void OnTutorialForward(InputAction.CallbackContext context);
         void OnMenuLeft(InputAction.CallbackContext context);
         void OnMenuRight(InputAction.CallbackContext context);
+        void OnLUp(InputAction.CallbackContext context);
+        void OnLDown(InputAction.CallbackContext context);
+        void OnLLeft(InputAction.CallbackContext context);
+        void OnLRight(InputAction.CallbackContext context);
     }
 }

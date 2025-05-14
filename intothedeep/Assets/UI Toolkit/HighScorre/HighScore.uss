@@ -1,26 +1,38 @@
 .Leaderboard {
-    font-size: 50px;
+    font-size: 40px;
     top: 176px;
     left: 1920px;
     transition-duration: 0.3s;
     transition-timing-function: ease-in;
     color: rgb(255, 255, 255);
     -unity-text-align: middle-left;
-    background-image: url("project://database/Assets/UI%20Toolkit/UIImages/other_posistion.png?fileID=2800000&guid=455811ffe2f9c1a43882ced2f1db9f66&type=3#other_posistion");
     height: 70px;
     width: 1000px;
     padding-left: 150px;
-    padding-bottom: 17px;
+    padding-bottom: 0;
     margin-bottom: 6px;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.31);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 23px;
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    border-bottom-left-radius: 23px;
 }
 
 .Leaderboard-Active {
-    left: 1120px;
+    left: 464px;
 }
 
 .Leaderboard-Submit {
-    background-image: url("project://database/Assets/UI%20Toolkit/UIImages/1st_postion.png?fileID=2800000&guid=5e56864f7023b5e498b64951333ad37b&type=3#1st_postion");
+    background-color: rgba(43, 137, 151, 0.72);
 }
 
 .Button {
@@ -34,4 +46,51 @@
     background-color: rgba(255, 255, 255, 0);
     -unity-font: url("project://database/Assets/Fonts/Helvetica.ttf?fileID=12800000&guid=1cd6824dcf37f1d47a53c6d7d11ff869&type=3#Helvetica");
     -unity-font-definition: url("project://database/Assets/Fonts/Helvetica%20SDF.asset?fileID=11400000&guid=13658d39d9b202d4aa5067ee4c40f6e5&type=2#Helvetica SDF");
+}
+
+.letter {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    color: rgb(75, 215, 255);
+    font-size: 150px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.dpadbuttons {
+    color: rgb(95, 229, 242);
+}
+
+.dpadbutton {
+    color: rgb(255, 255, 255);
+}
+
+.Leaderboarder {
+    font-size: 40px;
+    top: 176px;
+    left: 1920px;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-left;
+    height: 70px;
+    width: 1000px;
+    padding-left: 150px;
+    padding-bottom: 0;
+    margin-bottom: 6px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.31);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 23px;
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    border-bottom-left-radius: 23px;
 }

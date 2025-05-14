@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117f46105a6d4664683f0020365ef484, type: 3}
   m_Name: 8
   m_EditorClassIdentifier: 
-  Name: Haowei
-  score: 30
+  Name: 
+  score: 0

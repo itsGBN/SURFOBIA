@@ -124,7 +124,7 @@ public class Pause : MonoBehaviour
             dpadnum += 1;
             if (dpadnum > 3) { dpadnum = 0; }
             dpadButtons[dpadnum].AddToClassList("buttonhover");
-            print(dpadnum);
+            //print(dpadnum);
 
         }
         if (GetInputs.PS5Map.MenuLeft.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
@@ -133,7 +133,7 @@ public class Pause : MonoBehaviour
             dpadnum -= 1;
             if (dpadnum < 0) { dpadnum = 3; }
             dpadButtons[dpadnum].AddToClassList("buttonhover");
-            print(dpadnum);
+            //print(dpadnum);
 
         }
     }
