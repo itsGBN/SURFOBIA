@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -81,6 +82,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Time.timeScale = globalTimeScale;
+
+        // complete reset
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SceneManager.LoadScene(0);
+            //GameManager.instance.UpdateState(GameManager.GameState.MAIN);
+            Destroy(this);
+        }
 
         switch (gameState)
         {
