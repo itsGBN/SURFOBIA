@@ -177,7 +177,7 @@ public class MainMenuEvents : MonoBehaviour
         switch(dpadnum)
         {
             case 0:
-                gameMode.text = "Poseidon's Time Trail";
+                gameMode.text = "Poseidon's Time Trial";
                 explanation.text = "Do gnarly tricks and race to the finish line before time runs out.";
                 break;
             case 1:
@@ -185,8 +185,8 @@ public class MainMenuEvents : MonoBehaviour
                 explanation.text = "Learn how to surf, flip, and spin like a champ from a reknowned expert.";
                 break;
             case 2:
-                gameMode.text = "Meet the Team";
-                explanation.text = "The team behind Surfobia: Into the Deep";
+                gameMode.text = "Credits";
+                explanation.text = "Meet the team behind SURFOBIA: Into the Deep.";
                 break;
             case 3:
                 gameMode.text = "Quit";
