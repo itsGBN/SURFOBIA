@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
                 StopDive();
             }
         }
-        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
+        if ((GetInputs.PS5Map.Menu.WasPressedThisFrame()||GetInputs.PS5Map.Jump.WasPressedThisFrame()) && currentState is ZeroState && !MainMenuEvents.instance.isTrasitioning)
         {
                 Debug.Log("control press");
                 SetState(freeRoamState);
