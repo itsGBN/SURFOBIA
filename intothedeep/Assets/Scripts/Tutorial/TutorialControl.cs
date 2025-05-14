@@ -81,6 +81,7 @@ public class TutorialControl : MonoBehaviour
     public void Wait()
     {
         waiting = true;
+        StartCoroutine(MoveMap());
     }
 
     public void StartMovement()
@@ -98,6 +99,15 @@ public class TutorialControl : MonoBehaviour
     {
         FindObjectOfType<PlayerController>().SetState(FindObjectOfType<PlayerController>().freeRoamState);
         StartCoroutine(FadeIn(blackout, 0.8f));
+    }
+
+    IEnumerator MoveMap()
+    {
+        while (mapImage.rectTransform.anchoredPosition.y > 0)
+        {
+            mapImage.rectTransform.anchoredPosition += new Vector2(0, -130 * Time.deltaTime);
+            yield return null;
+        }
     }
 
     IEnumerator FadeIn(Image image, float speed)
