@@ -3105,7 +3105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486971379}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24267931, y: -0.000000016692024, z: 0.0000000041756323, w: 0.9701066}
+  m_LocalRotation: {x: 0.24267931, y: 0.000000016692024, z: -0.0000000041756323, w: 0.9701066}
   m_LocalPosition: {x: 14.906504, y: 18.199404, z: -13.233141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5536,7 +5536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickMode: 1
-  nextClickDelay: 0
+  nextClickDelay: 10
   cancelEnabled: 1
   ignoreMenuClicks: 1
 --- !u!114 &987012400
