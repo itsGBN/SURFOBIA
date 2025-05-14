@@ -127,7 +127,6 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.READY:
                 {
-                    CheckPointScript.RestartCheckpoint();
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
                     if (CheckPointScript.checkpointPosition != Vector3.zero){
                         tempPlayer.gameObject.transform.position = CheckPointScript.checkpointPosition;
@@ -174,6 +173,7 @@ public class GameManager : MonoBehaviour
             case GameState.ENDGAME:
                 playerInput = false;
                 HUD.instance.Endscreen();
+                CheckPointScript.RestartCheckpoint();
                 break;
             case GameState.TUTORIAL:
                 {

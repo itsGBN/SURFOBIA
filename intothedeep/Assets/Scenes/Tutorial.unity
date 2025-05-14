@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 656733882}
-  m_IndirectSpecularColor: {r: 0.047465563, g: 0.098504886, b: 0.1795624, a: 1}
+  m_IndirectSpecularColor: {r: 0.04841406, g: 0.0998437, b: 0.1820494, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1176,7 +1176,6 @@ GameObject:
   - component: {fileID: 310734090}
   - component: {fileID: 310734089}
   - component: {fileID: 310734092}
-  - component: {fileID: 310734093}
   - component: {fileID: 310734094}
   - component: {fileID: 310734095}
   m_Layer: 0
@@ -1210,9 +1209,10 @@ MonoBehaviour:
     y: -340
     width: 1114
     height: 859
-  selectedBlocks: []
+  selectedBlocks:
+  - {fileID: 310734054}
   selectedCommands:
-  - {fileID: 310734095}
+  - {fileID: 310734084}
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1243,7 +1243,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -24.251076
     y: 72.02126
-    width: 75.6
+    width: 75
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1274,7 +1274,6 @@ MonoBehaviour:
   - {fileID: 310734082}
   - {fileID: 310734092}
   - {fileID: 310734084}
-  - {fileID: 310734093}
   suppressAllAutoSelections: 0
 --- !u!114 &310734055
 MonoBehaviour:
@@ -1535,7 +1534,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 125.76168
     y: 128.90637
-    width: 93.2
+    width: 92
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1718,7 +1717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 16
   indentLevel: 0
-  storyText: Once very millenia, Poseidon lets the top Ray Surfers from all across
+  storyText: Once every millenia, Poseidon lets the top Ray Surfers from all across
     the ocean compete to get resurrected and join the mortal realm once more!
   description: 
   character: {fileID: 9205824353549915418}
@@ -2110,31 +2109,6 @@ MonoBehaviour:
   stringEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &310734093
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 310734052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76641c2c16481448eb6c0c1184fcdebe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 33
-  indentLevel: 0
-  _animator:
-    animatorRef: {fileID: 0}
-    animatorVal: {fileID: 0}
-  _parameterName:
-    stringRef: {fileID: 0}
-    stringVal: 
-  value:
-    integerRef: {fileID: 0}
-    integerVal: 0
-  animatorOLD: {fileID: 0}
-  parameterNameOLD: 
 --- !u!114 &310734094
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -4032,7 +4006,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649359576}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.09105559, y: -0.014700484, z: 0.0013442929, w: 0.9957364}
+  m_LocalRotation: {x: 0.09105558, y: -0.014700476, z: 0.0013442917, w: 0.9957364}
   m_LocalPosition: {x: 14.996504, y: 15.899405, z: -12.333141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
