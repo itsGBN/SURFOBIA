@@ -98,24 +98,30 @@ public class Pause : MonoBehaviour
     {
         if ((GetInputs.PS5Map.Menu.WasPressedThisFrame() || isResume) && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.RACING))
         {
-            switch (dpadnum)
+            if (puase.ClassListContains("inactive"))
             {
-                case 0:
-                    if (puase.ClassListContains("inactive")) { puase.RemoveFromClassList("inactive"); MainMenuEvents.instance.focusMenu = true; Time.timeScale = 0; }
-                    else { puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1; }
-                    break;
-                case 1:
-                    GameManager.instance.gameState = GameManager.GameState.READY;
-                    SceneManager.LoadScene("Leve1");
-                    break;
-                case 2:
-                    SceneManager.LoadScene("Credits");
-                    Time.timeScale = 1;
-                    break;
-                case 3:
-                    Debug.Log("Application Quit");
-                    Application.Quit();
-                    break;
+                puase.RemoveFromClassList("inactive"); MainMenuEvents.instance.focusMenu = true; Time.timeScale = 0;
+            }
+            else
+            {
+                switch (dpadnum)
+                {
+                    case 0:
+                        puase.AddToClassList("inactive"); MainMenuEvents.instance.focusMenu = false; Time.timeScale = 1; 
+                        break;
+                    case 1:
+                        GameManager.instance.gameState = GameManager.GameState.READY;
+                        SceneManager.LoadScene("Leve1");
+                        break;
+                    case 2:
+                        SceneManager.LoadScene("Credits");
+                        Time.timeScale = 1;
+                        break;
+                    case 3:
+                        Debug.Log("Application Quit");
+                        Application.Quit();
+                        break;
+                }
             }
         }
 
