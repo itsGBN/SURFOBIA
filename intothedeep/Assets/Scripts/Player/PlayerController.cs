@@ -215,6 +215,7 @@ public class PlayerController : MonoBehaviour
         float fallThreshold = CheckPointScript.checkpointPosition.y +fallOffset;
         if (!TUTORIAL && transform.position.y < fallThreshold)
         {
+            MainMenuEvents.instance.isTrasitioning = true;
             ResetMovement();
             GameManager.instance.UpdateState(GameState.READY);
             StartCoroutine(MainMenuEvents.instance.onCheckTransition(SceneManager.GetActiveScene().name, MainMenuEvents.instance.transitionName, 1f));
