@@ -28,6 +28,9 @@ public class MainMenuEvents : MonoBehaviour
     private int dpadnum = 0;
     private List<VisualElement> allElements = new List<VisualElement>();
 
+    private Label gameMode;
+    private Label explanation;
+
     private VisualElement fadeIn;
     private VisualElement squareIn;
     private VisualElement trasitionTypes;
@@ -77,6 +80,10 @@ public class MainMenuEvents : MonoBehaviour
         squareIn = uIDocument.rootVisualElement.Q("SquareIn") as VisualElement;
         mainMenu = uIDocument.rootVisualElement.Q("MainButtons") as VisualElement;
         inputPicture = uIDocument.rootVisualElement.Q("InputPicture") as VisualElement;
+
+        //Reference Labels
+        gameMode = uIDocument.rootVisualElement.Q("gamemode") as Label;
+        explanation = uIDocument.rootVisualElement.Q("explanation") as Label;
 
         //Register
         levelButton.RegisterCallback<ClickEvent>(onPlayButton);
@@ -165,6 +172,26 @@ public class MainMenuEvents : MonoBehaviour
             dpadButtons[dpadnum].AddToClassList("buttonhover");
             print(dpadnum);
 
+        }
+
+        switch (dpadnum)
+        {
+            case 0:
+                gameMode.text = "Poseidon's Time Trial";
+                explanation.text = "Do gnarly tricks and race to the finish line before time runs out.";
+                break;
+            case 1:
+                gameMode.text = "Surf School";
+                explanation.text = "Learn how to surf, flip, and spin like a champ from a reknowned expert.";
+                break;
+            case 2:
+                gameMode.text = "Credits";
+                explanation.text = "Meet the team behind SURFOBIA: Into the Deep.";
+                break;
+            case 3:
+                gameMode.text = "Quit";
+                explanation.text = "Leave behind your ray and give up on becoming Poseidon's next champion.";
+                break;
         }
     }
 

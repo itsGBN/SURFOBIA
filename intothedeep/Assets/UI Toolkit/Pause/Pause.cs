@@ -110,6 +110,7 @@ public class Pause : MonoBehaviour
                     break;
                 case 2:
                     SceneManager.LoadScene("Credits");
+                    Time.timeScale = 1;
                     break;
                 case 3:
                     Debug.Log("Application Quit");
