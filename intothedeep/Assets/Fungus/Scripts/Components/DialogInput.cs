@@ -103,7 +103,7 @@ namespace Fungus
             if (writer != null)
             {
                 if (Input.GetButtonDown(currentStandaloneInputModule.submitButton) ||
-                    (cancelEnabled && Input.GetButton(currentStandaloneInputModule.cancelButton)))
+                    (cancelEnabled && Input.GetButtonDown(currentStandaloneInputModule.cancelButton)))
                 {
                     SetNextLineFlag();
                 }
