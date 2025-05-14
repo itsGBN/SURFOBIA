@@ -134,7 +134,7 @@ public class MainMenuEvents : MonoBehaviour
 
     private void Update()
     {
-        if (GetInputs.PS5Map.Menu.WasPressedThisFrame() && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
+        if ((GetInputs.PS5Map.Menu.WasPressedThisFrame()) && !MainMenuEvents.instance.isTrasitioning && (GameManager.instance.gameState == GameManager.GameState.READY))
         {
             switch (dpadnum) 
             {

@@ -17,6 +17,9 @@ public class AudioManager : MonoBehaviour
     [Header("GameObjects")]
     [SerializeField] GameObject player;
 
+    [Header("Tutorial")]
+    [SerializeField] bool isTutorial;
+
     bool isGrounded;
     bool isGrinding;
     bool isCloseToGround;
@@ -35,66 +38,76 @@ public class AudioManager : MonoBehaviour
         if (instance == null) { instance = this; }
         else if (instance != this) { Destroy(this); }
 
-        filter = musicTrigger1.GetComponent<AudioHighPassFilter>();
-        lowFilter = musicTrigger1.GetComponent<AudioLowPassFilter>();
+        if (!isTutorial) {
+            filter = musicTrigger1.GetComponent<AudioHighPassFilter>();
+            lowFilter = musicTrigger1.GetComponent<AudioLowPassFilter>();
 
-        filter2 = musicTrigger2.GetComponent<AudioHighPassFilter>();
-        lowFilter2 = musicTrigger2.GetComponent<AudioLowPassFilter>();
+            filter2 = musicTrigger2.GetComponent<AudioHighPassFilter>();
+            lowFilter2 = musicTrigger2.GetComponent<AudioLowPassFilter>();
+
+            filter3 = musicTrigger3.GetComponent<AudioHighPassFilter>();
+            lowFilter3 = musicTrigger3.GetComponent<AudioLowPassFilter>();
+        }
         
-        filter3 = musicTrigger3.GetComponent<AudioHighPassFilter>();
-        lowFilter3 = musicTrigger3.GetComponent<AudioLowPassFilter>();
     }
 
     private void Update()
     {
-        isGrounded = player.GetComponent<PlayerController>().isGrounded;
-        isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
+        if (!isTutorial) {
+            isGrounded = player.GetComponent<PlayerController>().isGrounded;
+            isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
 
-        RaycastHit hit;
-        isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3.5f, layerMask);
-
-
-        if (!isCloseToGround)
-        {
-            if (filter.cutoffFrequency != 2000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 2000, 1 * Time.deltaTime);
-            if (filter2.cutoffFrequency != 2000) filter2.cutoffFrequency = Mathf.Lerp(filter2.cutoffFrequency, 2000, 1 * Time.deltaTime);
-            if (filter3.cutoffFrequency != 2000) filter3.cutoffFrequency = Mathf.Lerp(filter3.cutoffFrequency, 2000, 1 * Time.deltaTime);
-        }
-        else
-        {
-            if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 12 * Time.deltaTime);
-            if (filter2.cutoffFrequency != 10) filter2.cutoffFrequency = Mathf.Lerp(filter2.cutoffFrequency, 10, 12 * Time.deltaTime);
-            if (filter3.cutoffFrequency != 10) filter3.cutoffFrequency = Mathf.Lerp(filter3.cutoffFrequency, 10, 12 * Time.deltaTime);
-        }
+            RaycastHit hit;
+            isCloseToGround = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 3.5f, layerMask);
 
 
-        isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
-
-        if (isGrinding)
-        {
-            if (lowFilter.cutoffFrequency != 5000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 5000, 3 * Time.deltaTime);
-            if (lowFilter2.cutoffFrequency != 5000) lowFilter2.cutoffFrequency = Mathf.Lerp(lowFilter2.cutoffFrequency, 5000, 3 * Time.deltaTime);
-            if (lowFilter3.cutoffFrequency != 5000) lowFilter3.cutoffFrequency = Mathf.Lerp(lowFilter3.cutoffFrequency, 5000, 3 * Time.deltaTime);
-
-            if (!Audio[5].isPlaying) { 
-                Audio[5].pitch = Random.Range(0.8f, 1.2f);
-                Audio[5].volume = 1;
-                Audio[5].Play();
-            }
-
-        }
-        else
-        {
-            if (lowFilter.cutoffFrequency != 22000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 22000, 3 * Time.deltaTime);
-            if (lowFilter2.cutoffFrequency != 22000) lowFilter2.cutoffFrequency = Mathf.Lerp(lowFilter2.cutoffFrequency, 22000, 3 * Time.deltaTime);
-            if (lowFilter3.cutoffFrequency != 22000) lowFilter3.cutoffFrequency = Mathf.Lerp(lowFilter3.cutoffFrequency, 22000, 3 * Time.deltaTime);
-
-            if (Audio[5].isPlaying)
+            if (!isCloseToGround)
             {
-                Audio[5].volume = Mathf.Lerp(Audio[5].volume, 0, 2 * Time.deltaTime);
-                if (Audio[5].volume < 0.01f) Audio[5].Stop();
+                if (filter.cutoffFrequency != 2000) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 2000, 1 * Time.deltaTime);
+                if (filter2.cutoffFrequency != 2000) filter2.cutoffFrequency = Mathf.Lerp(filter2.cutoffFrequency, 2000, 1 * Time.deltaTime);
+                if (filter3.cutoffFrequency != 2000) filter3.cutoffFrequency = Mathf.Lerp(filter3.cutoffFrequency, 2000, 1 * Time.deltaTime);
             }
+            else
+            {
+                if (filter.cutoffFrequency != 10) filter.cutoffFrequency = Mathf.Lerp(filter.cutoffFrequency, 10, 12 * Time.deltaTime);
+                if (filter2.cutoffFrequency != 10) filter2.cutoffFrequency = Mathf.Lerp(filter2.cutoffFrequency, 10, 12 * Time.deltaTime);
+                if (filter3.cutoffFrequency != 10) filter3.cutoffFrequency = Mathf.Lerp(filter3.cutoffFrequency, 10, 12 * Time.deltaTime);
+            }
+
+
+            isGrinding = player.GetComponent<PlayerController>().currentState == player.GetComponent<PlayerController>().grindState;
+
+            if (isGrinding)
+            {
+                if (lowFilter.cutoffFrequency != 5000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 5000, 3 * Time.deltaTime);
+                if (lowFilter2.cutoffFrequency != 5000) lowFilter2.cutoffFrequency = Mathf.Lerp(lowFilter2.cutoffFrequency, 5000, 3 * Time.deltaTime);
+                if (lowFilter3.cutoffFrequency != 5000) lowFilter3.cutoffFrequency = Mathf.Lerp(lowFilter3.cutoffFrequency, 5000, 3 * Time.deltaTime);
+
+                if (!Audio[5].isPlaying)
+                {
+                    Audio[5].pitch = Random.Range(0.8f, 1.2f);
+                    Audio[5].volume = 1;
+                    Audio[5].Play();
+                }
+
+            }
+            else
+            {
+                if (lowFilter.cutoffFrequency != 22000) lowFilter.cutoffFrequency = Mathf.Lerp(lowFilter.cutoffFrequency, 22000, 3 * Time.deltaTime);
+                if (lowFilter2.cutoffFrequency != 22000) lowFilter2.cutoffFrequency = Mathf.Lerp(lowFilter2.cutoffFrequency, 22000, 3 * Time.deltaTime);
+                if (lowFilter3.cutoffFrequency != 22000) lowFilter3.cutoffFrequency = Mathf.Lerp(lowFilter3.cutoffFrequency, 22000, 3 * Time.deltaTime);
+
+                if (Audio[5].isPlaying)
+                {
+                    Audio[5].volume = Mathf.Lerp(Audio[5].volume, 0, 2 * Time.deltaTime);
+                    if (Audio[5].volume < 0.01f) Audio[5].Stop();
+                }
+            }
+        } else
+        {
+
         }
+        
 
     }
 

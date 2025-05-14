@@ -48,13 +48,29 @@ namespace Fungus
 
         protected Writer writer;
 
+        //public PS5Input GetInputs;
+
         protected virtual void Awake()
         {
             writer = GetComponent<Writer>();
 
             CheckEventSystem();
+
+            //GetInputs = new PS5Input();
         }
 
+        /*
+        private void OnEnable()
+        {
+            GetInputs.Enable();
+        }
+
+        private void OnDisable()
+        {
+            GetInputs.Disable();
+        }
+        
+        */
         // There must be an Event System in the scene for Say and Menu input to work.
         // This method will automatically instantiate one if none exists.
         protected virtual void CheckEventSystem()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 656733882}
-  m_IndirectSpecularColor: {r: 0.04846569, g: 0.09991531, b: 0.18218634, a: 1}
+  m_IndirectSpecularColor: {r: 0.047465563, g: 0.098504886, b: 0.1795624, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3105,7 +3105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486971379}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24267933, y: -0, z: -0, w: 0.9701066}
+  m_LocalRotation: {x: 0.24267931, y: -0.000000016692024, z: 0.0000000041756323, w: 0.9701066}
   m_LocalPosition: {x: 14.906504, y: 18.199404, z: -13.233141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -21794,7 +21794,7 @@ AudioHighPassFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2997089006954914736}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CutoffFrequency: 5000
   m_HighpassResonanceQ: 1
 --- !u!1 &544015920871813569
@@ -22040,12 +22040,12 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2997089006954914736}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8ca184561be7aa549bd88fa9c2ec623c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 94e7f777958fdee4bbd0b170f41e0cfc, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.142
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -27790,6 +27790,7 @@ MonoBehaviour:
   musicTrigger2: {fileID: 0}
   musicTrigger3: {fileID: 0}
   player: {fileID: 3097079286256423364}
+  isTutorial: 1
 --- !u!1 &1307076196599149926
 GameObject:
   m_ObjectHideFlags: 0
@@ -36945,7 +36946,7 @@ AudioLowPassFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2997089006954914736}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_LowpassResonanceQ: 1
   lowpassLevelCustomCurve:
