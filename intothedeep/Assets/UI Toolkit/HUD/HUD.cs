@@ -21,6 +21,7 @@ public class HUD : MonoBehaviour
     private Label comboLabel;
     private Dictionary<Label, (int, string)> enemyScores = new Dictionary<Label, (int, string)>();
     private Label trickLabel;
+    private Label centerDistanceLabel;
     private int trickNum;
     private float scoreNum;
     private float comboNum = 1;
@@ -48,6 +49,7 @@ public class HUD : MonoBehaviour
         redVisualElement = uIDocument.rootVisualElement.Q("Red") as VisualElement;
         endscreenVisualElement = uIDocument.rootVisualElement.Q("Endscreen") as VisualElement;
         distanceLabel = uIDocument.rootVisualElement.Q("Distance") as Label;
+        centerDistanceLabel = uIDocument.rootVisualElement.Q("CenterDistance") as Label;
         countdownLabel = uIDocument.rootVisualElement.Q("Countdown") as Label;
         scoreLabel = uIDocument.rootVisualElement.Q("Score") as Label;
         comboLabel = uIDocument.rootVisualElement.Q("Mult") as Label;
@@ -82,6 +84,7 @@ public class HUD : MonoBehaviour
     {
         //InvokeRepeating("OnEnemyScore", 1, 1);
         var scoreList = HighScore.instance.tenScores;
+        centerDistanceLabel.style.visibility = Visibility.Hidden;
 
         for (int i = 0; i < enemyScores.Count && i < scoreList.Length; i++)
         {
@@ -142,6 +145,7 @@ public class HUD : MonoBehaviour
             int milliseconds = (int)((elapsedTime * 1000) % 1000);
 
             distanceLabel.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
+            centerDistanceLabel.text = distanceLabel.text;
         }
     }
 
@@ -243,7 +247,18 @@ public class HUD : MonoBehaviour
     {
         countdownLabel.style.visibility = Visibility.Visible;
         countdownLabel.text = value.ToString();
-        if (value <= 0) { countdownLabel.style.visibility = Visibility.Hidden; }
+        if (value <= 0) { countdownLabel.style.visibility = Visibility.Hidden; StartCoroutine(showTimer()); }
+    }
+
+    IEnumerator showTimer()
+    {
+        centerDistanceLabel.style.visibility = Visibility.Visible;
+        distanceLabel.style.visibility = Visibility.Hidden;
+
+        yield return new WaitForSeconds(3);
+
+        centerDistanceLabel.style.visibility = Visibility.Hidden;
+        distanceLabel.style.visibility = Visibility.Visible;
     }
 
 
