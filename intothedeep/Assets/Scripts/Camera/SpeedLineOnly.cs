@@ -22,6 +22,8 @@ public class SpeedLineOnly : MonoBehaviour
     private Material mat1;
     private Material mat2;
     private Image[] images;
+
+    public bool isOnTutorial = false;
     void Start()
     {
         mat1 = Instantiate(image1.material);
@@ -35,6 +37,18 @@ public class SpeedLineOnly : MonoBehaviour
 
     void Update()
     {
+        if (isOnTutorial)
+        {
+            foreach (var img in images)
+            {
+                var ma     = img.material;
+                float cur = ma.GetFloat("_OpacityPower");
+                float nex    = Mathf.MoveTowards(cur, highSpeedTarget, changeSpeed * Time.deltaTime);
+                ma.SetFloat("_OpacityPower", nex);
+            }
+
+            return;
+        }
         // 1) 判断当前是否超速
         bool isHigh    = player.GetCurrentSpeed() + speedOffset >= player.moveSpeed;
         // 2) 判断是否在 special spline 上
@@ -54,5 +68,10 @@ public class SpeedLineOnly : MonoBehaviour
             mat.SetFloat("_OpacityPower", next);
         }
         
+    }
+
+    public void IsOnTutorial()
+    {
+        isOnTutorial = true;
     }
 }

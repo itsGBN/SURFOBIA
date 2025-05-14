@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 656733882}
-  m_IndirectSpecularColor: {r: 0.047465563, g: 0.098504886, b: 0.1795624, a: 1}
+  m_IndirectSpecularColor: {r: 0.04846569, g: 0.09991531, b: 0.18218634, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1178,6 +1178,7 @@ GameObject:
   - component: {fileID: 310734092}
   - component: {fileID: 310734093}
   - component: {fileID: 310734094}
+  - component: {fileID: 310734095}
   m_Layer: 0
   m_Name: Flowchart
   m_TagString: Untagged
@@ -1198,7 +1199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: -11.761673, y: 121.59363}
+  scrollPos: {x: -11.761673, y: 118.79364}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 481
@@ -1209,10 +1210,9 @@ MonoBehaviour:
     y: -340
     width: 1114
     height: 859
-  selectedBlocks:
-  - {fileID: 310734067}
+  selectedBlocks: []
   selectedCommands:
-  - {fileID: 310734094}
+  - {fileID: 310734095}
   variables:
   - {fileID: 310734065}
   - {fileID: 310734064}
@@ -1545,6 +1545,7 @@ MonoBehaviour:
   eventHandler: {fileID: 310734068}
   commandList:
   - {fileID: 310734094}
+  - {fileID: 310734095}
   - {fileID: 310734081}
   - {fileID: 310734079}
   - {fileID: 310734083}
@@ -2111,7 +2112,7 @@ MonoBehaviour:
       m_Calls: []
 --- !u!114 &310734093
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2136,7 +2137,7 @@ MonoBehaviour:
   parameterNameOLD: 
 --- !u!114 &310734094
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2157,6 +2158,62 @@ MonoBehaviour:
       - m_Target: {fileID: 844609889}
         m_TargetAssemblyTypeName: TutorialCameraEvent, Assembly-CSharp
         m_MethodName: risePriority
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &310734095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310734052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 35
+  indentLevel: 0
+  description: changespeedlinealwayshow
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1111685720}
+        m_TargetAssemblyTypeName: SpeedLineOnly, Assembly-CSharp
+        m_MethodName: IsOnTutorial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3015,7 +3072,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 3196512575697794116}
   m_Follow: {fileID: 3196512575697794116}
   m_Lens:
-    FieldOfView: 75.80001
+    FieldOfView: 78.7
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 250
@@ -3048,7 +3105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486971379}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24996786, y: -0, z: -0, w: 0.96825415}
+  m_LocalRotation: {x: 0.24267933, y: -0, z: -0, w: 0.9701066}
   m_LocalPosition: {x: 14.906504, y: 18.199404, z: -13.233141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3975,7 +4032,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649359576}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.09105558, y: -0.014700476, z: 0.0013442917, w: 0.9957364}
+  m_LocalRotation: {x: 0.09105559, y: -0.014700484, z: 0.0013442929, w: 0.9957364}
   m_LocalPosition: {x: 14.996504, y: 15.899405, z: -12.333141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6232,6 +6289,7 @@ MonoBehaviour:
   changeSpeed: 10
   image1: {fileID: 1917008194}
   image2: {fileID: 915641794}
+  isOnTutorial: 0
 --- !u!114 &1111685721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8252,7 +8310,7 @@ MonoBehaviour:
   m_NoiseProfile: {fileID: 11400000, guid: b241f91b9ccf8ff489abf204b30d3112, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0.5
-  m_FrequencyGain: 5.060008
+  m_FrequencyGain: 7.090002
   mNoiseOffsets: {x: -653.1162, y: -771.8916, z: 679.42285}
 --- !u!114 &1556183067
 MonoBehaviour:
@@ -10363,6 +10421,7 @@ GameObject:
   - component: {fileID: 2021468512}
   - component: {fileID: 2021468511}
   - component: {fileID: 2021468513}
+  - component: {fileID: 2021468514}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -10446,6 +10505,23 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
+--- !u!114 &2021468514
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021468508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: b241f91b9ccf8ff489abf204b30d3112, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 300.59238, y: -471.23657, z: 926.23926}
 --- !u!1 &2023218184
 GameObject:
   m_ObjectHideFlags: 0
@@ -10707,7 +10783,7 @@ MonoBehaviour:
   m_NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 0.5
-  m_FrequencyGain: 2.000001
+  m_FrequencyGain: 9
   mNoiseOffsets: {x: -653.1162, y: -771.8916, z: 679.42285}
 --- !u!114 &2048599931
 MonoBehaviour:
