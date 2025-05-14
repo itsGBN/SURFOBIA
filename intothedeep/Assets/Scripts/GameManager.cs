@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         {
             
             UpdateState(GameState.READY);
-            CheckPointScript.checkpointPosition = new Vector3(-231f, 91.46f,29.88f);
+            CheckPointScript.RestartCheckpoint();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.READY:
                 {
+                    CheckPointScript.RestartCheckpoint();
                     PlayerController tempPlayer = FindObjectOfType<PlayerController>();
                     if (CheckPointScript.checkpointPosition != Vector3.zero){
                         tempPlayer.gameObject.transform.position = CheckPointScript.checkpointPosition;

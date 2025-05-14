@@ -30,4 +30,9 @@ public class CheckPointScript : MonoBehaviour
             Debug.Log("Checkpoint reached: " + checkpointPosition);
         }
     }
+
+    public static void RestartCheckpoint()
+    {
+        checkpointPosition = new Vector3(-231f, 91.46f, 29.88f);
+    }
 }
