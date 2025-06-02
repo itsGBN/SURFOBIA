@@ -13,7 +13,7 @@ public class RumbleManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (instance == null) { instance = this; }
+        if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
     }
 
     public void SetRumbleActive(float lowFrequency, float highFrequency)

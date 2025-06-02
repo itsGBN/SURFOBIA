@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
             //GameManager.instance.UpdateState(GameManager.GameState.MAIN);
+            CheckPointScript.RestartCheckpoint();
             Destroy(this);
         }
 
@@ -126,11 +127,13 @@ public class GameManager : MonoBehaviour
         gameState = newState;
         Debug.Log("Game state changed: " + gameState.ToString());
 
-        // TODO FIX LOOPING INPUT
+        RumbleManager.instance.SetRumbleActive(false);
 
         switch (gameState)
         {
+
             case GameState.MAIN:
+                CheckPointScript.RestartCheckpoint();
                 playerInput = false;
                 Time.timeScale = 1f;
                 break;
