@@ -346,7 +346,7 @@ public class TutorialAnimations : MonoBehaviour
                     totalRotation += 1;
                     //comboThreshold = 0.1f; //Amount of +1 per rotation, might need to find a better way to do this
                     comboThreshold = rotationSpeed * (26 / 14);
-                    Debug.Log(totalRotation);
+                    //Debug.Log(totalRotation);
 
                     if (totalRotation > comboThreshold)
                     {

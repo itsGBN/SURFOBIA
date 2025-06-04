@@ -14,6 +14,7 @@ public class RumbleManager : MonoBehaviour
     void Awake()
     {
         if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
+        else { Destroy(this); }
     }
 
     public void SetRumbleActive(float lowFrequency, float highFrequency)

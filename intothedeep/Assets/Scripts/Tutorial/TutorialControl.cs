@@ -56,7 +56,9 @@ public class TutorialControl : MonoBehaviour
 
             if (GetInputs.PS5Map.TutorialForward.WasPressedThisFrame() && waiting)
             {
-                Fall();
+                // open confirmation
+                chart.SendFungusMessage("confirm");
+                waiting = false;
             }
         }
     }

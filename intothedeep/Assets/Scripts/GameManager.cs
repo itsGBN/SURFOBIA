@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         gameState = newState;
         Debug.Log("Game state changed: " + gameState.ToString());
 
-        RumbleManager.instance.SetRumbleActive(false);
+        if (RumbleManager.instance != null) { RumbleManager.instance.SetRumbleActive(false); }
 
         switch (gameState)
         {
